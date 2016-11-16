@@ -1,7 +1,7 @@
 ﻿using System;
 using NServiceBus;
 
-namespace Shared.Commands
+namespace Contracts.Commands
 {
     public class PlaceOrder : ICommand
     {

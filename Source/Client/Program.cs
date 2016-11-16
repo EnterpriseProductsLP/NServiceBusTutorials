@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Contracts;
+using Contracts.Commands;
 using NServiceBus;
-using Shared;
-using Shared.Commands;
 
 namespace Client
 {
@@ -21,7 +21,7 @@ namespace Client
             // as the address, or identity, of the endpoint
             var endpointConfiguration = new EndpointConfiguration(Endpoints.Client);
 
-
+            // Configure where to send failed messages
             endpointConfiguration.SendFailedMessagesTo("error");
 
             // Use JSON to serialize and deserialize messages (which are just
@@ -36,8 +36,7 @@ namespace Client
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
 
             // Configure NServiceBus to use the RabbitMQ Transport
-            var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-            
+            endpointConfiguration.UseTransport<RabbitMQTransport>();
 
             // Initialize the endpoint with the finished configuration
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);

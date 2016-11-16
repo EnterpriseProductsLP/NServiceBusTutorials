@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace Contracts
 {
     public static class Endpoints
     {
