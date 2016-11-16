@@ -8,7 +8,7 @@ namespace Contracts.Commands
     {
         public PlaceOrder()
         {
-            OrderId = new Guid();
+            OrderId = Guid.NewGuid();
         }
 
         public PlaceOrder(Product product)
@@ -22,8 +22,8 @@ namespace Contracts.Commands
         {
         }
 
-        public Guid OrderId { get; }
+        public Guid OrderId { get; set; }
 
-        public Product Product { get; }
+        public Product Product { get; set; }
     }
 }
