@@ -1,18 +1,29 @@
 ﻿using System;
+using Domain;
 using NServiceBus;
 
 namespace Contracts.Commands
 {
     public class PlaceOrder : ICommand
     {
-        public PlaceOrder(Guid id, string product)
+        public PlaceOrder()
         {
-            Id = id;
+            OrderId = new Guid();
+        }
+
+        public PlaceOrder(Product product)
+            : this()
+        {
             Product = product;
         }
 
-        public Guid Id { get; set; }
+        public PlaceOrder(Guid productId, string productName)
+            : this(new Product(id: productId, name: productName))
+        {
+        }
 
-        public string Product { get; set; }
+        public Guid OrderId { get; }
+
+        public Product Product { get; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Contracts;
 using Contracts.Commands;
+using Domain;
 using NServiceBus;
 
 namespace Client
@@ -10,39 +13,22 @@ namespace Client
     {
         public static void Main(string[] args)
         {
-            AsyncMain().GetAwaiter().GetResult();
+            var asyncMain = AsyncMain();
+            var taskAwaiter = asyncMain.GetAwaiter();
+            taskAwaiter.GetResult();
         }
 
         private static async Task AsyncMain()
         {
+            Thread.Sleep(2000);
             Console.Title = "NServiceBusTutorials:  Client";
 
-            // The endpoint name will be used to determine queue names and serves
-            // as the address, or identity, of the endpoint
-            var endpointConfiguration = new EndpointConfiguration(Endpoints.Client);
-
-            // Configure where to send failed messages
-            endpointConfiguration.SendFailedMessagesTo("error");
-
-            // Use JSON to serialize and deserialize messages (which are just
-            // plain classes) to and from message queues
-            endpointConfiguration.UseSerialization<JsonSerializer>();
-
-            // Ask NServiceBus to automatically create message queues
-            endpointConfiguration.EnableInstallers();
-
-            // Store information in memory for this example, rather than in
-            // a database. In this sample, only subscription information is stored
-            endpointConfiguration.UsePersistence<InMemoryPersistence>();
-
-            // Configure NServiceBus to use the RabbitMQ Transport
-            endpointConfiguration.UseTransport<RabbitMQTransport>();
-
-            // Initialize the endpoint with the finished configuration
+            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Client);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try
             {
+                Console.Clear();
                 await SendOrder(endpointInstance);
             }
             finally
@@ -65,11 +51,11 @@ namespace Client
                     return;
                 }
 
-                var id = Guid.NewGuid();
-                var placeOrder = new PlaceOrder(id, "New Shoes");
+                var product = ProductBuilder.NextProduct();
+                var placeOrder = new PlaceOrder(productId: product.Id, productName: product.Name);
 
-                await endpointInstance.Send(Endpoints.Server, placeOrder);
-                Console.WriteLine($"Sent a PlaceOrder message with ID: {id}");
+                await endpointInstance.Send(destination: Endpoints.Server, message: placeOrder);
+                Console.WriteLine($"Sent a PlaceOrder message with ID: {placeOrder.OrderId}");
             }
         }
     }

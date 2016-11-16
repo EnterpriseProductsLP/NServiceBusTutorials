@@ -13,7 +13,7 @@ namespace Domain
         {
             _nextProductLock = new object();
             _products = new List<Product>();
-            _random = new Random(DateTime.Now.Millisecond);
+            _random = new Random(Seed: DateTime.Now.Millisecond);
             foreach (var productName in GetProductNames())
             {
                 _products.Add(new Product(id: Guid.NewGuid(), name: productName));
@@ -24,12 +24,12 @@ namespace Domain
         {
             lock (_nextProductLock)
             {
-                var productIndex = _random.Next(0, _products.Count - 1);
-                return _products[productIndex];
+                var productIndex = _random.Next(minValue: 0, maxValue: _products.Count - 1);
+                return _products[index: productIndex];
             }
         }
 
-        private static List<string> GetProductNames()
+        private static IEnumerable<string> GetProductNames()
         {
             return new List<string>
             {
