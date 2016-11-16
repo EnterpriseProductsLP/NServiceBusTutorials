@@ -20,8 +20,8 @@ namespace Client
 
         private static async Task AsyncMain()
         {
-            Thread.Sleep(2000);
             Console.Title = "NServiceBusTutorials:  Client";
+            Thread.Sleep(2000);
 
             var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Client);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);

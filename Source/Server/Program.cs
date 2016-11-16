@@ -18,8 +18,8 @@ namespace Server
 
         private static async Task AsyncMain()
         {
-            Thread.Sleep(1000);
             Console.Title = "NServiceBusTutorials:  Server";
+            Thread.Sleep(1000);
 
             var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Server);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
