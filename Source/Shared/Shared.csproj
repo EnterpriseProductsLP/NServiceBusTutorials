@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Endpoints.cs" />
     <Compile Include="Events\OrderPlaced.cs" />
     <Compile Include="Commands\PlaceOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
