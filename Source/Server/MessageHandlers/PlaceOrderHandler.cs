@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Contracts.Commands;
 using Contracts.Events;
 using NServiceBus;
@@ -15,6 +16,8 @@ namespace Server.MessageHandlers
             var orderId = message.OrderId;
             var productId = message.Product.Id;
             var productName = message.Product.Name;
+
+            Console.WriteLine();
 
             log.Info($"Order: {orderId} placed for Product:[Id: {productId}, Name: {productName}]");
             log.Info($"Publishing: OrderPlaced for Order Id: {orderId}");

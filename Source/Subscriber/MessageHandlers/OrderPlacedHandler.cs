@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Contracts.Events;
 using NServiceBus;
 using NServiceBus.Logging;
@@ -11,6 +12,8 @@ namespace Subscriber.MessageHandlers
 
         public Task Handle(OrderPlaced message, IMessageHandlerContext context)
         {
+            Console.WriteLine();
+
             log.Info($"Hadling: OrderPlaced for Order Id: {message.Id}");
             return Task.CompletedTask;
         }
