@@ -4,6 +4,7 @@ using NServiceBus;
 
 namespace Contracts.Commands
 {
+    [TimeToBeReceived("24:00:00")]
     public class PlaceOrder : ICommand
     {
         public PlaceOrder()
