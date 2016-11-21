@@ -7,9 +7,9 @@ namespace Common
         public static EndpointConfiguration GetDefaultEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
-            endpointConfiguration.AuditProcessedMessagesTo("audit");
+            endpointConfiguration.AuditProcessedMessagesTo(auditQueue: "auditQueue");
             endpointConfiguration.EnableInstallers();
-            endpointConfiguration.SendFailedMessagesTo(errorQueue: "error");
+            endpointConfiguration.SendFailedMessagesTo(errorQueue: "errorQueue");
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseTransport<RabbitMQTransport>();
