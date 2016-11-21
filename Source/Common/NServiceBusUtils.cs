@@ -7,6 +7,7 @@ namespace Common
         public static EndpointConfiguration GetDefaultEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
+            endpointConfiguration.AuditProcessedMessagesTo("audit");
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.SendFailedMessagesTo(errorQueue: "error");
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
