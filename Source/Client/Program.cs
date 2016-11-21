@@ -28,7 +28,9 @@ namespace Client
 
             try
             {
-                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
                 await SendOrder(endpointInstance);
             }
             finally

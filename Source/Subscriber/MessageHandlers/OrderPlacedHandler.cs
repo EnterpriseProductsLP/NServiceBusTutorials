@@ -14,7 +14,7 @@ namespace Subscriber.MessageHandlers
         {
             Console.WriteLine();
 
-            log.Info($"Hadling: OrderPlaced for Order Id: {message.Id}");
+            log.Info($"Hadling: OrderPlaced for Order Id: {message.OrderId}");
             return Task.CompletedTask;
         }
     }
