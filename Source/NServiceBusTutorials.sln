@@ -19,7 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell Scripts", "PowerShell Scripts", "{39F7EF0B-B419-4AAA-9953-1383AF3226C0}"
 	ProjectSection(SolutionItems) = preProject
-		Configure VHost for Testing.ps1 = Configure VHost for Testing.ps1
+		Configure Corp and Gulf Clusters for Testing.ps1 = Configure Corp and Gulf Clusters for Testing.ps1
+		Configure Local RabbitMQ for Testing.ps1 = Configure Local RabbitMQ for Testing.ps1
 	EndProjectSection
 EndProject
 Global

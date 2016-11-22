@@ -7,8 +7,6 @@ rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_vhost NServiceBusTutorials
 
 # Grant user permissions on the virtual host
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials eburcham ".*" ".*" ".*"
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials test ".*" ".*" ".*"
 
 # Create federation upstreams
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://test:1breakthings!@TSESTMRMQ04GULF"", ""amqp://test:1breakthings!@TSESTMRMQ05GULF"", ""amqp://test:1breakthings!@TSESTMRMQ06GULF""], ""max-hops"":10}'
@@ -30,8 +28,6 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_vhost NServiceBusTutorials
 
 # Grant user permissions on the virtual host
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials eburcham ".*" ".*" ".*"
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials test ".*" ".*" ".*"
 
 # Create federation upstreams
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://test:1breakthings!@TSESTMRMQ01CORP"", ""amqp://test:1breakthings!@TSESTMRMQ02CORP"", ""amqp://test:1breakthings!@TSESTMRMQ03CORP""], ""max-hops"":10}'
