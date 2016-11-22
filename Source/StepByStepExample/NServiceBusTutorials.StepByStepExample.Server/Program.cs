@@ -28,8 +28,6 @@ namespace NServiceBusTutorials.StepByStepExample.Server
             try
             {
                 Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
                 Console.WriteLine("Press any key to exit");
                 Console.ReadKey();
             }

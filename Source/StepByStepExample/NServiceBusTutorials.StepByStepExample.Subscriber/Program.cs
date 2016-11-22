@@ -25,8 +25,6 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber
             try
             {
                 Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
                 Console.WriteLine("Press any key to exit");
                 Console.ReadKey();
             }

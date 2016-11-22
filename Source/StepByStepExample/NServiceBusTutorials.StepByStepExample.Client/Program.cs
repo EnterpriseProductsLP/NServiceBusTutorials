@@ -28,9 +28,6 @@ namespace NServiceBusTutorials.StepByStepExample.Client
 
             try
             {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
                 await SendOrder(endpointInstance);
             }
             finally
@@ -41,6 +38,7 @@ namespace NServiceBusTutorials.StepByStepExample.Client
 
         private static async Task SendOrder(IEndpointInstance endpointInstance)
         {
+            Console.WriteLine();
             Console.WriteLine("Press enter to send a message");
             Console.WriteLine("Press any key to exit");
 
