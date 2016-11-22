@@ -68,6 +68,14 @@
       <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
       <Name>NServiceBusTutorials.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NServiceBusTutorials.StepByStepExample.Contracts\NServiceBusTutorials.StepByStepExample.Contracts.csproj">
+      <Project>{232435D0-13D5-4F4B-B0D9-EE75A27D22EA}</Project>
+      <Name>NServiceBusTutorials.StepByStepExample.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBusTutorials.StepByStepExample.Domain\NServiceBusTutorials.StepByStepExample.Domain.csproj">
+      <Project>{0078A810-99D5-441A-A154-596D93CB39A1}</Project>
+      <Name>NServiceBusTutorials.StepByStepExample.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
