@@ -65,7 +65,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
+    <ProjectReference Include="..\..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
       <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
       <Name>NServiceBusTutorials.Common</Name>
     </ProjectReference>
