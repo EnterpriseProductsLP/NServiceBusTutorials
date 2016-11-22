@@ -2,10 +2,10 @@
 {
     public static class Endpoints
     {
-        public const string Client = "NServiceBusTutorials.Client";
+        public const string Client = "NServiceBusTutorials.StepByStepExample.Client";
 
-        public const string Server = "NServiceBusTutorials.Server";
+        public const string Server = "NServiceBusTutorials.StepByStepExample.Server";
 
-        public const string Subscriber = "NServiceBusTutorials.Subscriber";
+        public const string Subscriber = "NServiceBusTutorials.StepByStepExample.Subscriber";
     }
 }
