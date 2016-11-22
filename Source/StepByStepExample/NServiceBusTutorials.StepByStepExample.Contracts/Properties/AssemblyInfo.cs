@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("NServiceBusTutorials.Common")]
+[assembly: AssemblyTitle("NServiceBusTutorials.StepByStepExample.Shared")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Enterprise Products")]
-[assembly: AssemblyProduct("NServiceBusTutorials.Common")]
+[assembly: AssemblyProduct("NServiceBusTutorials.StepByStepExample.Shared")]
 [assembly: AssemblyCopyright("Copyright © Enterprise Products 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("baffff6e-7447-4f37-a4b8-7d8ed6d171cd")]
+[assembly: Guid("232435d0-13d5-4f4b-b0d9-ee75a27d22ea")]
 
 // Version information for an assembly consists of the following four values:
 //
