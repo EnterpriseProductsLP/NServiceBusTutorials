@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Common;
 using Contracts;
 using NServiceBus;
+using NServiceBusTutorials.Common;
 
 namespace Subscriber
 {
@@ -19,7 +19,7 @@ namespace Subscriber
         {
             Console.Title = "NServiceBusTutorials:  Subscriber";
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Subscriber);
+            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Subscriber, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try

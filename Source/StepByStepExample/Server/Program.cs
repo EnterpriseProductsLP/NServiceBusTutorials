@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Common;
 using Contracts;
 using NServiceBus;
+using NServiceBusTutorials.Common;
 
 namespace Server
 {
@@ -21,7 +21,7 @@ namespace Server
             Console.Title = "NServiceBusTutorials:  Server";
             Thread.Sleep(1000);
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Server);
+            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Server, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
 

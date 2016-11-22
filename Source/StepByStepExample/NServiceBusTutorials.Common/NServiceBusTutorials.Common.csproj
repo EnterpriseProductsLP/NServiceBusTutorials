@@ -7,8 +7,8 @@
     <ProjectGuid>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>NServiceBusTutorials.Common</RootNamespace>
+    <AssemblyName>NServiceBusTutorials.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

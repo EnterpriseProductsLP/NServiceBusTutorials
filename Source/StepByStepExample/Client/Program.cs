@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Common;
 using Contracts;
 using Contracts.Commands;
 using Domain;
 using NServiceBus;
+using NServiceBusTutorials.Common;
 
 namespace Client
 {
@@ -23,7 +23,7 @@ namespace Client
             Console.Title = "NServiceBusTutorials:  Client";
             Thread.Sleep(2000);
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Client);
+            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Client, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try
