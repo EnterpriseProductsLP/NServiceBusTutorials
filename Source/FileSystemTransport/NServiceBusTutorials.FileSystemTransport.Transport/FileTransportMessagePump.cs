@@ -162,15 +162,15 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                 var json = string.Join("", message.Skip(1));
                 var headers = HeaderSerializer.DeSerialize(json);
 
-                string ttbrString;
-                if (headers.TryGetValue(Headers.TimeToBeReceived, out ttbrString))
+                string timeToBeReceivedString;
+                if (headers.TryGetValue(Headers.TimeToBeReceived, out timeToBeReceivedString))
                 {
-                    var ttbr = TimeSpan.Parse(ttbrString);
+                    var timeToBeReceived = TimeSpan.Parse(timeToBeReceivedString);
 
                     // File.Move preserves create time.
                     var sentTime = File.GetCreationTimeUtc(transaction.FileToProcess);
 
-                    if (sentTime + ttbr > DateTime.UtcNow)
+                    if (sentTime + timeToBeReceived > DateTime.UtcNow)
                     {
                         return;
                     }
