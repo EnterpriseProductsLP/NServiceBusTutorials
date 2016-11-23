@@ -9,7 +9,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server
 {
     internal class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var asyncMain = AsyncMain();
             var taskAwaiter = asyncMain.GetAwaiter();

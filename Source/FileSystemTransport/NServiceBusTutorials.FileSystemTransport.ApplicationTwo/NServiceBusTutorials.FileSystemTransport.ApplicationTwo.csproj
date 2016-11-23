@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{8CE5715D-2520-48CA-A3DA-72EA4E7C150B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBusTutorials.Common</RootNamespace>
-    <AssemblyName>NServiceBusTutorials.Common</AssemblyName>
+    <RootNamespace>NServiceBusTutorials.FileSystemTransport.ApplicationTwo</RootNamespace>
+    <AssemblyName>NServiceBusTutorials.FileSystemTransport.ApplicationTwo</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,11 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NServiceBus.Core">
-      <HintPath>..\packages\NServiceBus.6.0.0\lib\net452\NServiceBus.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NServiceBus.Transports.RabbitMQ">
-      <HintPath>..\packages\NServiceBus.RabbitMQ.4.1.0\lib\net452\NServiceBus.Transports.RabbitMQ.dll</HintPath>
+    <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NServiceBus.6.0.0\lib\net452\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,9 +47,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\TaskExtensions.cs" />
-    <Compile Include="NServiceBusUtils.cs" />
+    <Compile Include="MessageHandlers\MessageAHandler.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
+      <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
+      <Name>NServiceBusTutorials.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBusTutorials.FileSystemTransport.Contracts\NServiceBusTutorials.FileSystemTransport.Contracts.csproj">
+      <Project>{A7FB7A86-5EC6-4D0A-AB55-A6E571B31088}</Project>
+      <Name>NServiceBusTutorials.FileSystemTransport.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBusTutorials.FileSystemTransport.Transport\NServiceBusTutorials.FileSystemTransport.Transport.csproj">
+      <Project>{32330CDB-6D75-499E-AF38-3D0B31046BAF}</Project>
+      <Name>NServiceBusTutorials.FileSystemTransport.Transport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Features;
 using NServiceBusTutorials.Common;
-using NServiceBusTutorials.StepByStepExample.Contracts;
+using NServiceBusTutorials.FileSystemTransport.Contracts;
+using NServiceBusTutorials.FileSystemTransport.Transport;
 
-namespace NServiceBusTutorials.StepByStepExample.Subscriber
+namespace NServiceBusTutorials.FileSystemTransport.ApplicationTwo
 {
-    internal class Program
+    class Program
     {
         public static void Main()
         {
-            var asyncMain = AsyncMain();
-            var taskAwaiter = asyncMain.GetAwaiter();
-            taskAwaiter.GetResult();
+            AsyncMain().GetAwaiter().GetResult();
         }
 
         private static async Task AsyncMain()
         {
-            Console.Title = "End to End Example:  Subscriber";
+            Console.Title = "FileSystem Transport:  Application Two";
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Subscriber, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = NServiceBusUtils.GetEndpointConfiguration<FileTransport>(endpointName: Endpoints.EndpointTwo, auditQueue: null, errorQueue: Endpoints.ErrorQueue);
+            endpointConfiguration.DisableFeature<TimeoutManager>();
+
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try

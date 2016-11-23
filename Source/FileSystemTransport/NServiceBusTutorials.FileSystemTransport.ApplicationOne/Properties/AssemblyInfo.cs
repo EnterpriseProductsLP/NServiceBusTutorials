@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NServiceBusTutorials.CallbackUsage.Contracts")]
+[assembly: AssemblyTitle("NServiceBusTutorials.FileSystemTransport.ApplicationOne")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NServiceBusTutorials.CallbackUsage.Contracts")]
+[assembly: AssemblyProduct("NServiceBusTutorials.FileSystemTransport.ApplicationOne")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("55410ca9-18a0-4e82-b5b4-e81ba7e143d6")]
+[assembly: Guid("ead45d14-429f-4858-b92a-c8b9dfd67e64")]
 
 // Version information for an assembly consists of the following four values:
 //

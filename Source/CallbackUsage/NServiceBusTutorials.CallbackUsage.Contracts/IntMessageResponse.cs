@@ -2,7 +2,8 @@
 
 namespace NServiceBusTutorials.CallbackUsage.Contracts
 {
-    public class EnumMessage : IMessage
+    public class IntMessageResponse : IMessage
     {
+        public int Value;
     }
 }
