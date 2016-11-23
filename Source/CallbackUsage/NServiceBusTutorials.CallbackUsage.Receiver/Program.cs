@@ -17,7 +17,8 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver
         {
             Console.Title = "Callback Usage:  Receiver";
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Receiver, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Receiver, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             endpointConfiguration.MakeInstanceUniquelyAddressable(discriminator: "1");
             var endpointInstance = await Endpoint.Start(configuration: endpointConfiguration);
 

@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\TaskExtensions.cs" />
-    <Compile Include="NServiceBusUtils.cs" />
+    <Compile Include="EndpointConfigurationBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

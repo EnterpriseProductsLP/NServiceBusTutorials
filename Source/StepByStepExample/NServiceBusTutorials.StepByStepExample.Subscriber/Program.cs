@@ -19,7 +19,8 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber
         {
             Console.Title = "End to End Example:  Subscriber";
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Subscriber, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Subscriber, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try

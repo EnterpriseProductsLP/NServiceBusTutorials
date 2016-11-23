@@ -3,14 +3,14 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.Common
 {
-    public static class NServiceBusUtils
+    public class EndpointConfigurationBuilder
     {
-        public static EndpointConfiguration GetDefaultEndpointConfiguration(string endpointName, string auditQueue = null, string errorQueue = null)
+        public EndpointConfiguration GetEndpointConfiguration(string endpointName, string auditQueue = null, string errorQueue = null)
         {
             return GetEndpointConfiguration<RabbitMQTransport>(endpointName, auditQueue, errorQueue);
         }
 
-        public static EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string auditQueue = null, string errorQueue = null) where TTransport : TransportDefinition, new()
+        public EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string auditQueue = null, string errorQueue = null) where TTransport : TransportDefinition, new()
         {
             var endpointConfiguration = GetBaseEndpointConfiguration(endpointName);
             if (auditQueue != null)
@@ -28,7 +28,7 @@ namespace NServiceBusTutorials.Common
             return endpointConfiguration;
         }
 
-        private static EndpointConfiguration GetBaseEndpointConfiguration(string endpointName)
+        private EndpointConfiguration GetBaseEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
             endpointConfiguration.EnableInstallers();

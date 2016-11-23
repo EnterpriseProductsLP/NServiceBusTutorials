@@ -21,7 +21,8 @@ namespace NServiceBusTutorials.StepByStepExample.Server
             Console.Title = "End to End Example:  Server";
             Thread.Sleep(1000);
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Server, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Server, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
 

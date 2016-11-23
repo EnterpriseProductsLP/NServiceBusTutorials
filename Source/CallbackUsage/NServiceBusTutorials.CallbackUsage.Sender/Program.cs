@@ -19,7 +19,8 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
             Console.Title = "Callback Usage:  Sender";
             Thread.Sleep(1000);
 
-            var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Sender, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Sender, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             endpointConfiguration.MakeInstanceUniquelyAddressable(discriminator: "1");
             var endpointInstance = await Endpoint.Start(configuration: endpointConfiguration);
 
