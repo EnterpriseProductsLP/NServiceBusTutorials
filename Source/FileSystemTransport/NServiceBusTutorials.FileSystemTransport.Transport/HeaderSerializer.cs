@@ -5,33 +5,34 @@ using System.Text;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    static class HeaderSerializer
+    internal static class HeaderSerializer
     {
-        public static string Serialize(Dictionary<string, string> instance)
+        public static string Serialize(Dictionary<string, string> headers)
         {
             var serializer = BuildSerializer();
             using (var stream = new MemoryStream())
             {
-                serializer.WriteObject(stream, instance);
+                serializer.WriteObject(stream, headers);
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
 
-        public static Dictionary<string, string> DeSerialize(string json)
+        public static Dictionary<string, string> DeSerialize(string headerJson)
         {
             var serializer = BuildSerializer();
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(headerJson)))
             {
                 return (Dictionary<string, string>) serializer.ReadObject(stream);
             }
         }
 
-        static DataContractJsonSerializer BuildSerializer()
+        private static DataContractJsonSerializer BuildSerializer()
         {
             var settings = new DataContractJsonSerializerSettings
             {
                 UseSimpleDictionaryFormat = true,
             };
+
             return new DataContractJsonSerializer(typeof(Dictionary<string, string>), settings);
         }
     }

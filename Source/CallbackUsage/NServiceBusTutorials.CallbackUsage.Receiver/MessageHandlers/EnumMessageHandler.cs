@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
     public class EnumMessageHandler : IHandleMessages<EnumMessage>
     {
-        static ILog log = LogManager.GetLogger<EnumMessageHandler>();
+        private static ILog log = LogManager.GetLogger<EnumMessageHandler>();
 
         public Task Handle(EnumMessage message, IMessageHandlerContext context)
         {

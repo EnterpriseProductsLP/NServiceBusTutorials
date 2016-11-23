@@ -4,29 +4,31 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    class FileTransportQueueCreator : ICreateQueues
+    internal class FileTransportQueueCreator : ICreateQueues
     {
         public Task CreateQueueIfNecessary(QueueBindings queueBindings, string identity)
         {
             foreach (var sendingAddress in queueBindings.SendingAddresses)
             {
-                CreateQueueDirectory(sendingAddress);
+                BuildQueueDirectory(sendingAddress);
             }
 
             foreach (var receivingAddress in queueBindings.ReceivingAddresses)
             {
-                CreateQueueDirectory(receivingAddress);
+                BuildQueueDirectory(receivingAddress);
             }
 
             return Task.CompletedTask;
         }
 
-        static void CreateQueueDirectory(string address)
+        private static void BuildQueueDirectory(string address)
         {
-            var fullPath = BaseDirectoryBuilder.BuildBasePath(address);
-            var committedPath = Path.Combine(fullPath, ".committed");
+            var queuePath = DirectoryBuilder.BuildBasePath(address);
+
+            var committedPath = Path.Combine(queuePath, ".committed");
             Directory.CreateDirectory(committedPath);
-            var bodiesPath = Path.Combine(fullPath, ".bodies");
+
+            var bodiesPath = Path.Combine(queuePath, ".bodies");
             Directory.CreateDirectory(bodiesPath);
         }
 

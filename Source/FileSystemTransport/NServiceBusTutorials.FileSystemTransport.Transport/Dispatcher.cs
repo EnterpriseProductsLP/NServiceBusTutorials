@@ -7,20 +7,20 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    public class Dispatcher : IDispatchMessages
+    internal class Dispatcher : IDispatchMessages
     {
         public Task Dispatch(TransportOperations outgoingMessages, TransportTransaction transaction, ContextBag context)
         {
             foreach (var operation in outgoingMessages.UnicastTransportOperations)
             {
-                var basePath = BaseDirectoryBuilder.BuildBasePath(operation.Destination);
+                var destinationBasePath = DirectoryBuilder.BuildBasePath(operation.Destination);
                 var nativeMessageId = Guid.NewGuid().ToString();
-                var bodyPath = Path.Combine(basePath, ".bodies", $"{nativeMessageId}.xml");
+                var bodyPath = Path.Combine(destinationBasePath, ".bodies", $"{nativeMessageId}.xml");
 
-                var dir = Path.GetDirectoryName(bodyPath);
-                if (!Directory.Exists(dir))
+                var bodyDirectory = Path.GetDirectoryName(bodyPath);
+                if (!Directory.Exists(bodyDirectory))
                 {
-                    Directory.CreateDirectory(dir);
+                    Directory.CreateDirectory(bodyDirectory);
                 }
 
                 File.WriteAllBytes(bodyPath, operation.Message.Body);
@@ -31,13 +31,13 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                     HeaderSerializer.Serialize(operation.Message.Headers)
                 };
 
-                var messagePath = Path.Combine(basePath, $"{nativeMessageId}.txt");
+                var messagePath = Path.Combine(destinationBasePath, $"{nativeMessageId}.txt");
 
                 // Write to a temp file first so an atomic move can be done.
                 // This avoids the file being locked when the receiver triest to process it.
-                var tempFile = Path.GetTempFileName();
-                File.WriteAllLines(tempFile, messageContents);
-                File.Move(tempFile, messagePath);
+                var tempFilePath = Path.GetTempFileName();
+                File.WriteAllLines(tempFilePath, messageContents);
+                File.Move(tempFilePath, messagePath);
             }
 
             return Task.CompletedTask;

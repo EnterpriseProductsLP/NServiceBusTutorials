@@ -12,6 +12,6 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             return new FileTransportInfrastructure();
         }
 
-        public override string ExampleConnectionStringForErrorMessage { get; } = "";
+        public override string ExampleConnectionStringForErrorMessage => "";
     }
 }

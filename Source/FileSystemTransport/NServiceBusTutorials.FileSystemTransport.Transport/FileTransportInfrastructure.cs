@@ -9,21 +9,23 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    public class FileTransportInfrastructure : TransportInfrastructure
+    internal class FileTransportInfrastructure : TransportInfrastructure
     {
         public override TransportReceiveInfrastructure ConfigureReceiveInfrastructure()
         {
             return new TransportReceiveInfrastructure(
                 messagePumpFactory: () => new FileTransportMessagePump(),
                 queueCreatorFactory: () => new FileTransportQueueCreator(),
-                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success));
+                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success)
+            );
         }
 
         public override TransportSendInfrastructure ConfigureSendInfrastructure()
         {
             return new TransportSendInfrastructure(
                 dispatcherFactory: () => new Dispatcher(),
-                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success));
+                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success)
+            );
         }
 
         public override TransportSubscriptionInfrastructure ConfigureSubscriptionInfrastructure()
@@ -31,9 +33,9 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             throw new NotImplementedException();
         }
 
-        public override EndpointInstance BindToLocalEndpoint(EndpointInstance instance)
+        public override EndpointInstance BindToLocalEndpoint(EndpointInstance endpointInstance)
         {
-            return instance;
+            return endpointInstance;
         }
 
         public override string ToTransportAddress(LogicalAddress logicalAddress)
@@ -46,23 +48,18 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 
         public override IEnumerable<Type> DeliveryConstraints
         {
-            get { yield return typeof(DiscardIfNotReceivedBefore); }
-        }
-
-        public override TransportTransactionMode TransactionMode
-        {
-            get { return TransportTransactionMode.ReceiveOnly; }
-        }
-
-        public override OutboundRoutingPolicy OutboundRoutingPolicy
-        {
             get
             {
-                return new OutboundRoutingPolicy(
-                    sends: OutboundRoutingType.Unicast,
-                    publishes: OutboundRoutingType.Unicast,
-                    replies: OutboundRoutingType.Unicast);
+                yield return typeof(DiscardIfNotReceivedBefore);
             }
         }
+
+        public override TransportTransactionMode TransactionMode => TransportTransactionMode.ReceiveOnly;
+
+        public override OutboundRoutingPolicy OutboundRoutingPolicy => new OutboundRoutingPolicy(
+            sends: OutboundRoutingType.Unicast,
+            publishes: OutboundRoutingType.Unicast,
+            replies: OutboundRoutingType.Unicast
+        );
     }
 }

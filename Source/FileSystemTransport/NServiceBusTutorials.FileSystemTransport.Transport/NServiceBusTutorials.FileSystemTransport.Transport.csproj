@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseDirectoryBuilder.cs" />
+    <Compile Include="DirectoryBuilder.cs" />
     <Compile Include="FileTransport.cs" />
     <Compile Include="DirectoryBasedTransaction.cs" />
     <Compile Include="Dispatcher.cs" />

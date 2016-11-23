@@ -26,7 +26,7 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne
 
             try
             {
-                for (var i = 0; i < 1; i++)
+                for (var i = 0; i < 100; i++)
                 {
                     var messageA = new MessageA();
                     await endpointInstance.Send(Endpoints.EndpointTwo, messageA).ConfigureAwait(false);

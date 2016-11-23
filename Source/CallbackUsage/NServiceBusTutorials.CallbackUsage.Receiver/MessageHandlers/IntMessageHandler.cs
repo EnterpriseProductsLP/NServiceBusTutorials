@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
     class IntMessageHandler : IHandleMessages<IntMessage>
     {
-        static ILog log = LogManager.GetLogger<IntMessageHandler>();
+        private static ILog log = LogManager.GetLogger<IntMessageHandler>();
 
         public Task Handle(IntMessage message, IMessageHandlerContext context)
         {

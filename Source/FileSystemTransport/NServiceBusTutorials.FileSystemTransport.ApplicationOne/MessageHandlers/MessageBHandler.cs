@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne.MessageHandler
 {
     public class MessageBHandler : IHandleMessages<MessageB>
     {
-        static ILog log = LogManager.GetLogger<MessageBHandler>();
+        private static ILog log = LogManager.GetLogger<MessageBHandler>();
 
         public Task Handle(MessageB message, IMessageHandlerContext context)
         {
