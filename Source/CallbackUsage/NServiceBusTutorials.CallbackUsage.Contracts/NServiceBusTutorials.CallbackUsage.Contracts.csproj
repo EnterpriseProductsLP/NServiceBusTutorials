@@ -46,6 +46,11 @@
   <ItemGroup>
     <Compile Include="Endpoints.cs" />
     <Compile Include="EnumMessage.cs" />
+    <Compile Include="EnumMessageResponse.cs" />
+    <Compile Include="IntMessage.cs" />
+    <Compile Include="IntMessageResponse.cs" />
+    <Compile Include="ObjectMessage.cs" />
+    <Compile Include="ObjectMessageResponse.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

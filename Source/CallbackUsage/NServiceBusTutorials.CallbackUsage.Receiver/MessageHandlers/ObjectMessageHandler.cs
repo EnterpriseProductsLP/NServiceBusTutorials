@@ -5,14 +5,14 @@ using NServiceBusTutorials.CallbackUsage.Contracts;
 
 namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
-    public class EnumMessageHandler : IHandleMessages<EnumMessage>
+    class ObjectMessageHandler : IHandleMessages<ObjectMessage>
     {
         static ILog log = LogManager.GetLogger<EnumMessageHandler>();
 
-        public Task Handle(EnumMessage message, IMessageHandlerContext context)
+        public Task Handle(ObjectMessage message, IMessageHandlerContext context)
         {
-            log.Info("Enum message received.  Returning.");
-            var responseMessage = new EnumMessageResponse {Status = Status.OK};
+            log.Info("Object message received.  Returning.");
+            var responseMessage = new ObjectMessageResponse {Property = "PropertyValue"};
             return context.Reply(responseMessage);
         }
     }
