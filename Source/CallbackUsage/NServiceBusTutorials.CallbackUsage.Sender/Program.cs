@@ -9,7 +9,7 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
 {
     class Program
     {
-        static void Main()
+        public static void Main()
         {
             AsyncMain().GetAwaiter().GetResult();
         }

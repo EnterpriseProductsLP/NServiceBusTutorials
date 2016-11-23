@@ -5,11 +5,13 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
     public class FileTransport : TransportDefinition
     {
+        public override bool RequiresConnectionString => false;
+
         public override TransportInfrastructure Initialize(SettingsHolder settings, string connectionString)
         {
             return new FileTransportInfrastructure();
         }
 
-        public override string ExampleConnectionStringForErrorMessage => "";
+        public override string ExampleConnectionStringForErrorMessage { get; } = "";
     }
 }

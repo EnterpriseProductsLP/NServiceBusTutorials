@@ -31,10 +31,11 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         {
             if (!_committed)
             {
+                // Roll back by moving the file back to the main dir
                 File.Move(FileToProcess, Path.Combine(_basePath, Path.GetFileName(FileToProcess)));
             }
 
-            Directory.Delete(_transactionDir);
+            Directory.Delete(_transactionDir, true);
         }
     }
 }

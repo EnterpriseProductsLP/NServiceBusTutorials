@@ -4,7 +4,7 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    public class FileTransportQueueCreator : ICreateQueues
+    class FileTransportQueueCreator : ICreateQueues
     {
         public Task CreateQueueIfNecessary(QueueBindings queueBindings, string identity)
         {
@@ -21,14 +21,14 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             return Task.CompletedTask;
         }
 
-        private void CreateQueueDirectory(string address)
+        static void CreateQueueDirectory(string address)
         {
             var fullPath = BaseDirectoryBuilder.BuildBasePath(address);
             var committedPath = Path.Combine(fullPath, ".committed");
             Directory.CreateDirectory(committedPath);
-
             var bodiesPath = Path.Combine(fullPath, ".bodies");
             Directory.CreateDirectory(bodiesPath);
         }
+
     }
 }

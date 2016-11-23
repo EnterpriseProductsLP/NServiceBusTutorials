@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -13,75 +14,75 @@ using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    public class FileTransportMessagePump : IPushMessages
+    class FileTransportMessagePump : IPushMessages
     {
-        private static readonly ILog log = LogManager.GetLogger<FileTransportMessagePump>();
+        static ILog log = LogManager.GetLogger<FileTransportMessagePump>();
 
-        private CancellationToken _cancellationToken;
-        private CancellationTokenSource _cancellationTokenSource;
-        private SemaphoreSlim _concurrencyLimiter;
-        private Task _messagePumpTask;
-        private Func<ErrorContext, Task<ErrorHandleResult>> _onError;
-        private string _path;
-        private Func<MessageContext, Task> _pipeline;
-        private bool _purgeOnStartup;
-        private ConcurrentDictionary<Task, Task> _runningReceiveTasks;
+        CancellationToken cancellationToken;
+        CancellationTokenSource cancellationTokenSource;
+        SemaphoreSlim concurrencyLimiter;
+        Task messagePumpTask;
+        Func<ErrorContext, Task<ErrorHandleResult>> onError;
+        string path;
+        Func<MessageContext, Task> pipeline;
+        bool purgeOnStartup;
+        ConcurrentDictionary<Task, Task> runningReceiveTasks;
 
-        public Task Init(Func<MessageContext, Task> onMessage, Func<ErrorContext, Task<ErrorHandleResult>> onError,
-            CriticalError criticalError, PushSettings settings)
+        public Task Init(Func<MessageContext, Task> onMessage, Func<ErrorContext, Task<ErrorHandleResult>> onError, CriticalError criticalError, PushSettings settings)
         {
-            _onError = onError;
-            _pipeline = onMessage;
-            _path = BaseDirectoryBuilder.BuildBasePath(settings.InputQueue);
-            _purgeOnStartup = settings.PurgeOnStartup;
+            this.onError = onError;
+            pipeline = onMessage;
+            path = BaseDirectoryBuilder.BuildBasePath(settings.InputQueue);
+            purgeOnStartup = settings.PurgeOnStartup;
             return Task.CompletedTask;
         }
 
         public void Start(PushRuntimeSettings limitations)
         {
-            _runningReceiveTasks = new ConcurrentDictionary<Task, Task>();
-            _concurrencyLimiter = new SemaphoreSlim(limitations.MaxConcurrency);
-            _cancellationTokenSource = new CancellationTokenSource();
-            _cancellationToken = _cancellationTokenSource.Token;
+            runningReceiveTasks = new ConcurrentDictionary<Task, Task>();
+            concurrencyLimiter = new SemaphoreSlim(limitations.MaxConcurrency);
+            cancellationTokenSource = new CancellationTokenSource();
 
-            if (_purgeOnStartup)
+            cancellationToken = cancellationTokenSource.Token;
+
+            if (purgeOnStartup)
             {
-                Directory.Delete(_path, true);
-                Directory.CreateDirectory(_path);
+                Directory.Delete(path, true);
+                Directory.CreateDirectory(path);
             }
 
-            _messagePumpTask = Task.Factory
+            messagePumpTask = Task.Factory
                 .StartNew(
                     function: ProcessMessages,
                     cancellationToken: CancellationToken.None,
                     creationOptions: TaskCreationOptions.LongRunning,
-                    scheduler: TaskScheduler.Default
-                )
+                    scheduler: TaskScheduler.Default)
                 .Unwrap();
         }
 
         public async Task Stop()
         {
-            _cancellationTokenSource.Cancel();
+            cancellationTokenSource.Cancel();
 
-            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(30), _cancellationTokenSource.Token);
-            var allTasks = _runningReceiveTasks.Values.Concat(new[]
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(30), cancellationTokenSource.Token);
+            var allTasks = runningReceiveTasks.Values.Concat(new[]
             {
-                _messagePumpTask
-            });
-
-            var finishedTask = await Task.WhenAny(Task.WhenAll(allTasks), timeoutTask).ConfigureAwait(false);
+            messagePumpTask
+        });
+            var finishedTask = await Task.WhenAny(Task.WhenAll(allTasks), timeoutTask)
+                .ConfigureAwait(false);
 
             if (finishedTask.Equals(timeoutTask))
             {
-                log.Error("The message pump failed to stop within the time allowed(30s)");
+                log.Error("The message pump failed to stop with in the time allowed(30s)");
             }
 
-            _concurrencyLimiter.Dispose();
-            _runningReceiveTasks.Clear();
+            concurrencyLimiter.Dispose();
+            runningReceiveTasks.Clear();
         }
 
-        private async Task ProcessMessages()
+        [DebuggerNonUserCode]
+        async Task ProcessMessages()
         {
             try
             {
@@ -89,71 +90,76 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             }
             catch (OperationCanceledException)
             {
-                // For graceful shutdown purposes.
+                // For graceful shutdown purposes
             }
             catch (Exception ex)
             {
                 log.Error("File Message pump failed", ex);
             }
 
-            if (!_cancellationToken.IsCancellationRequested)
+            if (!cancellationToken.IsCancellationRequested)
             {
-                await ProcessMessages().ConfigureAwait(false);
+                await ProcessMessages()
+                    .ConfigureAwait(false);
             }
         }
 
-        private async Task InnerProcessMessages()
+        async Task InnerProcessMessages()
         {
-            while (!_cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationTokenSource.IsCancellationRequested)
             {
                 var filesFound = false;
 
-                foreach (var filePath in Directory.EnumerateFiles(_path, "*.*"))
+                foreach (var filePath in Directory.EnumerateFiles(path, "*.*"))
                 {
                     filesFound = true;
-                    await ProcessFile(filePath).ConfigureAwait(false);
+                    await ProcessFile(filePath)
+                        .ConfigureAwait(false);
                 }
 
                 if (!filesFound)
                 {
-                    await Task.Delay(10, _cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(10, cancellationToken)
+                        .ConfigureAwait(false);
                 }
             }
         }
 
-        private async Task ProcessFile(string filePath)
+        async Task ProcessFile(string filePath)
         {
             var nativeMessageId = Path.GetFileNameWithoutExtension(filePath);
 
-            await _concurrencyLimiter.WaitAsync(_cancellationToken).ConfigureAwait(false);
+            await concurrencyLimiter.WaitAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-            Func<Task> processFileWithTransaction = async () =>
+            var task = Task.Run(async () =>
             {
                 try
                 {
-                    await ProcessFileWithTransaction(filePath, nativeMessageId).ConfigureAwait(false);
+                    await ProcessFileWithTransaction(filePath, nativeMessageId)
+                        .ConfigureAwait(false);
                 }
                 finally
                 {
-                    _concurrencyLimiter.Release();
+                    concurrencyLimiter.Release();
                 }
-            };
-            var task = Task.Run(processFileWithTransaction, _cancellationToken);
+            }, cancellationToken);
 
             task.ContinueWith(t =>
-                    {
-                        Task toBeRemoved;
-                        _runningReceiveTasks.TryRemove(t, out toBeRemoved);
-                    },
-                    TaskContinuationOptions.ExecuteSynchronously)
+            {
+                Task toBeRemoved;
+                runningReceiveTasks.TryRemove(t, out toBeRemoved);
+            },
+                TaskContinuationOptions.ExecuteSynchronously)
                 .Ignore();
 
-            _runningReceiveTasks.AddOrUpdate(task, task, (k, v) => task).Ignore();
+            runningReceiveTasks.AddOrUpdate(task, task, (k, v) => task)
+                .Ignore();
         }
 
-        private async Task ProcessFileWithTransaction(string filePath, string messageId)
+        async Task ProcessFileWithTransaction(string filePath, string messageId)
         {
-            using (var transaction = new DirectoryBasedTransaction(_path))
+            using (var transaction = new DirectoryBasedTransaction(path))
             {
                 transaction.BeginTransaction(filePath);
 
@@ -162,35 +168,33 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                 var json = string.Join("", message.Skip(1));
                 var headers = HeaderSerializer.DeSerialize(json);
 
-                string timeToBeReceivedString;
-                if (headers.TryGetValue(Headers.TimeToBeReceived, out timeToBeReceivedString))
+                string ttbrString;
+                if (headers.TryGetValue(Headers.TimeToBeReceived, out ttbrString))
                 {
-                    var timeToBeReceived = TimeSpan.Parse(timeToBeReceivedString);
-
-                    // File.Move preserves create time.
+                    var ttbr = TimeSpan.Parse(ttbrString);
+                    // file.move preserves create time
                     var sentTime = File.GetCreationTimeUtc(transaction.FileToProcess);
 
-                    if (sentTime + timeToBeReceived > DateTime.UtcNow)
+                    if (sentTime + ttbr < DateTime.UtcNow)
                     {
                         return;
                     }
+                }
 
-                    var body = File.ReadAllBytes(bodyPath);
-                    var transportTransaction = new TransportTransaction();
-                    transportTransaction.Set(transaction);
+                var body = File.ReadAllBytes(bodyPath);
+                var transportTransaction = new TransportTransaction();
+                transportTransaction.Set(transaction);
 
-                    var shouldCommit = await HandleMessageWithRetries(messageId, headers, body, transportTransaction, 1);
+                var shouldCommit = await HandleMessageWithRetries(messageId, headers, body, transportTransaction, 1);
 
-                    if (shouldCommit)
-                    {
-                        transaction.Commit();
-                    }
+                if (shouldCommit)
+                {
+                    transaction.Commit();
                 }
             }
         }
 
-        private async Task<bool> HandleMessageWithRetries(string messageId, Dictionary<string, string> headers,
-            byte[] body, TransportTransaction transportTransaction, int processingAttempt)
+        async Task<bool> HandleMessageWithRetries(string messageId, Dictionary<string, string> headers, byte[] body, TransportTransaction transportTransaction, int processingAttempt)
         {
             try
             {
@@ -203,14 +207,15 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                     receiveCancellationTokenSource: receiveCancellationTokenSource,
                     context: new ContextBag());
 
-                await _pipeline(pushContext).ConfigureAwait(false);
+                await pipeline(pushContext)
+                    .ConfigureAwait(false);
 
                 return !receiveCancellationTokenSource.IsCancellationRequested;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                var errorContext = new ErrorContext(ex, headers, messageId, body, transportTransaction, processingAttempt);
-                var errorHandlingResult = await _onError(errorContext);
+                var errorContext = new ErrorContext(e, headers, messageId, body, transportTransaction, processingAttempt);
+                var errorHandlingResult = await onError(errorContext);
 
                 if (errorHandlingResult == ErrorHandleResult.RetryRequired)
                 {

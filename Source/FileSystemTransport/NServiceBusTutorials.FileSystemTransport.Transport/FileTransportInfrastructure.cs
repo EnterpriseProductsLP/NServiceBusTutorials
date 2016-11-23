@@ -49,11 +49,20 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             get { yield return typeof(DiscardIfNotReceivedBefore); }
         }
 
-        public override TransportTransactionMode TransactionMode => TransportTransactionMode.ReceiveOnly;
+        public override TransportTransactionMode TransactionMode
+        {
+            get { return TransportTransactionMode.ReceiveOnly; }
+        }
 
-        public override OutboundRoutingPolicy OutboundRoutingPolicy => new OutboundRoutingPolicy(
-            sends: OutboundRoutingType.Unicast,
-            publishes: OutboundRoutingType.Unicast,
-            replies: OutboundRoutingType.Unicast);
+        public override OutboundRoutingPolicy OutboundRoutingPolicy
+        {
+            get
+            {
+                return new OutboundRoutingPolicy(
+                    sends: OutboundRoutingType.Unicast,
+                    publishes: OutboundRoutingType.Unicast,
+                    replies: OutboundRoutingType.Unicast);
+            }
+        }
     }
 }

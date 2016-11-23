@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
-    public static class HeaderSerializer
+    static class HeaderSerializer
     {
         public static string Serialize(Dictionary<string, string> instance)
         {
@@ -26,13 +26,12 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             }
         }
 
-        private static DataContractJsonSerializer BuildSerializer()
+        static DataContractJsonSerializer BuildSerializer()
         {
             var settings = new DataContractJsonSerializerSettings
             {
-                UseSimpleDictionaryFormat = true
+                UseSimpleDictionaryFormat = true,
             };
-
             return new DataContractJsonSerializer(typeof(Dictionary<string, string>), settings);
         }
     }
