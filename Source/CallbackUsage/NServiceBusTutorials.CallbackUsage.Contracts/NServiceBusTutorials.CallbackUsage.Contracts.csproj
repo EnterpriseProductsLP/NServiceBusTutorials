@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{232435D0-13D5-4F4B-B0D9-EE75A27D22EA}</ProjectGuid>
+    <ProjectGuid>{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBusTutorials.StepByStepExample.Contracts</RootNamespace>
-    <AssemblyName>NServiceBusTutorials.StepByStepExample.Contracts</AssemblyName>
+    <RootNamespace>NServiceBusTutorials.CallbackUsage.Contracts</RootNamespace>
+    <AssemblyName>NServiceBusTutorials.CallbackUsage.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,10 +34,6 @@
       <HintPath>..\..\packages\NServiceBus.6.0.0\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RabbitMQ.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RabbitMQ.Client.4.1.1\lib\net451\RabbitMQ.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,15 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Endpoints.cs" />
-    <Compile Include="Events\OrderPlaced.cs" />
-    <Compile Include="Commands\PlaceOrder.cs" />
+    <Compile Include="EnumMessage.cs" />
+    <Compile Include="Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NServiceBusTutorials.StepByStepExample.Domain\NServiceBusTutorials.StepByStepExample.Domain.csproj">
-      <Project>{0078A810-99D5-441A-A154-596D93CB39A1}</Project>
-      <Name>NServiceBusTutorials.StepByStepExample.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

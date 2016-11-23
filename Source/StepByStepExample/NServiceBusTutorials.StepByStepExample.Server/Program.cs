@@ -18,7 +18,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server
 
         private static async Task AsyncMain()
         {
-            Console.Title = "NServiceBusTutorials:  Server";
+            Console.Title = "End to End Example:  Server";
             Thread.Sleep(1000);
 
             var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Server, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);

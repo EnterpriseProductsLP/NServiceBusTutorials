@@ -25,6 +25,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.StepBy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.Common", "NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj", "{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Callback Usage", "02 - Callback Usage", "{1AE819D5-13BD-4209-BF89-6D58C398165C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{18B0A26F-A37E-4493-AE45-474F6ACFE93B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.CallbackUsage.Receiver", "CallbackUsage\NServiceBusTutorials.CallbackUsage.Receiver\NServiceBusTutorials.CallbackUsage.Receiver.csproj", "{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.CallbackUsage.Contracts", "CallbackUsage\NServiceBusTutorials.CallbackUsage.Contracts\NServiceBusTutorials.CallbackUsage.Contracts.csproj", "{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.CallbackUsage.Sender", "CallbackUsage\NServiceBusTutorials.CallbackUsage.Sender\NServiceBusTutorials.CallbackUsage.Sender.csproj", "{1AD23A08-0AA6-4906-9759-E90D9B193C9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +65,18 @@ Global
 		{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AD23A08-0AA6-4906-9759-E90D9B193C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AD23A08-0AA6-4906-9759-E90D9B193C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AD23A08-0AA6-4906-9759-E90D9B193C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AD23A08-0AA6-4906-9759-E90D9B193C9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +88,9 @@ Global
 		{70D34D2A-E7A5-4F41-8BCE-B9BAB41984F2} = {956B3081-4FB6-421F-AC1B-B909A59232AC}
 		{0078A810-99D5-441A-A154-596D93CB39A1} = {B254FE29-B995-46C9-84BC-35BC51EBF48B}
 		{232435D0-13D5-4F4B-B0D9-EE75A27D22EA} = {B254FE29-B995-46C9-84BC-35BC51EBF48B}
+		{18B0A26F-A37E-4493-AE45-474F6ACFE93B} = {1AE819D5-13BD-4209-BF89-6D58C398165C}
+		{0BA288C9-D160-4EAF-AADA-D88A47C4C81A} = {18B0A26F-A37E-4493-AE45-474F6ACFE93B}
+		{55410CA9-18A0-4E82-B5B4-E81BA7E143D6} = {1AE819D5-13BD-4209-BF89-6D58C398165C}
+		{1AD23A08-0AA6-4906-9759-E90D9B193C9A} = {18B0A26F-A37E-4493-AE45-474F6ACFE93B}
 	EndGlobalSection
 EndGlobal

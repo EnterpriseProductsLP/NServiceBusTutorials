@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.StepByStepExample.Client
 
         private static async Task AsyncMain()
         {
-            Console.Title = "NServiceBusTutorials:  Client";
+            Console.Title = "End to End Example:  Client";
             Thread.Sleep(2000);
 
             var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Client, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);

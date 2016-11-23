@@ -17,7 +17,7 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber
 
         private static async Task AsyncMain()
         {
-            Console.Title = "NServiceBusTutorials:  Subscriber";
+            Console.Title = "End to End Example:  Subscriber";
 
             var endpointConfiguration = NServiceBusUtils.GetDefaultEndpointConfiguration(endpointName: Endpoints.Subscriber, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);

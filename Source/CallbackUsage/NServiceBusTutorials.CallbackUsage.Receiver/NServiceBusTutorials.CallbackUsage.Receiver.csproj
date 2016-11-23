@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{232435D0-13D5-4F4B-B0D9-EE75A27D22EA}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{0BA288C9-D160-4EAF-AADA-D88A47C4C81A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBusTutorials.StepByStepExample.Contracts</RootNamespace>
-    <AssemblyName>NServiceBusTutorials.StepByStepExample.Contracts</AssemblyName>
+    <RootNamespace>NServiceBusTutorials.CallbackUsage.Receiver</RootNamespace>
+    <AssemblyName>NServiceBusTutorials.CallbackUsage.Receiver</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,8 +37,12 @@
       <HintPath>..\..\packages\NServiceBus.6.0.0\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NServiceBus.Transports.RabbitMQ, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NServiceBus.RabbitMQ.4.1.0\lib\net452\NServiceBus.Transports.RabbitMQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RabbitMQ.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RabbitMQ.Client.4.1.1\lib\net451\RabbitMQ.Client.dll</HintPath>
+      <HintPath>..\..\packages\RabbitMQ.Client.4.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -48,19 +55,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Endpoints.cs" />
-    <Compile Include="Events\OrderPlaced.cs" />
-    <Compile Include="Commands\PlaceOrder.cs" />
+    <Compile Include="MessageHandlers\EnumMessageHandler.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NServiceBusTutorials.StepByStepExample.Domain\NServiceBusTutorials.StepByStepExample.Domain.csproj">
-      <Project>{0078A810-99D5-441A-A154-596D93CB39A1}</Project>
-      <Name>NServiceBusTutorials.StepByStepExample.Domain</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
+      <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
+      <Name>NServiceBusTutorials.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBusTutorials.CallbackUsage.Contracts\NServiceBusTutorials.CallbackUsage.Contracts.csproj">
+      <Project>{55410CA9-18A0-4E82-B5B4-E81BA7E143D6}</Project>
+      <Name>NServiceBusTutorials.CallbackUsage.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
