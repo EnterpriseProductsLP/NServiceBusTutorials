@@ -8,7 +8,7 @@ using NServiceBusTutorials.FileSystemTransport.Transport;
 
 namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne
 {
-    class Program
+    internal class Program
     {
         public static void Main()
         {
