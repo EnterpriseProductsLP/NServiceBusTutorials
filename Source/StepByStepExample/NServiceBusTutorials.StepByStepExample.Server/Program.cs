@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -11,9 +12,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server
     {
         public static void Main()
         {
-            var asyncMain = AsyncMain();
-            var taskAwaiter = asyncMain.GetAwaiter();
-            taskAwaiter.GetResult();
+            AsyncMain().GetAwaiter().GetResult();
         }
 
         private static async Task AsyncMain()

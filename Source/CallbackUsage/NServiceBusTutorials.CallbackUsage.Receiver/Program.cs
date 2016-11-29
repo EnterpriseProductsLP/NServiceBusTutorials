@@ -6,7 +6,7 @@ using NServiceBusTutorials.Common;
 
 namespace NServiceBusTutorials.CallbackUsage.Receiver
 {
-    class Program
+    internal class Program
     {
         public static void Main()
         {

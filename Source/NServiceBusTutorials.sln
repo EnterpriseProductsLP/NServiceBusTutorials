@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{956B3081-4FB6-421F-AC1B-B909A59232AC}"
 EndProject
@@ -46,6 +46,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.FileSystemTransport.ApplicationOne", "FileSystemTransport\NServiceBusTutorials.FileSystemTransport.ApplicationOne\NServiceBusTutorials.FileSystemTransport.ApplicationOne.csproj", "{EAD45D14-429F-4858-B92A-C8B9DFD67E64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.FileSystemTransport.ApplicationTwo", "FileSystemTransport\NServiceBusTutorials.FileSystemTransport.ApplicationTwo\NServiceBusTutorials.FileSystemTransport.ApplicationTwo.csproj", "{8CE5715D-2520-48CA-A3DA-72EA4E7C150B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - Publish Subscribe", "04 - Publish Subscribe", "{299F6B66-DC84-4E60-A129-4C102FE7FD0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.PublishSubscribe.Contracts", "PublishSubscribe\NServiceBusTutorials.PublishSubscribe.Contracts\NServiceBusTutorials.PublishSubscribe.Contracts.csproj", "{F9F50904-BAAC-45E0-87DA-9B979869D327}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5DF074CE-9F40-458A-8E80-E9E1522405FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.PublishSubscribe.Publisher", "PublishSubscribe\NServiceBusTutorials.PublishSubscribe.Publisher\NServiceBusTutorials.PublishSubscribe.Publisher.csproj", "{9E197B00-3B44-4172-9202-6DD899FDF6E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.PublishSubscribe.SubscriberOne", "PublishSubscribe\NServiceBusTutorials.PublishSubscribe.SubscriberOne\NServiceBusTutorials.PublishSubscribe.SubscriberOne.csproj", "{1440895E-D52B-4948-9CA7-06C738783940}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.PublishSubscribe.SubscriberTwo", "PublishSubscribe\NServiceBusTutorials.PublishSubscribe.SubscriberTwo\NServiceBusTutorials.PublishSubscribe.SubscriberTwo.csproj", "{F30634E5-72A9-44F7-BB56-393162B9B9E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBusTutorials.PublishSubscribe.SubscriberThree", "PublishSubscribe\NServiceBusTutorials.PublishSubscribe.SubscriberThree\NServiceBusTutorials.PublishSubscribe.SubscriberThree.csproj", "{5270E178-46F6-4460-AF2D-068766A64D2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +119,26 @@ Global
 		{8CE5715D-2520-48CA-A3DA-72EA4E7C150B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE5715D-2520-48CA-A3DA-72EA4E7C150B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CE5715D-2520-48CA-A3DA-72EA4E7C150B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9F50904-BAAC-45E0-87DA-9B979869D327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9F50904-BAAC-45E0-87DA-9B979869D327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9F50904-BAAC-45E0-87DA-9B979869D327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9F50904-BAAC-45E0-87DA-9B979869D327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E197B00-3B44-4172-9202-6DD899FDF6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E197B00-3B44-4172-9202-6DD899FDF6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E197B00-3B44-4172-9202-6DD899FDF6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E197B00-3B44-4172-9202-6DD899FDF6E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1440895E-D52B-4948-9CA7-06C738783940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1440895E-D52B-4948-9CA7-06C738783940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1440895E-D52B-4948-9CA7-06C738783940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1440895E-D52B-4948-9CA7-06C738783940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F30634E5-72A9-44F7-BB56-393162B9B9E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30634E5-72A9-44F7-BB56-393162B9B9E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F30634E5-72A9-44F7-BB56-393162B9B9E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F30634E5-72A9-44F7-BB56-393162B9B9E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5270E178-46F6-4460-AF2D-068766A64D2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5270E178-46F6-4460-AF2D-068766A64D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5270E178-46F6-4460-AF2D-068766A64D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5270E178-46F6-4460-AF2D-068766A64D2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,5 +159,11 @@ Global
 		{A7FB7A86-5EC6-4D0A-AB55-A6E571B31088} = {D546D428-9FC9-43B2-9E09-E39DCED8CD6C}
 		{EAD45D14-429F-4858-B92A-C8B9DFD67E64} = {2BB08BFD-29A8-4D6B-B7CB-9C891F5E90E8}
 		{8CE5715D-2520-48CA-A3DA-72EA4E7C150B} = {2BB08BFD-29A8-4D6B-B7CB-9C891F5E90E8}
+		{F9F50904-BAAC-45E0-87DA-9B979869D327} = {299F6B66-DC84-4E60-A129-4C102FE7FD0C}
+		{5DF074CE-9F40-458A-8E80-E9E1522405FB} = {299F6B66-DC84-4E60-A129-4C102FE7FD0C}
+		{9E197B00-3B44-4172-9202-6DD899FDF6E4} = {5DF074CE-9F40-458A-8E80-E9E1522405FB}
+		{1440895E-D52B-4948-9CA7-06C738783940} = {5DF074CE-9F40-458A-8E80-E9E1522405FB}
+		{F30634E5-72A9-44F7-BB56-393162B9B9E3} = {5DF074CE-9F40-458A-8E80-E9E1522405FB}
+		{5270E178-46F6-4460-AF2D-068766A64D2F} = {5DF074CE-9F40-458A-8E80-E9E1522405FB}
 	EndGlobalSection
 EndGlobal

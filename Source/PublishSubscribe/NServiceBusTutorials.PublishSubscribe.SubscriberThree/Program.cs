@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Features;
 using NServiceBusTutorials.Common;
-using NServiceBusTutorials.FileSystemTransport.Contracts;
-using NServiceBusTutorials.FileSystemTransport.Transport;
+using NServiceBusTutorials.PublishSubscribe.Contracts;
 
-namespace NServiceBusTutorials.FileSystemTransport.ApplicationTwo
+namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
 {
     internal class Program
     {
@@ -17,18 +15,16 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationTwo
 
         private static async Task AsyncMain()
         {
-            Console.Title = "FileSystem Transport:  Application Two";
+            Console.Title = "Pub/Sub:  SubscriberThree";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration<FileTransport>(endpointName: Endpoints.EndpointTwo, auditQueue: null, errorQueue: Endpoints.ErrorQueue);
-            endpointConfiguration.DisableFeature<TimeoutManager>();
-
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.SubscriberThree, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try
             {
                 Console.WriteLine();
-                Console.WriteLine("Press any key to exit");
+                Console.WriteLine("SubscriberThree Subscribed:  Press any key to exit");
                 Console.ReadKey();
             }
             finally
