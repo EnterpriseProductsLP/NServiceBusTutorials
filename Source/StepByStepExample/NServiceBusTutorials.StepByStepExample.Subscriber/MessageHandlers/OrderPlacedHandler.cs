@@ -14,7 +14,7 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber.MessageHandlers
         {
             Console.WriteLine();
 
-            log.Info($"Hadling: OrderPlaced for Order Id: {message.OrderId}");
+            log.Info($"Handling: OrderPlaced for Order Id: {message.OrderId}");
             return Task.CompletedTask;
         }
     }
