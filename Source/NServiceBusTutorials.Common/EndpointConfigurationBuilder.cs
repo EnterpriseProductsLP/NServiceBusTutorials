@@ -17,10 +17,12 @@ namespace NServiceBusTutorials.Common
             {
                 endpointConfiguration.AuditProcessedMessagesTo(auditQueue: auditQueue);
             }
+
             if (errorQueue != null)
             {
                 endpointConfiguration.SendFailedMessagesTo(errorQueue: errorQueue);
             }
+
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseTransport<TTransport>();
