@@ -8,7 +8,7 @@ rabbitmqctl -n rabbit@TSESTMRMQ01CORP delete_vhost NServiceBusTutorials
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_vhost NServiceBusTutorials
 
 # Grant user permissions on the virtual host
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials eburcham ".*" ".*" ".*"
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials admin ".*" ".*" ".*"
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
 
 # Create federation upstreams
@@ -32,7 +32,7 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF delete_vhost NServiceBusTutorials
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_vhost NServiceBusTutorials
 
 # Grant user permissions on the virtual host
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials eburcham ".*" ".*" ".*"
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials admin ".*" ".*" ".*"
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
 
 # Create federation upstreams

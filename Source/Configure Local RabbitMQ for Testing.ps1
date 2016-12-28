@@ -8,7 +8,7 @@ rabbitmqctl delete_vhost NServiceBusTutorials
 rabbitmqctl add_vhost NServiceBusTutorials
 
 # Grant user permissions on the virtual host
-rabbitmqctl set_permissions -p NServiceBusTutorials eburcham ".*" ".*" ".*"
+rabbitmqctl set_permissions -p NServiceBusTutorials admin ".*" ".*" ".*"
 rabbitmqctl set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
 
 # Add policies for high availablity on exchnages and high availability + federation on queues
