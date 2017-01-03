@@ -2,9 +2,9 @@
 {
     public static class Endpoints
     {
-        public const string AuditQueue = "NServiceBusTutorials.CallbackUsage.AuditQueue";
+        public const string AuditQueue = "Audit";
 
-        public const string ErrorQueue = "NServiceBusTutorials.CallbackUsage.ErrorQueue";
+        public const string ErrorQueue = "Errors";
 
         public const string Receiver = "NServiceBusTutorials.CallbackUsage.Receiver";
 
