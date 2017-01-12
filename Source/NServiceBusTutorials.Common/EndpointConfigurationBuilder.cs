@@ -24,7 +24,7 @@ namespace NServiceBusTutorials.Common
                 endpointConfiguration.SendFailedMessagesTo(errorQueue: errorQueue);
             }
 
-            LogManager.Use<DefaultFactory>().Level(LogLevel.Warn);
+            LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseTransport<TTransport>();
