@@ -1,10 +1,10 @@
 # Create the admin user
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP delete_user admin
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_user admin 1breakthings!
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_user admin Administr@tor
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_user_tags admin administrator
 
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF delete_user admin
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_user admin 1breakthings!
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_user admin Administr@tor
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_user_tags admin administrator
 
 
@@ -39,9 +39,9 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials NS
 
 
 # Create federation upstreams
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://test:1breakthings!@TSESTMRMQ04GULF"", ""amqp://test:1breakthings!@TSESTMRMQ05GULF"", ""amqp://test:1breakthings!@TSESTMRMQ06GULF""], ""max-hops"":10}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://admin:Administr@tor@TSESTMRMQ04GULF"", ""amqp://admin:Administr@tor@TSESTMRMQ05GULF"", ""amqp://admin:Administr@tor@TSESTMRMQ06GULF""], ""max-hops"":10}'
 
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://test:1breakthings!@TSESTMRMQ01CORP"", ""amqp://test:1breakthings!@TSESTMRMQ02CORP"", ""amqp://test:1breakthings!@TSESTMRMQ03CORP""], ""max-hops"":10}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://admin:Administr@tor@TSESTMRMQ01CORP"", ""amqp://admin:Administr@tor@TSESTMRMQ02CORP"", ""amqp://admin:Administr@tor@TSESTMRMQ03CORP""], ""max-hops"":10}'
 
 
 
