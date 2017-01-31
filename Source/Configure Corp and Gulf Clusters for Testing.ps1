@@ -39,9 +39,9 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials NS
 
 
 # Create federation upstreams
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://admin:Administr@tor@TSESTMRMQ04GULF"", ""amqp://admin:Administr@tor@TSESTMRMQ05GULF"", ""amqp://admin:Administr@tor@TSESTMRMQ06GULF""], ""max-hops"":10}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ04GULF"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ05GULF"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ06GULF""], ""max-hops"":10}'
 
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://admin:Administr@tor@TSESTMRMQ01CORP"", ""amqp://admin:Administr@tor@TSESTMRMQ02CORP"", ""amqp://admin:Administr@tor@TSESTMRMQ03CORP""], ""max-hops"":10}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ01CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ02CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ03CORP""], ""max-hops"":10}'
 
 
 
