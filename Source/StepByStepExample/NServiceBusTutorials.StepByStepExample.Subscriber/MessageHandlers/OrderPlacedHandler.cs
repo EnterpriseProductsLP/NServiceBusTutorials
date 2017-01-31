@@ -15,7 +15,6 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber.MessageHandlers
             Console.WriteLine();
 
             log.Info($"Handling: OrderPlaced for Order Id: {message.OrderId}");
-            throw new Exception("Could not process order.");
             return Task.CompletedTask;
         }
     }
