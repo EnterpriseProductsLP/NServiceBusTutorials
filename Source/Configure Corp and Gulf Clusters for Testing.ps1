@@ -32,14 +32,20 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials sv
 # Create federation upstreams
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ04GULF"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ05GULF"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ06GULF""], ""max-hops"":10}'
 
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-gulf '{""uri"": [""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ01CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ02CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ03CORP""], ""max-hops"":10}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_parameter -p NServiceBusTutorials federation-upstream federate-corp '{""uri"": [""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ01CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ02CORP"", ""amqp://svc-RabbitMQ:RabbitMQpwd@TSESTMRMQ03CORP""], ""max-hops"":10}'
 
 
 
 
 # Add policies for high availablity on exchnages and high availability + federation on queues
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 0 --apply-to "exchanges" ha-exchanges ".*" '{""ha-mode"": ""all""}'
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-federation-queues ".*" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic"", ""federation-upstream-set"": ""all""}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-retries-queues ".Retries" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-timeouts-queues ".Timeouts" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-timeouts-dispatcher-queues ".TimeoutsDispatcher" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_policy -p NServiceBusTutorials --priority 1 --apply-to "queues" autosynced-ha-federation-queues ".*" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic"", ""federation-upstream-set"": ""all""}'
 
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 0 --apply-to "exchanges" ha-exchanges ".*" '{""ha-mode"": ""all""}'
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-federation-queues ".*" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic"", ""federation-upstream-set"": ""all""}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-retries-queues ".Retries" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-timeouts-queues ".Timeouts" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 0 --apply-to "queues" autosynced-ha-timeouts-dispatcher-queues ".TimeoutsDispatcher" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic""}'
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_policy -p NServiceBusTutorials --priority 1 --apply-to "queues" autosynced-ha-federation-queues ".*" '{""ha-mode"": ""all"", ""ha-sync-mode"": ""automatic"", ""federation-upstream-set"": ""all""}'
