@@ -1,14 +1,3 @@
-# Create the admin user
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP delete_user admin
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_user admin Administr@tor
-rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_user_tags admin administrator
-
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF delete_user admin
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_user admin Administr@tor
-rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_user_tags admin administrator
-
-
-
 # Create the NServiceBusTutorials user
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP delete_user NServiceBusTutorials
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP add_user NServiceBusTutorials 1breakthings!
@@ -32,9 +21,11 @@ rabbitmqctl -n rabbit@TSESTMRMQ04GULF add_vhost NServiceBusTutorials
 # Grant user permissions on the virtual host
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials admin ".*" ".*" ".*"
 rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
+rabbitmqctl -n rabbit@TSESTMRMQ01CORP set_permissions -p NServiceBusTutorials svc-RabbitMQ ".*" ".*" ".*"
 
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials admin ".*" ".*" ".*"
 rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials NServiceBusTutorials ".*" ".*" ".*"
+rabbitmqctl -n rabbit@TSESTMRMQ04GULF set_permissions -p NServiceBusTutorials svc-RabbitMQ ".*" ".*" ".*"
 
 
 
