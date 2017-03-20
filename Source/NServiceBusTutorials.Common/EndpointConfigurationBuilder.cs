@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using NServiceBus.Logging;
 using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.Common
@@ -23,6 +24,7 @@ namespace NServiceBusTutorials.Common
                 endpointConfiguration.SendFailedMessagesTo(errorQueue: errorQueue);
             }
 
+            LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseTransport<TTransport>();

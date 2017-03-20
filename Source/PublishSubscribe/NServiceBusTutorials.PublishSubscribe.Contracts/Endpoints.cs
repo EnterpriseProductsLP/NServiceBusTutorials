@@ -2,9 +2,9 @@
 {
     public static class Endpoints
     {
-        public const string AuditQueue = "NServiceBusTutorials.PublishSubscribe.AuditQueue";
+        public const string AuditQueue = "Audit";
 
-        public const string ErrorQueue = "NServiceBusTutorials.PublishSubscribe.ErrorQueue";
+        public const string ErrorQueue = "Errors";
 
         public const string Publisher = "NServiceBusTutorials.PublishSubscribe.Publisher";
 
