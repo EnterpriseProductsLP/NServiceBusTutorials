@@ -8,13 +8,13 @@ using NServiceBusTutorials.Common;
 
 namespace NServiceBusTutorials.ActivePassive.Publisher
 {
-    internal class MessagePublisher : Worker
+    internal class WorkProducer : Worker
     {
         private readonly IStartableEndpoint _startableEndpoint;
 
         private IEndpointInstance _endpointInstance;
 
-        public MessagePublisher(IStartableEndpoint startableEndpoint)
+        public WorkProducer(IStartableEndpoint startableEndpoint)
         {
             _startableEndpoint = startableEndpoint;
         }
@@ -32,9 +32,9 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
         protected override void DoStep()
         {
             var identifier = Guid.NewGuid();
-            var workMessage = new WorkQueued { Identifier = identifier };
-            _endpointInstance.Publish(message: workMessage).GetAwaiter().GetResult();
-            Console.WriteLine($"Sent a WorkQueued message with Identifier: {identifier}");
+            var workEvent = new WorkEvent { Identifier = identifier };
+            _endpointInstance.Publish(message: workEvent).GetAwaiter().GetResult();
+            Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
             Thread.Sleep(2000);
         }
     }

@@ -4,7 +4,7 @@ using NServiceBus;
 
 namespace NServiceBusTutorials.ActivePassive.Contracts
 {
-    public class WorkQueued : IEvent
+    public class WorkEvent : IEvent
     {
         public Guid Identifier { get; set; }
     }

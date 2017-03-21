@@ -13,7 +13,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
 {
     public class Program
     {
-        private static MessagePublisher _messagePublisher;
+        private static WorkProducer _workProducer;
 
         public static void Main()
         {
@@ -29,7 +29,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
         private static void RunUntilCancelKeyPress()
         {
             Console.CancelKeyPress += OnCancelKeyPress;
-            while (!_messagePublisher.Stopped)
+            while (!_workProducer.Stopped)
             {
             }
 
@@ -43,7 +43,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             e.Cancel = true;
             Console.WriteLine("CTRL+C detected");
             Console.WriteLine("Stopping publisher");
-            _messagePublisher.Stop();
+            _workProducer.Stop();
         }
 
         private static void StartMessagePublisher()
@@ -51,8 +51,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Publisher, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = Endpoint.Create(endpointConfiguration).ConfigureAwait(false).GetAwaiter().GetResult();
-            _messagePublisher = new MessagePublisher(endpointInstance);
-            new Thread(_messagePublisher.Start).Start();
+            _workProducer = new WorkProducer(endpointInstance);
+            new Thread(_workProducer.Start).Start();
         }
 
         private static void RunMigrations()

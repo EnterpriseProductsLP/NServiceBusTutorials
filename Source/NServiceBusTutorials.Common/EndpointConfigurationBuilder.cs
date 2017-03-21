@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
 
@@ -24,9 +25,6 @@ namespace NServiceBusTutorials.Common
                 endpointConfiguration.SendFailedMessagesTo(errorQueue: errorQueue);
             }
 
-            LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-            endpointConfiguration.UsePersistence<InMemoryPersistence>();
-            endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseTransport<TTransport>();
 
             return endpointConfiguration;
@@ -35,8 +33,11 @@ namespace NServiceBusTutorials.Common
         private EndpointConfiguration GetBaseEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
+            endpointConfiguration.DisableFeature<AutoSubscribe>();
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
+            endpointConfiguration.UseSerialization<JsonSerializer>();
+            LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
 
             return endpointConfiguration;
         }
