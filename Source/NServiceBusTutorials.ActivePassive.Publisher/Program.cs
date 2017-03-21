@@ -34,7 +34,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             }
 
             Console.WriteLine("Publisher stopped");
-            Console.WriteLine("Exited gracefully");
+            Console.WriteLine("Press Enter to Exit");
+            Console.ReadLine();
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
