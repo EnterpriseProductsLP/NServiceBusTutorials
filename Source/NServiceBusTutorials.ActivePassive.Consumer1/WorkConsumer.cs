@@ -32,8 +32,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
 
         protected override void DoStep()
         {
-            // All actual work is handled by a WorkEvent handler.
-            Thread.Sleep(2000);
         }
     }
 }
