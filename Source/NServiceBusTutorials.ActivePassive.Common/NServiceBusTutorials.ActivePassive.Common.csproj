@@ -41,8 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeartbeatProducer.cs" />
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
+      <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
+      <Name>NServiceBusTutorials.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

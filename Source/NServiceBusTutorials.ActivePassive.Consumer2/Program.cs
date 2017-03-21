@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NServiceBusTutorials.ActivePassive.Consumer2
+﻿namespace NServiceBusTutorials.ActivePassive.Consumer2
 {
     public class Program
     {
