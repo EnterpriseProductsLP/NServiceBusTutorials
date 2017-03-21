@@ -50,14 +50,18 @@
   <ItemGroup>
     <Compile Include="MigrationRunnerBuilder.cs" />
     <Compile Include="OrderedMigrations\Migration_1_Create_Locking_Table.cs" />
-    <Compile Include="OrderedMigrations\Migration_2_Create_uspAddDistributedLock.cs" />
+    <Compile Include="OrderedMigrations\Migration_3_Create_uspDeleteDistributedLock.cs" />
+    <Compile Include="OrderedMigrations\Migration_2_Create_uspHeartbeatDistributedLock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration_2_Create_uspAddDistributedLock.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration_2_Create_uspHeartbeatDistributedLock.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Migration_3_Create_uspDeleteDistributedLock.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
