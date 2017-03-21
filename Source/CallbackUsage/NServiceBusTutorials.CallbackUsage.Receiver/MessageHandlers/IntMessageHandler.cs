@@ -5,7 +5,7 @@ using NServiceBusTutorials.CallbackUsage.Contracts;
 
 namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
-    class IntMessageHandler : IHandleMessages<IntMessage>
+    internal class IntMessageHandler : IHandleMessages<IntMessage>
     {
         private static ILog log = LogManager.GetLogger<IntMessageHandler>();
 

@@ -5,7 +5,7 @@ using NServiceBusTutorials.CallbackUsage.Contracts;
 
 namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
-    public class EnumMessageHandler : IHandleMessages<EnumMessage>
+    internal class EnumMessageHandler : IHandleMessages<EnumMessage>
     {
         private static ILog log = LogManager.GetLogger<EnumMessageHandler>();
 

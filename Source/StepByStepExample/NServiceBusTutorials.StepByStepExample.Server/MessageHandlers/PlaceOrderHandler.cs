@@ -7,7 +7,7 @@ using NServiceBusTutorials.StepByStepExample.Contracts.Events;
 
 namespace NServiceBusTutorials.StepByStepExample.Server.MessageHandlers
 {
-    public class PlaceOrderHandler : IHandleMessages<PlaceOrder>
+    internal class PlaceOrderHandler : IHandleMessages<PlaceOrder>
     {
         private static ILog log = LogManager.GetLogger<PlaceOrderHandler>();
 
