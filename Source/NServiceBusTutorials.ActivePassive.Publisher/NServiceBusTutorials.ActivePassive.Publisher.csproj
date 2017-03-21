@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.6.2.1\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.Runner.1.6.2.1\lib\40\FluentMigrator.Runner.dll</HintPath>
     </Reference>
@@ -54,6 +58,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NServiceBusTutorials.Common\NServiceBusTutorials.Common.csproj">
+      <Project>{BAFFFF6E-7447-4F37-A4B8-7D8ED6D171CD}</Project>
+      <Name>NServiceBusTutorials.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NServiceBusTutorials.Migrations\NServiceBusTutorials.Migrations.csproj">
       <Project>{36409AF0-AB2F-40ED-AC8F-5C16771F2837}</Project>
       <Name>NServiceBusTutorials.Migrations</Name>
