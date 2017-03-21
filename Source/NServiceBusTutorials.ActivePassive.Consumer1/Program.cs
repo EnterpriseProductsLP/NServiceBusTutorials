@@ -7,6 +7,7 @@ using NServiceBus;
 
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer1
@@ -50,7 +51,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Consumer, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
-            var endpointInstance = Endpoint.Create(endpointConfiguration).ConfigureAwait(false).GetAwaiter().GetResult();
+            var endpointInstance = Endpoint.Create(endpointConfiguration).Inline();
             _workConsumer = new WorkConsumer(endpointInstance);
             new Thread(_workConsumer.Start).Start();
         }

@@ -12,7 +12,7 @@ namespace NServiceBusTutorials.PublishSubscribe.Publisher
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()

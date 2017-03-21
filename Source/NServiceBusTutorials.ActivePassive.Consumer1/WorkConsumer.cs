@@ -2,7 +2,9 @@
 
 using NServiceBus;
 
+using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer1
 {
@@ -19,12 +21,13 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
 
         protected override void Setup()
         {
-            _endpointInstance = _startableEndpoint.Start().GetAwaiter().GetResult();
+            _endpointInstance = _startableEndpoint.Start().Inline();
+            _endpointInstance.Subscribe<WorkEvent>().Inline();
         }
 
         protected override void TearDown()
         {
-            _endpointInstance.Stop().GetAwaiter().GetResult();
+            _endpointInstance.Stop().Inline();
         }
 
         protected override void DoStep()

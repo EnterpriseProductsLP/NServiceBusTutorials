@@ -5,6 +5,7 @@ using NServiceBus;
 
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.ActivePassive.Publisher
 {
@@ -21,19 +22,19 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
 
         protected override void Setup()
         {
-            _endpointInstance = _startableEndpoint.Start().GetAwaiter().GetResult();
+            _endpointInstance = _startableEndpoint.Start().Inline();
         }
 
         protected override void TearDown()
         {
-            _endpointInstance.Stop().GetAwaiter().GetResult();
+            _endpointInstance.Stop().Inline();
         }
 
         protected override void DoStep()
         {
             var identifier = Guid.NewGuid();
             var workEvent = new WorkEvent { Identifier = identifier };
-            _endpointInstance.Publish(message: workEvent).GetAwaiter().GetResult();
+            _endpointInstance.Publish(message: workEvent).Inline();
             Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
             Thread.Sleep(2000);
         }

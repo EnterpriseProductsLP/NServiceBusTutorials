@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.StepByStepExample.Contracts;
 
 namespace NServiceBusTutorials.StepByStepExample.Subscriber
@@ -10,7 +11,7 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()

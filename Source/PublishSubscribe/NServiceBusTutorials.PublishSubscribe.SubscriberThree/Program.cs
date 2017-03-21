@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.PublishSubscribe.Contracts;
 using NServiceBusTutorials.PublishSubscribe.Contracts.Events;
 
@@ -11,7 +12,7 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()

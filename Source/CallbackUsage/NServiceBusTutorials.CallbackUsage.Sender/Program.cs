@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.CallbackUsage.Contracts;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.CallbackUsage.Sender
 {
@@ -11,7 +12,7 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()
