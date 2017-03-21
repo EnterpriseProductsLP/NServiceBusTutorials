@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Framework].[uspRemoveDistributedLock]
     (
-      @pKey VARCHAR(100) ,				-- The unique key for the requested lock.
+      @pKey VARCHAR(100) ,			-- The unique key for the requested lock.
       @pDiscriminator VARCHAR(100)	-- The caller's unique discriminator.
     )
 AS
