@@ -1,22 +1,22 @@
 ﻿namespace NServiceBusTutorials.Common
 {
-    public enum WorkerState
-    {
-        Initializing,
-        Paused,
-        Pausing,
-        Resuming,
-        Running,
-        Starting,
-        Stopped,
-        Stopping
-    }
-
     public abstract class Worker
     {
         private readonly object _stateLock = new object();
 
         private WorkerState _workerState = WorkerState.Initializing;
+
+        public enum WorkerState
+        {
+            Initializing,
+            Paused,
+            Pausing,
+            Resuming,
+            Running,
+            Starting,
+            Stopped,
+            Stopping
+        }
 
         public bool Initializing
         {

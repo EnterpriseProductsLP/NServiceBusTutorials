@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading;
 using System.Timers;
 
 using NServiceBus;
@@ -17,17 +16,17 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
 {
     internal class WorkConsumer : Worker
     {
-        private readonly EndpointConfiguration _endpointConfiguration;
+        private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
+
+        private readonly Timer _heartbeatTimer = new Timer(2000);
+
+        private readonly Timer _startupTimer = new Timer(10000);
 
         private IEndpointInstance _endpointInstance;
 
-        private Timer _heartbeatTimer = new Timer(2000);
-
-        private Timer _startupTimer = new Timer(1000);
-
-        public WorkConsumer(EndpointConfiguration endpointConfiguration)
+        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder)
         {
-            _endpointConfiguration = endpointConfiguration;
+            _endpointConfigurationBuilder = endpointConfigurationBuilder;
             _heartbeatTimer.Elapsed += OnHeartbeatTimerElapsed;
             _startupTimer.Elapsed += OnStartupTimerElapsed;
         }
@@ -42,10 +41,17 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
 
         protected override void OnResuming()
         {
-            _startupTimer.Stop();
-            StartEndpoint();
-            SetRunning();
-            _heartbeatTimer.Start();
+            try
+            {
+                _startupTimer.Stop();
+                StartEndpoint();
+                SetRunning();
+                _heartbeatTimer.Start();
+            }
+            catch
+            {
+                Pause();
+            }
         }
 
         protected override void OnRunning()
@@ -159,15 +165,20 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
 
         private void StartEndpoint()
         {
-            _endpointInstance = Endpoint.Start(_endpointConfiguration).Inline();
-            _endpointInstance.Subscribe<WorkEvent>().Inline();
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Consumer, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
+            _endpointInstance = startableEndpoint.Start().Inline();
         }
 
         private void StopEndpoint()
         {
+            if (_endpointInstance == null)
+            {
+                return;
+            }
+
             _endpointInstance.Stop().Inline();
             _endpointInstance = null;
         }
     }
 }
-

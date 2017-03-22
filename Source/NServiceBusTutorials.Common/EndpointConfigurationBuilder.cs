@@ -33,7 +33,7 @@ namespace NServiceBusTutorials.Common
         private EndpointConfiguration GetBaseEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
-            endpointConfiguration.DisableFeature<AutoSubscribe>();
+            // endpointConfiguration.DisableFeature<AutoSubscribe>();
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
