@@ -1,20 +1,96 @@
 ﻿namespace NServiceBusTutorials.Common
 {
+    public enum WorkerState
+    {
+        Initializing,
+        Paused,
+        Pausing,
+        Resuming,
+        Running,
+        Starting,
+        Stopped,
+        Stopping
+    }
+
     public abstract class Worker
     {
-        private readonly object _stopLock = new object();
+        private readonly object _stateLock = new object();
 
-        private bool _stopped;
+        private WorkerState _workerState = WorkerState.Initializing;
 
-        private bool _stopping;
+        public bool Initializing
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Initializing;
+                }
+            }
+        }
+
+        public bool Paused
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Paused;
+                }
+            }
+        }
+
+        public bool Pausing
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Pausing;
+                }
+            }
+        }
+
+        public bool Resuming
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Resuming;
+                }
+            }
+        }
+
+        public bool Running
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Running;
+                }
+            }
+        }
+
+        public bool Starting
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _workerState == WorkerState.Starting;
+                }
+            }
+        }
 
         public bool Stopping
         {
             get
             {
-                lock (_stopLock)
+                lock (_stateLock)
                 {
-                    return _stopping;
+                    return _workerState == WorkerState.Stopping;
                 }
             }
         }
@@ -23,11 +99,21 @@
         {
             get
             {
-                lock (_stopLock)
+                lock (_stateLock)
                 {
-                    return _stopped;
+                    return _workerState == WorkerState.Stopped;
                 }
             }
+        }
+
+        public void Pause()
+        {
+            SetPausing();
+        }
+
+        public void Resume()
+        {
+            SetResuming();
         }
 
         public void Start()
@@ -44,35 +130,87 @@
 
         public void Stop()
         {
-            lock (_stopLock)
-            {
-                _stopping = true;
-            }
+            SetStopping();
         }
 
-        protected abstract void Setup();
+        protected abstract void OnRunning();
 
         protected void Run()
         {
-            Setup();
+            OnRunning();
 
             while (!Stopping)
             {
-                DoStep();
+                if (Running)
+                {
+                    DoStep();
+                }
+                else if (Pausing)
+                {
+                    OnPausing();
+                }
+                else if (Resuming)
+                {
+                    OnResuming();
+                }
             }
 
-            TearDown();
+            OnStopping();
         }
 
-        protected abstract void TearDown();
+        protected abstract void OnPausing();
+
+        protected abstract void OnResuming();
+
+        protected abstract void OnStopping();
 
         protected abstract void DoStep();
 
+        protected void SetPaused()
+        {
+            lock (_stateLock)
+            {
+                _workerState = WorkerState.Paused;
+            }
+        }
+
+        private void SetPausing()
+        {
+            lock (_stateLock)
+            {
+                _workerState = WorkerState.Pausing;
+            }
+        }
+
+        private void SetResuming()
+        {
+            lock (_stateLock)
+            {
+                _workerState = WorkerState.Resuming;
+            }
+        }
+
+        protected void SetRunning()
+        {
+            lock (_stateLock)
+            {
+                _workerState = WorkerState.Running;
+            }
+        }
+
         private void SetStopped()
         {
-            lock (_stopLock)
+            lock (_stateLock)
             {
-                _stopped = true;
+                _workerState = WorkerState.Stopped;
+            }
+        }
+
+        private void SetStopping()
+        {
+            lock (_stateLock)
+            {
+                _workerState = WorkerState.Stopping;
             }
         }
     }

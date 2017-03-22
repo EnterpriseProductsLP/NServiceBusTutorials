@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.PublishSubscribe.Contracts;
 using NServiceBusTutorials.PublishSubscribe.Contracts.Events;
 

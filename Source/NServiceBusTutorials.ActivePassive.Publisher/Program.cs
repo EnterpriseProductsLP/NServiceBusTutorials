@@ -51,8 +51,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Publisher, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
-            var endpointInstance = Endpoint.Create(endpointConfiguration).Inline();
-            _workProducer = new WorkProducer(endpointInstance);
+            var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
+            _workProducer = new WorkProducer(startableEndpoint);
             new Thread(_workProducer.Start).Start();
         }
 

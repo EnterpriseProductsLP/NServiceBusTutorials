@@ -62,6 +62,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NServiceBusTutorials.ActivePassive.Common\NServiceBusTutorials.ActivePassive.Common.csproj">
+      <Project>{8611A084-5EB6-4730-97C2-208EEB2CCD24}</Project>
+      <Name>NServiceBusTutorials.ActivePassive.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NServiceBusTutorials.ActivePassive.Contracts\NServiceBusTutorials.ActivePassive.Contracts.csproj">
       <Project>{ECE203B4-A22B-4E0C-8B10-BA79CFB8E867}</Project>
       <Name>NServiceBusTutorials.ActivePassive.Contracts</Name>

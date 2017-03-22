@@ -51,8 +51,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Consumer, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
-            var endpointInstance = Endpoint.Create(endpointConfiguration).Inline();
-            _workConsumer = new WorkConsumer(endpointInstance);
+            _workConsumer = new WorkConsumer(endpointConfiguration);
             new Thread(_workConsumer.Start).Start();
         }
 
