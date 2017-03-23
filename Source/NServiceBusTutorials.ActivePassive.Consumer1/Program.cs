@@ -25,10 +25,31 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private static void RunUntilCancelKeyPress()
         {
+            Console.WriteLine();
+            Console.WriteLine("Press 'P' to pause.");
+            Console.WriteLine("Press 'R' to resume.");
+            Console.WriteLine("Press any key to exit");
+
             Console.CancelKeyPress += OnCancelKeyPress;
-            while (!_workConsumer.Stopped)
+
+            do
             {
+                ConsoleKeyInfo consoleKeyInfo;
+                if (ConsoleHelpers.TryReadKeyAsync(1000, out consoleKeyInfo))
+                {
+                    var consoleKey = consoleKeyInfo.Key;
+                    switch (consoleKey)
+                    {
+                        case ConsoleKey.P:
+                            _workConsumer.Pause();
+                            break;
+                        case ConsoleKey.R:
+                            _workConsumer.Resume();
+                            break;
+                    }
+                }
             }
+            while (!_workConsumer.Stopped);
 
             Console.WriteLine("Consumer stopped");
             Console.WriteLine("Press Enter to Exit");

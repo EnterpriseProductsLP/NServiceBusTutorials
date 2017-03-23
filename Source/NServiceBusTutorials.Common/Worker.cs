@@ -137,12 +137,15 @@
 
         public void Stop()
         {
-            SetStopping();
+            if (!Stopped)
+            {
+                SetStopping();
+            }
         }
 
         protected void Run()
         {
-            SetWorkerState(this.OnStarting());
+            SetWorkerState(OnStarting());
 
             while (!Stopping)
             {

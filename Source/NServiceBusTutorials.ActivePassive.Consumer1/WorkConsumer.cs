@@ -130,6 +130,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void StartEndpoint()
         {
+            // Stop any existing endpoint so we don't have two.
+            StopEndpoint();
+
             var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
             var recoverability = endpointConfiguration.Recoverability();
             recoverability.Immediate(immediate =>
