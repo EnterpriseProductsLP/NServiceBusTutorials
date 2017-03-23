@@ -6,7 +6,7 @@ using NServiceBus.Logging;
 
 using NServiceBusTutorials.ActivePassive.Contracts;
 
-namespace NServiceBusTutorials.ActivePassive.Consumer1.MessageHandlers
+namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
     internal class WorkEventHandler : IHandleMessages<WorkEvent>
     {

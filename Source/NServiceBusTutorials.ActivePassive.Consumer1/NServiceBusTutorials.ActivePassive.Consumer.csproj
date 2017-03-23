@@ -7,8 +7,8 @@
     <ProjectGuid>{1F165E87-B92E-4376-B297-EFB7130F7C26}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBusTutorials.ActivePassive.Consumer1</RootNamespace>
-    <AssemblyName>NServiceBusTutorials.ActivePassive.Consumer1</AssemblyName>
+    <RootNamespace>NServiceBusTutorials.ActivePassive.Consumer</RootNamespace>
+    <AssemblyName>NServiceBusTutorials.ActivePassive.Consumer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

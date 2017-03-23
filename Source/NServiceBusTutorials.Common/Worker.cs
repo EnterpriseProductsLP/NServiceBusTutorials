@@ -1,4 +1,13 @@
-﻿namespace NServiceBusTutorials.Common
+﻿// -----------------------------------------------------------------------
+// <copyright file="Worker.cs" company="Enterprise Products Partners L.P. (Enterprise)">
+// © Copyright 2012 - 2017, Enterprise Products Partners L.P. (Enterprise), All Rights Reserved.
+// Permission to use, copy, modify, or distribute this software source code, binaries or
+// related documentation, is strictly prohibited, without written consent from Enterprise.
+// For inquiries about the software, contact Enterprise: Enterprise Products Company Law
+// Department, 1100 Louisiana, 10th Floor, Houston, Texas 77002, phone 713-381-6500.
+// </copyright>
+// -----------------------------------------------------------------------
+namespace NServiceBusTutorials.Common
 {
     public abstract class Worker
     {
@@ -9,12 +18,19 @@
         public enum WorkerState
         {
             Initializing,
+
             Paused,
+
             Pausing,
+
             Resuming,
+
             Running,
+
             Starting,
+
             Stopped,
+
             Stopping
         }
 
@@ -133,11 +149,9 @@
             SetStopping();
         }
 
-        protected abstract void OnRunning();
-
         protected void Run()
         {
-            OnRunning();
+            SetWorkerState(OnRunning());
 
             while (!Stopping)
             {
@@ -147,70 +161,62 @@
                 }
                 else if (Pausing)
                 {
-                    OnPausing();
+                    SetWorkerState(OnPausing());
                 }
                 else if (Resuming)
                 {
-                    OnResuming();
+                    SetWorkerState(OnResuming());
                 }
             }
 
             OnStopping();
         }
 
-        protected abstract void OnPausing();
+        protected abstract WorkerState OnRunning();
 
-        protected abstract void OnResuming();
+        protected abstract WorkerState OnPausing();
+
+        protected abstract WorkerState OnResuming();
 
         protected abstract void OnStopping();
 
         protected abstract void DoStep();
 
-        protected void SetPaused()
+        private void SetPaused()
         {
-            lock (_stateLock)
-            {
-                _workerState = WorkerState.Paused;
-            }
+            SetWorkerState(WorkerState.Paused);
+        }
+
+        private void SetRunning()
+        {
+            SetWorkerState(WorkerState.Running);
         }
 
         private void SetPausing()
         {
-            lock (_stateLock)
-            {
-                _workerState = WorkerState.Pausing;
-            }
+            SetWorkerState(WorkerState.Pausing);
         }
 
         private void SetResuming()
         {
-            lock (_stateLock)
-            {
-                _workerState = WorkerState.Resuming;
-            }
-        }
-
-        protected void SetRunning()
-        {
-            lock (_stateLock)
-            {
-                _workerState = WorkerState.Running;
-            }
+            SetWorkerState(WorkerState.Resuming);
         }
 
         private void SetStopped()
         {
-            lock (_stateLock)
-            {
-                _workerState = WorkerState.Stopped;
-            }
+            SetWorkerState(WorkerState.Stopped);
         }
 
         private void SetStopping()
         {
+            SetWorkerState(WorkerState.Stopping);
+        }
+
+        private void SetWorkerState(WorkerState workerState)
+        {
             lock (_stateLock)
             {
-                _workerState = WorkerState.Stopping;
+                _workerState = workerState;
             }
         }
     }

@@ -12,7 +12,7 @@ using NServiceBusTutorials.Common.Extensions;
 
 using Timer = System.Timers.Timer;
 
-namespace NServiceBusTutorials.ActivePassive.Consumer1
+namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class WorkConsumer : Worker
     {
@@ -31,32 +31,33 @@ namespace NServiceBusTutorials.ActivePassive.Consumer1
             _startupTimer.Elapsed += OnStartupTimerElapsed;
         }
 
-        protected override void OnPausing()
+        protected override WorkerState OnPausing()
         {
             _heartbeatTimer.Stop();
             StopEndpoint();
-            SetPaused();
             _startupTimer.Start();
+            return WorkerState.Paused;
         }
 
-        protected override void OnResuming()
+        protected override WorkerState OnResuming()
         {
             try
             {
                 _startupTimer.Stop();
                 StartEndpoint();
-                SetRunning();
                 _heartbeatTimer.Start();
+                return WorkerState.Running;
             }
             catch
             {
-                Pause();
+                return WorkerState.Pausing;
             }
         }
 
-        protected override void OnRunning()
+        protected override WorkerState OnRunning()
         {
             _startupTimer.Start();
+            return WorkerState.Running;
         }
 
         protected override void OnStopping()

@@ -3,14 +3,10 @@ using System.Configuration;
 using System.Reflection;
 using System.Threading;
 
-using NServiceBus;
-
-using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
-using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
-namespace NServiceBusTutorials.ActivePassive.Consumer1
+namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     public class Program
     {
