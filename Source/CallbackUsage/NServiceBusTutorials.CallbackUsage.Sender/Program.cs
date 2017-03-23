@@ -21,7 +21,7 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
             Thread.Sleep(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Sender, Endpoints.AuditQueue, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Sender, Endpoints.ErrorQueue);
             endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             var endpointInstance = await Endpoint.Start(endpointConfiguration);
 

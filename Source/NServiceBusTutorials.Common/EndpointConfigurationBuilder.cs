@@ -6,12 +6,12 @@ namespace NServiceBusTutorials.Common
 {
     public class EndpointConfigurationBuilder
     {
-        public EndpointConfiguration GetEndpointConfiguration(string endpointName, string auditQueue = null, string errorQueue = null)
+        public EndpointConfiguration GetEndpointConfiguration(string endpointName, string errorQueue = null, string auditQueue = null)
         {
-            return GetEndpointConfiguration<RabbitMQTransport>(endpointName, auditQueue, errorQueue);
+            return GetEndpointConfiguration<RabbitMQTransport>(endpointName, errorQueue, auditQueue);
         }
 
-        public EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string auditQueue = null, string errorQueue = null) where TTransport : TransportDefinition, new()
+        public EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string errorQueue = null, string auditQueue = null) where TTransport : TransportDefinition, new()
         {
             var endpointConfiguration = GetBaseEndpointConfiguration(endpointName);
             if (auditQueue != null)
@@ -32,7 +32,6 @@ namespace NServiceBusTutorials.Common
         private EndpointConfiguration GetBaseEndpointConfiguration(string endpointName)
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
-            // endpointConfiguration.DisableFeature<AutoSubscribe>();
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();

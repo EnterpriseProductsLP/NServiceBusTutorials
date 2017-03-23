@@ -23,7 +23,7 @@ namespace NServiceBusTutorials.StepByStepExample.Client
             Thread.Sleep(2000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Client, Endpoints.AuditQueue, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Client, Endpoints.ErrorQueue, null);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try

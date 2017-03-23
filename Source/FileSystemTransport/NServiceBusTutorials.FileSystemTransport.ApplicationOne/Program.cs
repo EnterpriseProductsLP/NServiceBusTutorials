@@ -21,7 +21,7 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne
             Console.Title = "FileSystem Transport:  Application One";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration<FileTransport>(Endpoints.EndpointOne, null, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration<FileTransport>(Endpoints.EndpointOne, Endpoints.ErrorQueue, null);
             endpointConfiguration.DisableFeature<TimeoutManager>();
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
