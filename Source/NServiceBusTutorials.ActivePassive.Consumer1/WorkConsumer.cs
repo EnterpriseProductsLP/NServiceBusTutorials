@@ -19,22 +19,20 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class WorkConsumer : Worker
     {
+        private readonly IManageDistributedLocks _distributedLockManager;
+
         private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
 
         private readonly Timer _heartbeatTimer = new Timer(2000);
-
-        private readonly IManageDistributedLocks _lockManager;
 
         private readonly Timer _startupTimer = new Timer(10000);
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkConsumer(
-            EndpointConfigurationBuilder endpointConfigurationBuilder,
-            IManageDistributedLocks lockManager)
+        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks distributedLockManager)
         {
             _endpointConfigurationBuilder = endpointConfigurationBuilder;
-            _lockManager = lockManager;
+            _distributedLockManager = distributedLockManager;
             _heartbeatTimer.Elapsed += OnHeartbeatTimerElapsed;
             _startupTimer.Elapsed += OnStartupTimerElapsed;
         }
@@ -43,6 +41,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             _heartbeatTimer.Stop();
             StopEndpoint();
+            _distributedLockManager.ReleaseLock();
             _startupTimer.Start();
             return WorkerState.Paused;
         }
@@ -82,7 +81,10 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         protected override void OnStopping()
         {
+            _startupTimer.Stop();
+            _heartbeatTimer.Stop();
             StopEndpoint();
+            _distributedLockManager.ReleaseLock();
         }
 
         protected override void DoStep()
@@ -106,7 +108,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private bool CanGetOrUpdateDistributedLock()
         {
-            return _lockManager.GetOrMaintainLock();
+            return _distributedLockManager.GetOrMaintainLock();
         }
 
         private void OnStartupTimerElapsed(object sender, ElapsedEventArgs e)
@@ -127,9 +129,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void StartEndpoint()
         {
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(
-                Endpoints.Consumer,
-                Endpoints.ErrorQueue);
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.ErrorQueue);
             var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
             _endpointInstance = startableEndpoint.Start().Inline();
         }
