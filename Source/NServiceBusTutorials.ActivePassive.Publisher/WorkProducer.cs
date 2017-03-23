@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             _startableEndpoint = startableEndpoint;
         }
 
-        protected override WorkerState OnRunning()
+        protected override WorkerState OnStarting()
         {
             _endpointInstance = _startableEndpoint.Start().Inline();
             return WorkerState.Running;

@@ -142,7 +142,7 @@
 
         protected void Run()
         {
-            SetWorkerState(OnRunning());
+            SetWorkerState(this.OnStarting());
 
             while (!Stopping)
             {
@@ -163,7 +163,7 @@
             OnStopping();
         }
 
-        protected abstract WorkerState OnRunning();
+        protected abstract WorkerState OnStarting();
 
         protected abstract WorkerState OnPausing();
 

@@ -1,4 +1,12 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="WorkConsumer.cs" company="Enterprise Products Partners L.P. (Enterprise)">
+// © Copyright 2012 - 2017, Enterprise Products Partners L.P. (Enterprise), All Rights Reserved.
+// Permission to use, copy, modify, or distribute this software source code, binaries or
+// related documentation, is strictly prohibited, without written consent from Enterprise.
+// For inquiries about the software, contact Enterprise: Enterprise Products Company Law
+// Department, 1100 Louisiana, 10th Floor, Houston, Texas 77002, phone 713-381-6500.
+// </copyright>
+// -----------------------------------------------------------------------
 using System.Timers;
 
 using NServiceBus;
@@ -7,23 +15,23 @@ using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
 
-using Timer = System.Timers.Timer;
-
 namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class WorkConsumer : Worker
     {
         private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
 
-        private readonly IManageDistributedLocks _lockManager;
-
         private readonly Timer _heartbeatTimer = new Timer(2000);
+
+        private readonly IManageDistributedLocks _lockManager;
 
         private readonly Timer _startupTimer = new Timer(10000);
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks lockManager)
+        public WorkConsumer(
+            EndpointConfigurationBuilder endpointConfigurationBuilder,
+            IManageDistributedLocks lockManager)
         {
             _endpointConfigurationBuilder = endpointConfigurationBuilder;
             _lockManager = lockManager;
@@ -48,16 +56,28 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 _heartbeatTimer.Start();
                 return WorkerState.Running;
             }
-            catch(Exception ex)
+            catch
             {
                 return WorkerState.Pausing;
             }
         }
 
-        protected override WorkerState OnRunning()
+        protected override WorkerState OnStarting()
         {
-            _startupTimer.Start();
-            return WorkerState.Running;
+            try
+            {
+                if (CanGetOrUpdateDistributedLock())
+                {
+                    return OnResuming();
+                }
+
+                _startupTimer.Start();
+                return WorkerState.Running;
+            }
+            catch
+            {
+                return WorkerState.Pausing;
+            }
         }
 
         protected override void OnStopping()
@@ -107,7 +127,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void StartEndpoint()
         {
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.ErrorQueue);
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(
+                Endpoints.Consumer,
+                Endpoints.ErrorQueue);
             var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
             _endpointInstance = startableEndpoint.Start().Inline();
         }
