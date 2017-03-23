@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContainerProvider.cs" />
+    <Compile Include="DependencyInjection\ContainerProvider.cs" />
     <Compile Include="DistributedLockManager.cs" />
     <Compile Include="Interfaces\DistributedLockRegistrar.cs" />
     <Compile Include="Interfaces\IManageDistributedLocks.cs" />

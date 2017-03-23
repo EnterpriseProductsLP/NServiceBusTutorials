@@ -7,6 +7,7 @@ using Autofac;
 using NServiceBus;
 using NServiceBus.Logging;
 
+using NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers

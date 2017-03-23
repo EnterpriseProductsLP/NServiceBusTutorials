@@ -31,22 +31,17 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             Console.WriteLine("Press any key to exit");
 
             Console.CancelKeyPress += OnCancelKeyPress;
-
             do
             {
-                ConsoleKeyInfo consoleKeyInfo;
-                if (ConsoleHelpers.TryReadKeyAsync(1000, out consoleKeyInfo))
+                var consoleKey = Console.ReadKey().Key;
+                switch (consoleKey)
                 {
-                    var consoleKey = consoleKeyInfo.Key;
-                    switch (consoleKey)
-                    {
-                        case ConsoleKey.P:
-                            _workConsumer.Pause();
-                            break;
-                        case ConsoleKey.R:
-                            _workConsumer.Resume();
-                            break;
-                    }
+                    case ConsoleKey.P:
+                        _workConsumer.Pause();
+                        break;
+                    case ConsoleKey.R:
+                        _workConsumer.Resume();
+                        break;
                 }
             }
             while (!_workConsumer.Stopped);

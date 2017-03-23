@@ -18,7 +18,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
         {
             Console.WriteLine();
 
-            Logger.Info($"SubscriberOne: Handled event: {message.Identifier}");
+            Logger.Info($"Handled event: {message.Identifier}");
             return Task.CompletedTask;
         }
     }

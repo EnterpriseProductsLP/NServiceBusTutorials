@@ -4,20 +4,32 @@
     {
         public enum WorkerState
         {
+            // Initial state
             Initializing,
 
+            // Worker is idle but waiting for the distributed lock.
+
+            // Worker is TRANSITIONING to the idle state.
+
+            // Worker is paused.
             Paused,
 
+            // Working is TRANSITIONING to the paused state.
             Pausing,
 
+            // Working is TRANSITIONING to the running state.
             Resuming,
 
+            // Working is running.
             Running,
 
+            // Working is TRANSITIONING to the running state.
             Starting,
 
+            // Working is stopped and cannot be restarted.
             Stopped,
 
+            // Working is TRANSITIONING to the stopped state.
             Stopping
         }
 

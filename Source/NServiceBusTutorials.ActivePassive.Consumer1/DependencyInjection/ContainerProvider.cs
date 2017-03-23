@@ -8,7 +8,7 @@ using Autofac.Core.Resolving;
 
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 
-namespace NServiceBusTutorials.ActivePassive.Consumer
+namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
 {
     public class ContainerProvider : IContainer
     {
