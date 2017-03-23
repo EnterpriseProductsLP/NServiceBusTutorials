@@ -107,7 +107,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void StartEndpoint()
         {
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Consumer, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.AuditQueue, Endpoints.ErrorQueue);
             var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
             _endpointInstance = startableEndpoint.Start().Inline();
         }

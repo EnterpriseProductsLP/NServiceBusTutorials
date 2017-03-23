@@ -22,8 +22,8 @@ namespace NServiceBusTutorials.StepByStepExample.Server.MessageHandlers
             log.Info($"Order: {orderId} placed for Product:[Id: {productId}, Name: {productName}]");
             log.Info($"Publishing: OrderPlaced for Order Id: {orderId}");
 
-            var orderPlaced = new OrderPlaced(orderId: orderId);
-            return context.Publish(message: orderPlaced);
+            var orderPlaced = new OrderPlaced(orderId);
+            return context.Publish(orderPlaced);
         }
     }
 }

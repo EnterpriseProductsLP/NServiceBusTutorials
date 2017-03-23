@@ -23,7 +23,7 @@ namespace NServiceBusTutorials.StepByStepExample.Client
             Thread.Sleep(2000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Client, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Client, Endpoints.AuditQueue, Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try
@@ -52,9 +52,9 @@ namespace NServiceBusTutorials.StepByStepExample.Client
                 }
 
                 var product = ProductBuilder.NextProduct();
-                var placeOrder = new PlaceOrder(productId: product.Id, productName: product.Name);
+                var placeOrder = new PlaceOrder(product.Id, product.Name);
 
-                await endpointInstance.Send(destination: Endpoints.Server, message: placeOrder);
+                await endpointInstance.Send(Endpoints.Server, placeOrder);
                 Console.WriteLine($"Sent a PlaceOrder message with ID: {placeOrder.OrderId}");
             }
         }

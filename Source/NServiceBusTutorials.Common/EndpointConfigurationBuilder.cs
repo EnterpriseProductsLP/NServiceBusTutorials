@@ -16,12 +16,12 @@ namespace NServiceBusTutorials.Common
             var endpointConfiguration = GetBaseEndpointConfiguration(endpointName);
             if (auditQueue != null)
             {
-                endpointConfiguration.AuditProcessedMessagesTo(auditQueue: auditQueue);
+                endpointConfiguration.AuditProcessedMessagesTo(auditQueue);
             }
 
             if (errorQueue != null)
             {
-                endpointConfiguration.SendFailedMessagesTo(errorQueue: errorQueue);
+                endpointConfiguration.SendFailedMessagesTo(errorQueue);
             }
 
             endpointConfiguration.UseTransport<TTransport>();
