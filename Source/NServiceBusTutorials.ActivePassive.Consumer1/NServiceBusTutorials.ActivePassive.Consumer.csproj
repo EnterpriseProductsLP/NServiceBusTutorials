@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.6.2.1\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
@@ -53,8 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainerProvider.cs" />
     <Compile Include="DistributedLockManager.cs" />
-    <Compile Include="IManageDistributedLocks.cs" />
+    <Compile Include="Interfaces\DistributedLockRegistrar.cs" />
+    <Compile Include="Interfaces\IManageDistributedLocks.cs" />
+    <Compile Include="Interfaces\IRegisterModules.cs" />
+    <Compile Include="MessageHandlers\LockableMessageHandler.cs" />
     <Compile Include="MessageHandlers\WorkEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NServiceBusTutorials.ActivePassive.Common\NServiceBusTutorials.ActivePassive.Common.csproj">

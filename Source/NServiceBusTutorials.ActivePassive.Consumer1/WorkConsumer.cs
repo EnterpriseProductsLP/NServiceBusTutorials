@@ -11,6 +11,7 @@ using System.Timers;
 
 using NServiceBus;
 
+using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
@@ -129,7 +130,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void StartEndpoint()
         {
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.ErrorQueue);
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
+            var recoverability = endpointConfiguration.Recoverability();
+            recoverability.Immediate(immediate =>
+                {
+                    immediate.NumberOfRetries(1);
+                });
             var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
             _endpointInstance = startableEndpoint.Start().Inline();
         }

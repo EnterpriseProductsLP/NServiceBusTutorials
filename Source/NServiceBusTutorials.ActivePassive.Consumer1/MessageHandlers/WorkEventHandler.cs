@@ -2,21 +2,23 @@
 using System.Threading.Tasks;
 
 using NServiceBus;
-using NServiceBus.Logging;
 
 using NServiceBusTutorials.ActivePassive.Contracts;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
-    internal class WorkEventHandler : IHandleMessages<WorkEvent>
+    internal class WorkEventHandler : LockableMessageHandler<WorkEvent>
     {
-        private static ILog log = LogManager.GetLogger<WorkEventHandler>();
+        protected override string GetMessageIdentifier(WorkEvent message)
+        {
+            return message.Identifier.ToString();
+        }
 
-        public Task Handle(WorkEvent message, IMessageHandlerContext context)
+        protected override Task HandleInternal(WorkEvent message, IMessageHandlerContext context)
         {
             Console.WriteLine();
 
-            log.Info($"SubscriberOne: Handled event: {message.Identifier}");
+            Logger.Info($"SubscriberOne: Handled event: {message.Identifier}");
             return Task.CompletedTask;
         }
     }

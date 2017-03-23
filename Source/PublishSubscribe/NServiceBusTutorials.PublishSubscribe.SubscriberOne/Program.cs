@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberOne
             Console.Title = "Pub/Sub:  SubscriberOne";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberOne, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberOne, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
             await endpointInstance.Subscribe<EventMessage>().ConfigureAwait(false);
 

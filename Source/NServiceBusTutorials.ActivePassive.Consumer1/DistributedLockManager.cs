@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 using NServiceBusTutorials.ActivePassive.Common;
+using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer
 {

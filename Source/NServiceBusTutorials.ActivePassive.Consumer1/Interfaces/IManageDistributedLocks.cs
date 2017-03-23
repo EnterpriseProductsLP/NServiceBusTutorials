@@ -1,4 +1,4 @@
-﻿namespace NServiceBusTutorials.ActivePassive.Consumer
+﻿namespace NServiceBusTutorials.ActivePassive.Consumer.Interfaces
 {
     internal interface IManageDistributedLocks
     {
