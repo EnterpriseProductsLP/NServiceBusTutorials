@@ -1,5 +1,4 @@
 ﻿using NServiceBus;
-using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
 

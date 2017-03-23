@@ -23,7 +23,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
 
             Thread.Sleep(2000);
 
-            StartMessagePublisher();
+            StartWorkPublisher();
             RunUntilCancelKeyPress();
         }
 
@@ -47,7 +47,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             _workProducer.Stop();
         }
 
-        private static void StartMessagePublisher()
+        private static void StartWorkPublisher()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Publisher, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);

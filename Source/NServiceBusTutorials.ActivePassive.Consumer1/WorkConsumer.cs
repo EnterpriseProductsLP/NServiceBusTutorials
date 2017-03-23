@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Timers;
 
 using NServiceBus;
 
-using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
@@ -18,15 +15,18 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
     {
         private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
 
+        private readonly IManageDistributedLocks _lockManager;
+
         private readonly Timer _heartbeatTimer = new Timer(2000);
 
         private readonly Timer _startupTimer = new Timer(10000);
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder)
+        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks lockManager)
         {
             _endpointConfigurationBuilder = endpointConfigurationBuilder;
+            _lockManager = lockManager;
             _heartbeatTimer.Elapsed += OnHeartbeatTimerElapsed;
             _startupTimer.Elapsed += OnStartupTimerElapsed;
         }
@@ -48,7 +48,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 _heartbeatTimer.Start();
                 return WorkerState.Running;
             }
-            catch
+            catch(Exception ex)
             {
                 return WorkerState.Pausing;
             }
@@ -73,13 +73,10 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             try
             {
-                // TODO:  Remove this line when done debugging.
-                _heartbeatTimer.Stop();
-
-                Heartbeat();
-
-                // TODO:  Remove this line when done debugging.
-                _heartbeatTimer.Start();
+                if (!CanGetOrUpdateDistributedLock())
+                {
+                    Pause();
+                }
             }
             catch
             {
@@ -87,80 +84,24 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
         }
 
+        private bool CanGetOrUpdateDistributedLock()
+        {
+            return _lockManager.GetOrMaintainLock();
+        }
+
         private void OnStartupTimerElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
                 _startupTimer.Stop();
-                Heartbeat();
-                Resume();
+                if (CanGetOrUpdateDistributedLock())
+                {
+                    Resume();
+                }
             }
             catch
             {
                 _startupTimer.Start();
-            }
-        }
-
-        private void Heartbeat()
-        {
-            using (var connection = new SqlConnection(ConfigurationProvider.ConnectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    using (var command = connection.CreateCommand())
-                    {
-                        var key = new SqlParameter("@pKey", SqlDbType.VarChar, 100)
-                                      {
-                                          Value =
-                                              ConfigurationProvider
-                                              .DistributedLockKey,
-                                          Direction =
-                                              ParameterDirection.Input
-                                      };
-                        var discriminator = new SqlParameter("@pDiscriminator", SqlDbType.VarChar, 100)
-                                                {
-                                                    Value =
-                                                        ConfigurationProvider
-                                                        .DistributedLockDiscriminator,
-                                                    Direction =
-                                                        ParameterDirection
-                                                        .Input
-                                                };
-                        var heartbeatDuration = new SqlParameter("@pHeartbeatDuration", SqlDbType.Int)
-                                                    {
-                                                        Value =
-                                                            ConfigurationProvider
-                                                            .DistributedLockDuration,
-                                                        Direction =
-                                                            ParameterDirection
-                                                            .Input
-                                                    };
-                        var success = new SqlParameter("@success", SqlDbType.Bit)
-                                          {
-                                              Direction =
-                                                  ParameterDirection.Output
-                                          };
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "[Framework].[uspHeartbeatDistributedLock]";
-                        command.Parameters.Add(key);
-                        command.Parameters.Add(discriminator);
-                        command.Parameters.Add(heartbeatDuration);
-                        command.Parameters.Add(success);
-                        command.ExecuteNonQuery();
-
-                        var result = (bool)success.Value;
-
-                        if (result != true)
-                        {
-                            throw new Exception("Heartbeat failed");
-                        }
-                    }
-                }
-                finally
-                {
-                    connection.Close();
-                }
             }
         }
 

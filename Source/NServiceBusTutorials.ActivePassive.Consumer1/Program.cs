@@ -19,7 +19,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
             Thread.Sleep(2000);
 
-            StartMessagePublisher();
+            StartWorkConsumer();
             RunUntilCancelKeyPress();
         }
 
@@ -43,10 +43,10 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _workConsumer.Stop();
         }
 
-        private static void StartMessagePublisher()
+        private static void StartWorkConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            _workConsumer = new WorkConsumer(endpointConfigurationBuilder);
+            _workConsumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
             new Thread(_workConsumer.Start).Start();
         }
 

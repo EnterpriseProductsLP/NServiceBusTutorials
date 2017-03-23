@@ -47,7 +47,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             var workEvent = new WorkEvent { Identifier = identifier };
             _endpointInstance.Publish(message: workEvent).Inline();
             Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
         }
     }
 }
