@@ -4,9 +4,9 @@
     {
         private readonly Command _command;
 
-        private readonly ProcessState _currentState;
+        private readonly State _currentState;
 
-        public StateTransition(ProcessState currentState, Command command)
+        public StateTransition(State currentState, Command command)
         {
             _currentState = currentState;
             _command = command;

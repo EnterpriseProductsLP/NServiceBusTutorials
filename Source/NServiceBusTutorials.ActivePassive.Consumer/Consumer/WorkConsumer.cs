@@ -11,7 +11,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 {
     internal class WorkConsumer
     {
-        private readonly Dictionary<StateTransition, ProcessState> _allowedTransitions;
+        private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
         private readonly IManageDistributedLocks _distributedLockManager;
 
@@ -25,63 +25,63 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private bool _canTransition = true;
 
-        private ProcessState _currentState;
+        private State _currentState;
 
         private IEndpointInstance _endpointInstance;
 
         public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks distributedLockManager)
         {
-            CurrentState = ProcessState.Initializing;
+            CurrentState = State.Initializing;
 
             _endpointConfigurationBuilder = endpointConfigurationBuilder;
             _distributedLockManager = distributedLockManager;
             _heartbeatTimer.Elapsed += OnHeartbeatTimerElapsed;
             _startupTimer.Elapsed += OnStartupTimerElapsed;
 
-            _allowedTransitions = new Dictionary<StateTransition, ProcessState>
+            _allowedTransitions = new Dictionary<StateTransition, State>
             {
                 // Transitions from Initializing
                 {
-                    new StateTransition(ProcessState.Initializing, Command.Run), ProcessState.Running
+                    new StateTransition(State.Initializing, Command.Run), State.Running
                 },
                 {
-                    new StateTransition(ProcessState.Initializing, Command.Stop), ProcessState.Stopped
+                    new StateTransition(State.Initializing, Command.Stop), State.Stopped
                 },
                 {
-                    new StateTransition(ProcessState.Initializing, Command.Wait), ProcessState.Waiting
+                    new StateTransition(State.Initializing, Command.Wait), State.Waiting
                 },
 
                 // Transitions from Paused
                 {
-                    new StateTransition(ProcessState.Paused, Command.Run), ProcessState.Running
+                    new StateTransition(State.Paused, Command.Run), State.Running
                 },
                 {
-                    new StateTransition(ProcessState.Paused, Command.Stop), ProcessState.Stopped
+                    new StateTransition(State.Paused, Command.Stop), State.Stopped
                 },
                 {
-                    new StateTransition(ProcessState.Paused, Command.Wait), ProcessState.Waiting
+                    new StateTransition(State.Paused, Command.Wait), State.Waiting
                 },
 
                 // Transitions from Running
                 {
-                    new StateTransition(ProcessState.Running, Command.Pause), ProcessState.Paused
+                    new StateTransition(State.Running, Command.Pause), State.Paused
                 },
                 {
-                    new StateTransition(ProcessState.Running, Command.Stop), ProcessState.Stopped
+                    new StateTransition(State.Running, Command.Stop), State.Stopped
                 },
                 {
-                    new StateTransition(ProcessState.Running, Command.Wait), ProcessState.Waiting
+                    new StateTransition(State.Running, Command.Wait), State.Waiting
                 },
 
                 // Transitions from Waiting
                 {
-                    new StateTransition(ProcessState.Waiting, Command.Pause), ProcessState.Paused
+                    new StateTransition(State.Waiting, Command.Pause), State.Paused
                 },
                 {
-                    new StateTransition(ProcessState.Waiting, Command.Run), ProcessState.Running
+                    new StateTransition(State.Waiting, Command.Run), State.Running
                 },
                 {
-                    new StateTransition(ProcessState.Waiting, Command.Stop), ProcessState.Stopped
+                    new StateTransition(State.Waiting, Command.Stop), State.Stopped
                 }
             };
         }
@@ -130,7 +130,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
         }
 
-        public ProcessState CurrentState
+        public State CurrentState
         {
             get
             {
@@ -158,7 +158,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             SetState(Command.Run);
         }
 
-        public ProcessState SetState(Command command)
+        public State SetState(Command command)
         {
             Console.WriteLine($"Attempting to {command}");
             lock (_stateLock)
@@ -239,12 +239,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
         }
 
-        private ProcessState GetNext(Command command)
+        private State GetNext(Command command)
         {
             lock (_stateLock)
             {
                 var stateTransition = new StateTransition(CurrentState, command);
-                if (_allowedTransitions.TryGetValue(stateTransition, out ProcessState nextState))
+                if (_allowedTransitions.TryGetValue(stateTransition, out State nextState))
                 {
                     return nextState;
                 }

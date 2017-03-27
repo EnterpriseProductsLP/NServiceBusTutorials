@@ -52,11 +52,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (_workConsumer.CurrentState != ProcessState.Stopped);
-
-            Console.WriteLine("Consumer stopped");
-            Console.WriteLine("Press Enter to Exit");
-            Console.ReadLine();
+            while (_workConsumer.CurrentState != State.Stopped);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)

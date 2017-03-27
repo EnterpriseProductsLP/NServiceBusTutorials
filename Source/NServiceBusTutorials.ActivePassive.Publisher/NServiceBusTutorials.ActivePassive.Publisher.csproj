@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Producer\Command.cs" />
-    <Compile Include="Producer\ProcessState.cs" />
+    <Compile Include="Producer\State.cs" />
     <Compile Include="Producer\StateTransition.cs" />
     <Compile Include="Producer\WorkProducer.cs" />
     <Compile Include="Program.cs" />

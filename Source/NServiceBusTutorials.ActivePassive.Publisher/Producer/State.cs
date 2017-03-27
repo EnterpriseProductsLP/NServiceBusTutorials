@@ -1,6 +1,6 @@
 ﻿namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 {
-    internal enum ProcessState
+    internal enum State
     {
         Initializing,
         Paused,

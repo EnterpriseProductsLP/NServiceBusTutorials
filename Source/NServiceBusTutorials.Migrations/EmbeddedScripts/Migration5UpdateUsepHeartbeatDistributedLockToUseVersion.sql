@@ -75,7 +75,7 @@ AS
                                 Heartbeat = CURRENT_TIMESTAMP ,
                                 [Version] = [Version] + 1
                         WHERE   [Key] = @key
-                                AND [Version] = @validVersion;
+                                AND [Version] = @lockVersion;
                         SET @success = @@ROWCOUNT;
                     END;
                 ELSE

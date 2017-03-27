@@ -1,6 +1,6 @@
 ﻿namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 {
-    internal enum ProcessState
+    internal enum State
     {
         Initializing,
         Paused,

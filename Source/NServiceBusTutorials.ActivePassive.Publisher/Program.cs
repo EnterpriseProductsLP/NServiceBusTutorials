@@ -47,11 +47,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                         break;
                 }
             }
-            while (_workProducer.CurrentState != ProcessState.Stopped);
-
-            Console.WriteLine("Consumer stopped");
-            Console.WriteLine("Press Enter to Exit");
-            Console.ReadLine();
+            while (_workProducer.CurrentState != State.Stopped);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
