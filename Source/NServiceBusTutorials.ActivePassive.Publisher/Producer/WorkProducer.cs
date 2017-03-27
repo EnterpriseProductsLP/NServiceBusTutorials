@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Timers;
+
 using NServiceBus;
+
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
@@ -10,15 +12,15 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 {
     internal class WorkProducer
     {
-        private readonly Timer _publicationTimer = new Timer(500);
-
         private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
         private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
 
-        private readonly object _stateLock = new object();
-
         private readonly object _endpointLock = new object();
+
+        private readonly Timer _publicationTimer = new Timer(500);
+
+        private readonly object _stateLock = new object();
 
         private bool _canTransition = true;
 
@@ -34,39 +36,31 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             _publicationTimer.Elapsed += OnPublicationTimerOnElapsed;
 
             _allowedTransitions = new Dictionary<StateTransition, State>
-            {
-                // Transitions from Initializing
-                {
-                    new StateTransition(State.Initializing, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Initializing, Command.Stop), State.Stopped
-                },
+                                      {
+                                          // Transitions from Initializing
+                                          {
+                                              new StateTransition(State.Initializing, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Initializing, Command.Stop), State.Stopped
+                                          },
 
-                // Transitions from Paused
-                {
-                    new StateTransition(State.Paused, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Paused, Command.Stop), State.Stopped
-                },
+                                          // Transitions from Paused
+                                          {
+                                              new StateTransition(State.Paused, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Paused, Command.Stop), State.Stopped
+                                          },
 
-                // Transitions from Running
-                {
-                    new StateTransition(State.Running, Command.Pause), State.Paused
-                },
-                {
-                    new StateTransition(State.Running, Command.Stop), State.Stopped
-                }
-            };
-        }
-
-        private void OnPublicationTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
-        {
-            var identifier = Guid.NewGuid();
-            var workEvent = new WorkEvent { Identifier = identifier };
-            _endpointInstance.Publish(workEvent).Inline();
-            Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
+                                          // Transitions from Running
+                                          {
+                                              new StateTransition(State.Running, Command.Pause), State.Paused
+                                          },
+                                          {
+                                              new StateTransition(State.Running, Command.Stop), State.Stopped
+                                          }
+                                      };
         }
 
         public bool CanPause
@@ -129,6 +123,17 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                     _currentState = value;
                 }
             }
+        }
+
+        private void OnPublicationTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            var identifier = Guid.NewGuid();
+            var workEvent = new WorkEvent
+                                {
+                                    Identifier = identifier
+                                };
+            _endpointInstance.Publish(workEvent).Inline();
+            Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
         }
 
         public void Pause()
@@ -248,9 +253,6 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             lock (_endpointLock)
             {
                 var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
-                var recoverability = endpointConfiguration.Recoverability();
-                recoverability.Immediate(
-                    immediate => { immediate.NumberOfRetries(1); });
                 var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
                 _endpointInstance = startableEndpoint.Start().Inline();
             }

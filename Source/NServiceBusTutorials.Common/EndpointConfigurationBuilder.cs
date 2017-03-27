@@ -13,7 +13,8 @@ namespace NServiceBusTutorials.Common
             return GetEndpointConfiguration<RabbitMQTransport>(endpointName, errorQueue, auditQueue, requestedConcurrency);
         }
 
-        public EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string errorQueue = null, string auditQueue = null, int requestedConcurrency = 0) where TTransport : TransportDefinition, new()
+        public EndpointConfiguration GetEndpointConfiguration<TTransport>(string endpointName, string errorQueue = null, string auditQueue = null, int requestedConcurrency = 0)
+            where TTransport : TransportDefinition, new()
         {
             var endpointConfiguration = GetBaseEndpointConfiguration(endpointName);
             if (auditQueue != null)

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using System.Threading;
+
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;

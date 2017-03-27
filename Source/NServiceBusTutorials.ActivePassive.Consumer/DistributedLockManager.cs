@@ -20,17 +20,20 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     {
                         var key = new SqlParameter("@pKey", SqlDbType.VarChar, 100)
                                       {
-                                          Value = ConfigurationProvider.DistributedLockKey, Direction = ParameterDirection.Input
+                                          Value = ConfigurationProvider.DistributedLockKey,
+                                          Direction = ParameterDirection.Input
                                       };
 
                         var discriminator = new SqlParameter("@pDiscriminator", SqlDbType.VarChar, 100)
                                                 {
-                                                    Value = ConfigurationProvider.DistributedLockDiscriminator, Direction = ParameterDirection.Input
+                                                    Value = ConfigurationProvider.DistributedLockDiscriminator,
+                                                    Direction = ParameterDirection.Input
                                                 };
 
                         var heartbeatDuration = new SqlParameter("@pHeartbeatDuration", SqlDbType.Int)
                                                     {
-                                                        Value = ConfigurationProvider.DistributedLockDuration, Direction = ParameterDirection.Input
+                                                        Value = ConfigurationProvider.DistributedLockDuration,
+                                                        Direction = ParameterDirection.Input
                                                     };
 
                         var success = new SqlParameter("@success", SqlDbType.Bit)
@@ -69,12 +72,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     {
                         var key = new SqlParameter("@pKey", SqlDbType.VarChar, 100)
                                       {
-                                          Value = ConfigurationProvider.DistributedLockKey, Direction = ParameterDirection.Input
+                                          Value = ConfigurationProvider.DistributedLockKey,
+                                          Direction = ParameterDirection.Input
                                       };
 
                         var discriminator = new SqlParameter("@pDiscriminator", SqlDbType.VarChar, 100)
                                                 {
-                                                    Value = ConfigurationProvider.DistributedLockDiscriminator, Direction = ParameterDirection.Input
+                                                    Value = ConfigurationProvider.DistributedLockDiscriminator,
+                                                    Direction = ParameterDirection.Input
                                                 };
 
                         command.CommandType = CommandType.StoredProcedure;

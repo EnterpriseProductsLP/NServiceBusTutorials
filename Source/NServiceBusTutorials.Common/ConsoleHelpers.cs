@@ -4,8 +4,6 @@ namespace NServiceBusTutorials.Common
 {
     public static class ConsoleHelpers
     {
-        private delegate ConsoleKeyInfo ReadKeyDelegate();
-
         public static bool TryReadKeyAsync(int timeout, out ConsoleKeyInfo consoleKeyInfo)
         {
             bool result;
@@ -33,5 +31,7 @@ namespace NServiceBusTutorials.Common
 
             return result;
         }
+
+        private delegate ConsoleKeyInfo ReadKeyDelegate();
     }
 }

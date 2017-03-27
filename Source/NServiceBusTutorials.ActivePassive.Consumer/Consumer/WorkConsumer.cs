@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Timers;
+
 using NServiceBus;
+
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
@@ -39,51 +41,51 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             _startupTimer.Elapsed += OnStartupTimerElapsed;
 
             _allowedTransitions = new Dictionary<StateTransition, State>
-            {
-                // Transitions from Initializing
-                {
-                    new StateTransition(State.Initializing, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Initializing, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Initializing, Command.Wait), State.Waiting
-                },
+                                      {
+                                          // Transitions from Initializing
+                                          {
+                                              new StateTransition(State.Initializing, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Initializing, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Initializing, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Paused
-                {
-                    new StateTransition(State.Paused, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Paused, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Paused, Command.Wait), State.Waiting
-                },
+                                          // Transitions from Paused
+                                          {
+                                              new StateTransition(State.Paused, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Paused, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Paused, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Running
-                {
-                    new StateTransition(State.Running, Command.Pause), State.Paused
-                },
-                {
-                    new StateTransition(State.Running, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Running, Command.Wait), State.Waiting
-                },
+                                          // Transitions from Running
+                                          {
+                                              new StateTransition(State.Running, Command.Pause), State.Paused
+                                          },
+                                          {
+                                              new StateTransition(State.Running, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Running, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Waiting
-                {
-                    new StateTransition(State.Waiting, Command.Pause), State.Paused
-                },
-                {
-                    new StateTransition(State.Waiting, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Waiting, Command.Stop), State.Stopped
-                }
-            };
+                                          // Transitions from Waiting
+                                          {
+                                              new StateTransition(State.Waiting, Command.Pause), State.Paused
+                                          },
+                                          {
+                                              new StateTransition(State.Waiting, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Waiting, Command.Stop), State.Stopped
+                                          }
+                                      };
         }
 
         public bool CanPause
@@ -340,7 +342,10 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
             var recoverability = endpointConfiguration.Recoverability();
             recoverability.Immediate(
-                immediate => { immediate.NumberOfRetries(1); });
+                immediate =>
+                    {
+                        immediate.NumberOfRetries(1);
+                    });
             var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
             _endpointInstance = startableEndpoint.Start().Inline();
         }

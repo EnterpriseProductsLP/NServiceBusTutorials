@@ -23,6 +23,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
             _container = containerBuilder.Build();
         }
 
+        public static ContainerProvider Container => Lazy.Value;
+
         public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning
         {
             add => _container.ChildLifetimeScopeBeginning += value;
@@ -43,8 +45,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
 
             remove => _container.ResolveOperationBeginning -= value;
         }
-
-        public static ContainerProvider Container => Lazy.Value;
 
         public IDisposer Disposer => _container.Disposer;
 

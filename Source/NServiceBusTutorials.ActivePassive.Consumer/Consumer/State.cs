@@ -3,9 +3,13 @@
     internal enum State
     {
         Initializing,
+
         Paused,
+
         Running,
+
         Stopped,
+
         Waiting
     }
 }
