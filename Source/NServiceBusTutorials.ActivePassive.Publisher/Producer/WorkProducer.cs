@@ -71,7 +71,18 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 
         public bool CanStop => CanSetState(Command.Stop);
 
-        public State CurrentState
+        public bool Stopped
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _currentState == State.Stopped;
+                }
+            }
+        }
+
+        private State CurrentState
         {
             get
             {
@@ -80,7 +91,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                     return _currentState;
                 }
             }
-            private set
+            set
             {
                 lock (_stateLock)
                 {

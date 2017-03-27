@@ -53,7 +53,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (_workConsumer.CurrentState != State.Stopped);
+            while (!_workConsumer.Stopped);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)

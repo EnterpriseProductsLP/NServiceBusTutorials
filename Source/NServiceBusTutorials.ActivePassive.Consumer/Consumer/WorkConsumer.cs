@@ -98,7 +98,18 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         public bool CanStop => _canTransition && CanSetState(Command.Stop);
 
-        public State CurrentState
+        public bool Stopped
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _currentState == State.Stopped;
+                }
+            }
+        }
+
+        private State CurrentState
         {
             get
             {
@@ -107,7 +118,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                     return _currentState;
                 }
             }
-            private set
+            set
             {
                 lock (_stateLock)
                 {
