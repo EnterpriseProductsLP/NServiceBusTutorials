@@ -22,7 +22,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private readonly object _endpointLock = new object();
 
-        private readonly Timer _heartbeatTimer = new Timer(250);
+        private readonly Timer _heartbeatTimer = new Timer(2000);
 
         private readonly Timer _startupTimer = new Timer(10000);
 

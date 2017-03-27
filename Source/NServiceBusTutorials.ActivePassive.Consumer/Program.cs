@@ -17,7 +17,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         public static void Main()
         {
             Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
-            // RunMigrations();
+            RunMigrations();
 
             StartConsumer();
             RunUntilCancelKeyPress();
