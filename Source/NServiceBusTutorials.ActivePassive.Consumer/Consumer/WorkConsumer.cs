@@ -19,6 +19,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
 
+        private readonly object _endpointLock = new object();
+
         private readonly Timer _heartbeatTimer = new Timer(2000);
 
         private readonly Timer _startupTimer = new Timer(10000);
@@ -88,49 +90,13 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                                       };
         }
 
-        public bool CanPause
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Pause);
-                }
-            }
-        }
+        public bool CanPause => CanSetState(Command.Pause);
 
-        public bool CanResume
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Run);
-                }
-            }
-        }
+        public bool CanResume => _canTransition && CanSetState(Command.Run);
 
-        public bool CanStart
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Run);
-                }
-            }
-        }
+        public bool CanStart => _canTransition && CanSetState(Command.Run);
 
-        public bool CanStop
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Stop);
-                }
-            }
-        }
+        public bool CanStop => _canTransition && CanSetState(Command.Stop);
 
         public State CurrentState
         {
@@ -237,7 +203,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             lock (_stateLock)
             {
                 var stateTransition = new StateTransition(CurrentState, command);
-                return _allowedTransitions.ContainsKey(stateTransition);
+                return _canTransition && _allowedTransitions.ContainsKey(stateTransition);
             }
         }
 
@@ -339,26 +305,32 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             // Stop any existing endpoint so we don't have two.
             StopEndpoint();
 
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
-            var recoverability = endpointConfiguration.Recoverability();
-            recoverability.Immediate(
-                immediate =>
-                    {
-                        immediate.NumberOfRetries(1);
-                    });
-            var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
-            _endpointInstance = startableEndpoint.Start().Inline();
+            lock (_endpointLock)
+            {
+                var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
+                var recoverability = endpointConfiguration.Recoverability();
+                recoverability.Immediate(
+                    immediate =>
+                        {
+                            immediate.NumberOfRetries(1);
+                        });
+                var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
+                _endpointInstance = startableEndpoint.Start().Inline();
+            }
         }
 
         private void StopEndpoint()
         {
-            if (_endpointInstance == null)
+            lock (_endpointLock)
             {
-                return;
-            }
+                if (_endpointInstance == null)
+                {
+                    return;
+                }
 
-            _endpointInstance.Stop().Inline();
-            _endpointInstance = null;
+                _endpointInstance.Stop().Inline();
+                _endpointInstance = null;
+            }
         }
     }
 }
