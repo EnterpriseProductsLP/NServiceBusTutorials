@@ -2,12 +2,8 @@
 using System.Configuration;
 using System.Reflection;
 using System.Threading;
-
-using NServiceBus;
-
-using NServiceBusTutorials.ActivePassive.Contracts;
+using NServiceBusTutorials.ActivePassive.Publisher.Producer;
 using NServiceBusTutorials.Common;
-using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
 namespace NServiceBusTutorials.ActivePassive.Publisher
@@ -23,18 +19,41 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
 
             Thread.Sleep(2000);
 
-            StartWorkPublisher();
+            StartProducer();
             RunUntilCancelKeyPress();
         }
 
         private static void RunUntilCancelKeyPress()
         {
-            Console.CancelKeyPress += OnCancelKeyPress;
-            while (!_workProducer.Stopped)
-            {
-            }
+            Console.WriteLine();
+            Console.WriteLine("Press 'P' to pause.");
+            Console.WriteLine("Press 'R' to resume.");
 
-            Console.WriteLine("Publisher stopped");
+            Console.CancelKeyPress += OnCancelKeyPress;
+            do
+            {
+                var consoleKey = Console.ReadKey().Key;
+                switch (consoleKey)
+                {
+                    case ConsoleKey.P:
+                        if (_workProducer.CanPause)
+                        {
+                            _workProducer.Pause();
+                        }
+                        break;
+
+                    case ConsoleKey.R:
+                        if (_workProducer.CanResume)
+                        {
+                            _workProducer.Resume();
+                        }
+
+                        break;
+                }
+            }
+            while (_workProducer.CurrentState != ProcessState.Stopped);
+
+            Console.WriteLine("Consumer stopped");
             Console.WriteLine("Press Enter to Exit");
             Console.ReadLine();
         }
@@ -47,12 +66,10 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             _workProducer.Stop();
         }
 
-        private static void StartWorkPublisher()
+        private static void StartProducer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
-            var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
-            _workProducer = new WorkProducer(startableEndpoint);
+            _workProducer = new WorkProducer(endpointConfigurationBuilder);
             new Thread(_workProducer.Start).Start();
         }
 

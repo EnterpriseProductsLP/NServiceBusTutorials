@@ -2,8 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using System.Threading;
-
-using NServiceBusTutorials.ActivePassive.Consumer.StateMachine;
+using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
@@ -29,7 +28,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             Console.WriteLine();
             Console.WriteLine("Press 'P' to pause.");
             Console.WriteLine("Press 'R' to resume.");
-            Console.WriteLine("Press any key to exit");
 
             Console.CancelKeyPress += OnCancelKeyPress;
             do
@@ -38,10 +36,18 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 switch (consoleKey)
                 {
                     case ConsoleKey.P:
-                        _workConsumer.Pause();
+                        if (_workConsumer.CanPause)
+                        {
+                            _workConsumer.Pause();
+                        }
                         break;
+
                     case ConsoleKey.R:
-                        _workConsumer.Resume();
+                        if (_workConsumer.CanResume)
+                        {
+                            _workConsumer.Resume();
+                        }
+
                         break;
                 }
             }

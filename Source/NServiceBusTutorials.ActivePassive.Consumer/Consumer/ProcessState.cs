@@ -1,4 +1,4 @@
-﻿namespace NServiceBusTutorials.ActivePassive.Consumer.StateMachine
+﻿namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 {
     internal enum ProcessState
     {
