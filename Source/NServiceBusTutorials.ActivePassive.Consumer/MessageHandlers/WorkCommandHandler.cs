@@ -7,14 +7,14 @@ using NServiceBusTutorials.ActivePassive.Contracts;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
-    internal class WorkEventHandler : LockableMessageHandler<WorkEvent>
+    internal class WorkCommandHandler : LockableMessageHandler<WorkCommand>
     {
-        protected override string GetMessageIdentifier(WorkEvent message)
+        protected override string GetMessageIdentifier(WorkCommand message)
         {
             return message.Identifier.ToString();
         }
 
-        protected override Task HandleInternal(WorkEvent message, IMessageHandlerContext context)
+        protected override Task HandleInternal(WorkCommand message, IMessageHandlerContext context)
         {
             Console.WriteLine();
 

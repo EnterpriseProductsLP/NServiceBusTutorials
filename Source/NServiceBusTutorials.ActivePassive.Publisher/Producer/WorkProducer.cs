@@ -93,11 +93,11 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
         private void OnPublicationTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             var identifier = Guid.NewGuid();
-            var workEvent = new WorkEvent
+            var workEvent = new WorkCommand
                                 {
                                     Identifier = identifier
                                 };
-            _endpointInstance.Publish(workEvent).Inline();
+            _endpointInstance.Send(Endpoints.Consumer, workEvent).Inline();
             Console.WriteLine($"Sent a WorkEvent with Identifier: {identifier}");
         }
 

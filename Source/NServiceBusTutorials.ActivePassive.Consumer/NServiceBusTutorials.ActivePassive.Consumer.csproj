@@ -62,7 +62,7 @@
     <Compile Include="Interfaces\IManageDistributedLocks.cs" />
     <Compile Include="Interfaces\IRegisterModules.cs" />
     <Compile Include="MessageHandlers\LockableMessageHandler.cs" />
-    <Compile Include="MessageHandlers\WorkEventHandler.cs" />
+    <Compile Include="MessageHandlers\WorkCommandHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Consumer\WorkConsumer.cs" />
