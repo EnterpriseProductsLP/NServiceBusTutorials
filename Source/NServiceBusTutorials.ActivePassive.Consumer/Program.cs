@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using System.Threading;
+using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
@@ -14,7 +15,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         public static void Main()
         {
-            Console.Title = "Active/Passive Example:  Consumer 1";
+            Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
             RunMigrations();
 
             Thread.Sleep(2000);

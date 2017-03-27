@@ -267,7 +267,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 Console.Write("Trying to heartbeat distributed lock:  ");
                 if (CanGetOrUpdateDistributedLock())
                 {
-                    Console.Write("Success!");
+                    Console.WriteLine("Success!");
                 }
                 else
                 {
@@ -305,7 +305,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 _startupTimer.Stop();
                 if (CanGetOrUpdateDistributedLock())
                 {
-                    Console.Write("Got the lock!  Running.");
+                    Console.WriteLine("Got the lock!  Running.");
                     SetState(Command.Run);
                 }
                 else
@@ -316,7 +316,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
             catch (Exception ex)
             {
-                Console.Write($"Exception:  {ex.Message}");
+                Console.WriteLine($"Exception:  {ex.Message}");
                 _startupTimer.Start();
             }
         }
