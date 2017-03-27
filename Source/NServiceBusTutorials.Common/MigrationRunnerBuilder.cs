@@ -36,8 +36,6 @@ namespace NServiceBusTutorials.Common
                 announcer,
                 processorOptions,
                 databaseFactory);
-            var connectionString = serverProcessor.ConnectionString;
-            announcer.Write($"Connection string: {connectionString}");
             return new MigrationRunner(_migrationAssembly, runnerContext, serverProcessor);
         }
     }

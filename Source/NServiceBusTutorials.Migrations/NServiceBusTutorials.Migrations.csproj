@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderedMigrations\Migration_1_Create_Locking_Table.cs" />
+    <Compile Include="OrderedMigrations\Migration_4_Add_Version_Column_To_DistributedLock_Table - Copy.cs" />
     <Compile Include="OrderedMigrations\Migration_4_Add_Version_Column_To_DistributedLock_Table.cs" />
     <Compile Include="OrderedMigrations\Migration_3_Create_uspDeleteDistributedLock.cs" />
     <Compile Include="OrderedMigrations\Migration_2_Create_uspHeartbeatDistributedLock.cs" />
@@ -61,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedScripts\Migration_4_Add_Version_Column_To_DistributedLock_Table.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Migration_5_Update_usepHeartbeatDistributedLock_To_Use_Version.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
