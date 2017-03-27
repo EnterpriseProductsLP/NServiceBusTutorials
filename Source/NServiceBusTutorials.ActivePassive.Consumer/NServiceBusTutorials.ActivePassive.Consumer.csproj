@@ -35,10 +35,9 @@
   <ItemGroup>
     <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator">
-      <HintPath>..\packages\FluentMigrator.1.6.2.1\lib\40\FluentMigrator.dll</HintPath>
+      <HintPath>..\packages\FluentMigrator.1.6.2.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\NServiceBusTutorials.Common\bin\Debug\FluentMigrator.Runner.dll</HintPath>
