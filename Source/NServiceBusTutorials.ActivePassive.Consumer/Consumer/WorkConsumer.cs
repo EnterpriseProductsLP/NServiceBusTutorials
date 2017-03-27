@@ -22,7 +22,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private readonly object _endpointLock = new object();
 
-        private readonly Timer _heartbeatTimer = new Timer(2000);
+        private readonly Timer _heartbeatTimer = new Timer(250);
 
         private readonly Timer _startupTimer = new Timer(10000);
 
@@ -314,7 +314,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                     recoverability.Immediate(
                         immediate =>
                             {
-                                immediate.NumberOfRetries(1);
+                                immediate.NumberOfRetries(0);
                             });
                     var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
                     _endpointInstance = startableEndpoint.Start().Inline();
