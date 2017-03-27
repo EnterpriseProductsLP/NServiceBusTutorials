@@ -12,14 +12,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     public class Program
     {
-        private static WorkConsumer _workConsumer;
+        private static WorkConsumer _consumer;
 
         public static void Main()
         {
             Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
             RunMigrations();
-
-            Thread.Sleep(2000);
 
             StartConsumer();
             RunUntilCancelKeyPress();
@@ -38,22 +36,30 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 switch (consoleKey)
                 {
                     case ConsoleKey.P:
-                        if (_workConsumer.CanPause)
+                        try
                         {
-                            _workConsumer.Pause();
+                            _consumer.Pause();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
                         break;
 
                     case ConsoleKey.R:
-                        if (_workConsumer.CanResume)
+                        try
                         {
-                            _workConsumer.Resume();
+                            _consumer.Resume();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
 
                         break;
                 }
             }
-            while (!_workConsumer.Stopped);
+            while (!_consumer.Stopped);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -61,14 +67,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             e.Cancel = true;
             Console.WriteLine("CTRL+C detected");
             Console.WriteLine("Stopping consumer");
-            _workConsumer.Stop();
+            _consumer.Stop();
         }
 
         private static void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            _workConsumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
-            new Thread(_workConsumer.Start).Start();
+            _consumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
+            new Thread(_consumer.Run).Start();
         }
 
         private static void RunMigrations()

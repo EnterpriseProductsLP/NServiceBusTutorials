@@ -22,8 +22,6 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 
         private readonly object _stateLock = new object();
 
-        private bool _canTransition = true;
-
         private State _currentState;
 
         private IEndpointInstance _endpointInstance;
@@ -62,14 +60,6 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                                           }
                                       };
         }
-
-        public bool CanPause => CanSetState(Command.Pause);
-
-        public bool CanResume => CanSetState(Command.Run);
-
-        public bool CanStart => CanSetState(Command.Run);
-
-        public bool CanStop => CanSetState(Command.Stop);
 
         public bool Stopped
         {
@@ -113,20 +103,19 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 
         public void Pause()
         {
-            SetState(Command.Pause);
+            DoStateTransition(Command.Pause);
         }
 
         public void Resume()
         {
-            SetState(Command.Run);
+            DoStateTransition(Command.Run);
         }
 
-        public State SetState(Command command)
+        public State DoStateTransition(Command command)
         {
             Console.WriteLine($"Attempting to {command}");
             lock (_stateLock)
             {
-                _canTransition = false;
                 var nextState = GetNext(command);
 
                 switch (command)
@@ -142,48 +131,36 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                         }
                         catch
                         {
-                            nextState = SetState(Command.Stop);
+                            nextState = DoStateTransition(Command.Stop);
                         }
                         break;
 
                     case Command.Stop:
                         OnStop();
                         break;
-
-                    default: throw new ArgumentOutOfRangeException(nameof(command), command, null);
                 }
 
                 CurrentState = nextState;
-                _canTransition = true;
             }
 
             return CurrentState;
         }
 
-        public void Start()
+        public void Run()
         {
             try
             {
-                SetState(Command.Run);
+                DoStateTransition(Command.Run);
             }
             catch
             {
-                SetState(Command.Stop);
+                DoStateTransition(Command.Stop);
             }
         }
 
         public void Stop()
         {
-            SetState(Command.Stop);
-        }
-
-        private bool CanSetState(Command command)
-        {
-            lock (_stateLock)
-            {
-                var stateTransition = new StateTransition(CurrentState, command);
-                return _canTransition && _allowedTransitions.ContainsKey(stateTransition);
-            }
+            DoStateTransition(Command.Stop);
         }
 
         private State GetNext(Command command)
@@ -225,11 +202,18 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             // Stop any existing endpoint so we don't have two.
             StopEndpoint();
 
-            lock (_endpointLock)
+            try
             {
-                var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
-                var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
-                _endpointInstance = startableEndpoint.Start().Inline();
+                lock (_endpointLock)
+                {
+                    var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
+                    var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
+                    _endpointInstance = startableEndpoint.Start().Inline();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 

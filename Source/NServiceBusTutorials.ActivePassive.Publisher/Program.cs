@@ -8,13 +8,11 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
 {
     public class Program
     {
-        private static WorkProducer _workProducer;
+        private static WorkProducer _producer;
 
         public static void Main()
         {
             Console.Title = "Active/Passive Example:  Publisher";
-
-            Thread.Sleep(2000);
 
             StartProducer();
             RunUntilCancelKeyPress();
@@ -33,22 +31,30 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                 switch (consoleKey)
                 {
                     case ConsoleKey.P:
-                        if (_workProducer.CanPause)
+                        try
                         {
-                            _workProducer.Pause();
+                            _producer.Pause();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
                         break;
 
                     case ConsoleKey.R:
-                        if (_workProducer.CanResume)
+                        try
                         {
-                            _workProducer.Resume();
+                            _producer.Resume();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
 
                         break;
                 }
             }
-            while (!_workProducer.Stopped);
+            while (!_producer.Stopped);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -56,14 +62,14 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             e.Cancel = true;
             Console.WriteLine("CTRL+C detected");
             Console.WriteLine("Stopping publisher");
-            _workProducer.Stop();
+            _producer.Stop();
         }
 
         private static void StartProducer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            _workProducer = new WorkProducer(endpointConfigurationBuilder);
-            new Thread(_workProducer.Start).Start();
+            _producer = new WorkProducer(endpointConfigurationBuilder);
+            new Thread(_producer.Run).Start();
         }
     }
 }

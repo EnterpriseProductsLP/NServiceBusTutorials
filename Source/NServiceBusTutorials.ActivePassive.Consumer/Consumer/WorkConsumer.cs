@@ -27,8 +27,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private readonly object _stateLock = new object();
 
-        private bool _canTransition = true;
-
         private State _currentState;
 
         private IEndpointInstance _endpointInstance;
@@ -90,14 +88,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                                       };
         }
 
-        public bool CanPause => CanSetState(Command.Pause);
-
-        public bool CanResume => _canTransition && CanSetState(Command.Run);
-
-        public bool CanStart => _canTransition && CanSetState(Command.Run);
-
-        public bool CanStop => _canTransition && CanSetState(Command.Stop);
-
         public bool Stopped
         {
             get
@@ -127,22 +117,11 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
         }
 
-        public void Pause()
-        {
-            SetState(Command.Pause);
-        }
-
-        public void Resume()
-        {
-            SetState(Command.Run);
-        }
-
-        public State SetState(Command command)
+        public State DoStateTransition(Command command)
         {
             Console.WriteLine($"Attempting to {command}");
             lock (_stateLock)
             {
-                _canTransition = false;
                 var nextState = GetNext(command);
 
                 switch (command)
@@ -160,12 +139,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                             }
                             else
                             {
-                                nextState = SetState(Command.Wait);
+                                nextState = DoStateTransition(Command.Wait);
                             }
                         }
                         catch
                         {
-                            nextState = SetState(Command.Stop);
+                            nextState = DoStateTransition(Command.Wait);
                         }
                         break;
 
@@ -176,46 +155,44 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                     case Command.Wait:
                         OnWait();
                         break;
-
-                    default: throw new ArgumentOutOfRangeException(nameof(command), command, null);
                 }
 
                 CurrentState = nextState;
-                _canTransition = true;
             }
 
             return CurrentState;
         }
 
-        public void Start()
+        public void Pause()
+        {
+            DoStateTransition(Command.Pause);
+        }
+
+        public void Resume()
+        {
+            DoStateTransition(Command.Run);
+        }
+
+        public void Run()
         {
             try
             {
-                SetState(Command.Run);
+                DoStateTransition(Command.Run);
             }
             catch
             {
-                SetState(Command.Stop);
+                DoStateTransition(Command.Wait);
             }
         }
 
         public void Stop()
         {
-            SetState(Command.Stop);
+            DoStateTransition(Command.Stop);
         }
 
         private bool CanGetOrUpdateDistributedLock()
         {
             return _distributedLockManager.GetOrMaintainLock();
-        }
-
-        private bool CanSetState(Command command)
-        {
-            lock (_stateLock)
-            {
-                var stateTransition = new StateTransition(CurrentState, command);
-                return _canTransition && _allowedTransitions.ContainsKey(stateTransition);
-            }
         }
 
         private State GetNext(Command command)
@@ -246,13 +223,13 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 else
                 {
                     Console.WriteLine("Failed!  Waiting.");
-                    SetState(Command.Wait);
+                    Wait();
                 }
             }
             catch
             {
                 Console.WriteLine("Heartbeat failed.");
-                SetState(Command.Pause);
+                Wait();
             }
         }
 
@@ -280,7 +257,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 if (CanGetOrUpdateDistributedLock())
                 {
                     Console.WriteLine("Got the lock!  Running.");
-                    SetState(Command.Run);
+                    Run();
                 }
                 else
                 {
@@ -316,17 +293,25 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             // Stop any existing endpoint so we don't have two.
             StopEndpoint();
 
-            lock (_endpointLock)
+            try
             {
-                var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
-                var recoverability = endpointConfiguration.Recoverability();
-                recoverability.Immediate(
-                    immediate =>
-                        {
-                            immediate.NumberOfRetries(1);
-                        });
-                var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
-                _endpointInstance = startableEndpoint.Start().Inline();
+                lock (_endpointLock)
+                {
+                    var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, errorQueue: Endpoints.ErrorQueue);
+                    var recoverability = endpointConfiguration.Recoverability();
+                    recoverability.Immediate(
+                        immediate =>
+                            {
+                                immediate.NumberOfRetries(1);
+                            });
+                    var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
+                    _endpointInstance = startableEndpoint.Start().Inline();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Wait();
             }
         }
 
@@ -342,6 +327,11 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 _endpointInstance.Stop().Inline();
                 _endpointInstance = null;
             }
+        }
+
+        private void Wait()
+        {
+            DoStateTransition(Command.Wait);
         }
     }
 }
