@@ -79,10 +79,17 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private static void RunMigrations()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-            var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
-            var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
-            migrationRunner.MigrateUp();
+            try
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+                var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
+                var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
+                migrationRunner.MigrateUp();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtilities.WriteLineWithColor($"Failed to run migrations:  {ex.Message}", ConsoleColor.Red);
+            }
         }
     }
 }

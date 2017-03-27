@@ -9,6 +9,7 @@ using NServiceBus.Logging;
 
 using NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
+using NServiceBusTutorials.Common;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
@@ -48,16 +49,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
                 return;
             }
 
-            var consoleColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Handled repeated message: {messageIdentifier}");
-            Console.ForegroundColor = consoleColor;
-            _failedMessages.Remove(messageIdentifier);
+            ConsoleUtilities.WriteLineWithColor($"Handled repeated message: {messageIdentifier}", ConsoleColor.Green);
         }
 
         private void HandleFailedMessage(string messageIdentifier)
         {
-            Logger.Error($"Could not handle message: {messageIdentifier}");
+            ConsoleUtilities.WriteLineWithColor($"Could not handle message: {messageIdentifier}", ConsoleColor.Red);
 
             if (!_failedMessages.Contains(messageIdentifier))
             {

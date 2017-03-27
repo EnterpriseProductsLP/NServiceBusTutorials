@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleUtilities.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="EndpointConfigurationBuilder.cs" />
     <Compile Include="MigrationRunnerBuilder.cs" />
