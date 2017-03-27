@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Timers;
 
 using NServiceBus;
@@ -179,9 +180,15 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             {
                 DoStateTransition(Command.Run);
             }
-            catch
+            catch (SqlException ex)
             {
-                DoStateTransition(Command.Wait);
+                ConsoleUtilities.WriteLineWithColor($"Exception when trying to run: {ex.Message}", ConsoleColor.Red);
+                WaitOnSqlException();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtilities.WriteLineWithColor($"Exception when trying to run: {ex.Message}", ConsoleColor.Red);
+                Wait();
             }
         }
 
@@ -218,17 +225,22 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
                 Console.Write("Trying to heartbeat distributed lock:  ");
                 if (CanGetOrUpdateDistributedLock())
                 {
-                    Console.WriteLine("Success!");
+                    ConsoleUtilities.WriteLineWithColor("Success!", ConsoleColor.Green);
                 }
                 else
                 {
-                    Console.WriteLine("Failed!  Waiting.");
+                    ConsoleUtilities.WriteLineWithColor("Failed!  Waiting.", ConsoleColor.Red);
                     Wait();
                 }
             }
-            catch
+            catch (SqlException ex)
             {
-                Console.WriteLine("Heartbeat failed.");
+                ConsoleUtilities.WriteLineWithColor($"Heartbeat failed: {ex.Message}", ConsoleColor.Red);
+                WaitOnSqlException();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtilities.WriteLineWithColor($"Heartbeat failed: {ex.Message}", ConsoleColor.Red);
                 Wait();
             }
         }
@@ -267,7 +279,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception:  {ex.Message}");
+                ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                 _startupTimer.Start();
             }
         }
@@ -310,7 +322,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                 Wait();
             }
         }
@@ -332,6 +344,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
         private void Wait()
         {
             DoStateTransition(Command.Wait);
+        }
+
+        private void WaitOnSqlException()
+        {
+            _heartbeatTimer.Stop();
+            StopEndpoint();
+            _startupTimer.Start();
+            _currentState = State.Waiting;
         }
     }
 }

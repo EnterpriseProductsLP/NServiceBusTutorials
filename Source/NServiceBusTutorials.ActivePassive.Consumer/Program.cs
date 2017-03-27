@@ -17,7 +17,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         public static void Main()
         {
             Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
-            RunMigrations();
+            // RunMigrations();
 
             StartConsumer();
             RunUntilCancelKeyPress();
@@ -42,7 +42,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                         }
                         break;
 
@@ -53,7 +53,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                         }
 
                         break;
@@ -88,7 +88,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
             catch (Exception ex)
             {
-                ConsoleUtilities.WriteLineWithColor($"Failed to run migrations:  {ex.Message}", ConsoleColor.Red);
+                ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
             }
         }
     }

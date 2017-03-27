@@ -37,7 +37,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                         }
                         break;
 
@@ -48,7 +48,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                         }
 
                         break;

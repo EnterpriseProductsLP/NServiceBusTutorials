@@ -213,7 +213,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
             }
         }
 
