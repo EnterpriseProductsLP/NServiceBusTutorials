@@ -63,49 +63,13 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                                       };
         }
 
-        public bool CanPause
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Pause);
-                }
-            }
-        }
+        public bool CanPause => CanSetState(Command.Pause);
 
-        public bool CanResume
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Run);
-                }
-            }
-        }
+        public bool CanResume => CanSetState(Command.Run);
 
-        public bool CanStart
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Run);
-                }
-            }
-        }
+        public bool CanStart => CanSetState(Command.Run);
 
-        public bool CanStop
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _canTransition && CanSetState(Command.Stop);
-                }
-            }
-        }
+        public bool CanStop => CanSetState(Command.Stop);
 
         public State CurrentState
         {
@@ -207,7 +171,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             lock (_stateLock)
             {
                 var stateTransition = new StateTransition(CurrentState, command);
-                return _allowedTransitions.ContainsKey(stateTransition);
+                return _canTransition && _allowedTransitions.ContainsKey(stateTransition);
             }
         }
 
