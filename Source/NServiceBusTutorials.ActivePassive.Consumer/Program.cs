@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Reflection;
 using System.Threading;
 
+using NServiceBusTutorials.ActivePassive.Consumer.StateMachine;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
@@ -19,7 +20,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
             Thread.Sleep(2000);
 
-            StartWorkConsumer();
+            StartConsumer();
             RunUntilCancelKeyPress();
         }
 
@@ -44,7 +45,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (!_workConsumer.Stopped);
+            while (_workConsumer.CurrentState != ProcessState.Stopped);
 
             Console.WriteLine("Consumer stopped");
             Console.WriteLine("Press Enter to Exit");
@@ -59,7 +60,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _workConsumer.Stop();
         }
 
-        private static void StartWorkConsumer()
+        private static void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             _workConsumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
