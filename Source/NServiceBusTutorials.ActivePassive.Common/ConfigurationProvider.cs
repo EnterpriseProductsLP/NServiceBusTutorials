@@ -12,44 +12,11 @@ namespace NServiceBusTutorials.ActivePassive.Common
 
         private static string _connectionString;
 
-        public static string ConnectionString
-        {
-            get
-            {
-                if (_connectionString == null)
-                {
-                    _connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                }
+        public static string ConnectionString => _connectionString ?? (_connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString);
 
-                return _connectionString;
-            }
-        }
+        public static string DistributedLockDiscriminator => _distributedLockDiscriminator ?? (_distributedLockDiscriminator = ConfigurationManager.AppSettings["DistributedLockDiscriminator"]);
 
-        public static string DistributedLockDiscriminator
-        {
-            get
-            {
-                if (_distributedLockDiscriminator == null)
-                {
-                    _distributedLockDiscriminator = ConfigurationManager.AppSettings["DistributedLockDiscriminator"];
-                }
-
-                return _distributedLockDiscriminator;
-            }
-        }
-
-        public static string DistributedLockKey
-        {
-            get
-            {
-                if (_distributedLockKey == null)
-                {
-                    _distributedLockKey = ConfigurationManager.AppSettings["DistributedLockKey"];
-                }
-
-                return _distributedLockKey;
-            }
-        }
+        public static string DistributedLockKey => _distributedLockKey ?? (_distributedLockKey = ConfigurationManager.AppSettings["DistributedLockKey"]);
 
         public static int DistributedLockDuration
         {

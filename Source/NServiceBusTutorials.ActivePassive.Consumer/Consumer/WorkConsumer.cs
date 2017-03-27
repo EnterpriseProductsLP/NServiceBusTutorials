@@ -230,11 +230,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             return _distributedLockManager.GetOrMaintainLock();
         }
 
-        private bool CannotGetOrUpdateDistributredLock()
-        {
-            return !CanGetOrUpdateDistributedLock();
-        }
-
         private bool CanSetState(Command command)
         {
             lock (_stateLock)

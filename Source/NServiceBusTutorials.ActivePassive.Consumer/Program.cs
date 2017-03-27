@@ -77,7 +77,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private static void RunMigrations()
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-            var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration_1_Create_Locking_Table)));
+            var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
             var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
             migrationRunner.MigrateUp();
         }

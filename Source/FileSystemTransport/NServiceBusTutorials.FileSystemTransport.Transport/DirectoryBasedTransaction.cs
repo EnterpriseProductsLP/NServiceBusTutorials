@@ -21,7 +21,12 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         public void BeginTransaction(string incomingFilePath)
         {
             Directory.CreateDirectory(_transactionDirectory);
-            FileToProcess = Path.Combine(_transactionDirectory, Path.GetFileName(incomingFilePath));
+            var fileName = Path.GetFileName(incomingFilePath);
+            if (fileName != null)
+            {
+                FileToProcess = Path.Combine(_transactionDirectory, fileName);
+            }
+
             File.Move(incomingFilePath, FileToProcess);
         }
 
@@ -35,7 +40,11 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             if (!_committed)
             {
                 // Roll back by moving the file back to the main dir
-                File.Move(FileToProcess, Path.Combine(_basePath, Path.GetFileName(FileToProcess)));
+                var fileName = Path.GetFileName(FileToProcess);
+                if (fileName != null)
+                {
+                    File.Move(FileToProcess, Path.Combine(_basePath, fileName));
+                }
             }
 
             Directory.Delete(_transactionDirectory, true);

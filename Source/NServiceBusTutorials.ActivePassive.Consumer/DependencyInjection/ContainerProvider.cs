@@ -25,41 +25,23 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
 
         public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning
         {
-            add
-            {
-                _container.ChildLifetimeScopeBeginning += value;
-            }
+            add => _container.ChildLifetimeScopeBeginning += value;
 
-            remove
-            {
-                _container.ChildLifetimeScopeBeginning -= value;
-            }
+            remove => _container.ChildLifetimeScopeBeginning -= value;
         }
 
         public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding
         {
-            add
-            {
-                _container.CurrentScopeEnding += value;
-            }
+            add => _container.CurrentScopeEnding += value;
 
-            remove
-            {
-                _container.CurrentScopeEnding -= value;
-            }
+            remove => _container.CurrentScopeEnding -= value;
         }
 
         public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning
         {
-            add
-            {
-                _container.ResolveOperationBeginning += value;
-            }
+            add => _container.ResolveOperationBeginning += value;
 
-            remove
-            {
-                _container.ResolveOperationBeginning -= value;
-            }
+            remove => _container.ResolveOperationBeginning -= value;
         }
 
         public static ContainerProvider Container => Lazy.Value;

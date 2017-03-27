@@ -2,19 +2,19 @@
 {
     internal class StateTransition
     {
-        private readonly Command Command;
+        private readonly Command _command;
 
-        private readonly ProcessState CurrentState;
+        private readonly ProcessState _currentState;
 
         public StateTransition(ProcessState currentState, Command command)
         {
-            CurrentState = currentState;
-            Command = command;
+            _currentState = currentState;
+            _command = command;
         }
 
         protected bool Equals(StateTransition other)
         {
-            return Equals(Command, other.Command) && CurrentState == other.CurrentState;
+            return Equals(_command, other._command) && _currentState == other._currentState;
         }
 
         public override bool Equals(object obj)
@@ -36,7 +36,7 @@
         {
             unchecked
             {
-                return (Command.GetHashCode() * 397) ^ (int)CurrentState;
+                return (_command.GetHashCode() * 397) ^ (int)_currentState;
             }
         }
     }

@@ -15,7 +15,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
     internal class FileTransportMessagePump : IPushMessages
     {
-        private static readonly ILog log = LogManager.GetLogger<FileTransportMessagePump>();
+        private static readonly ILog Log = LogManager.GetLogger<FileTransportMessagePump>();
 
         private CancellationToken _cancellationToken;
         private CancellationTokenSource _cancellationTokenSource;
@@ -26,7 +26,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         private Func<MessageContext, Task> _pipeline;
         private bool _purgeOnStartup;
         private ConcurrentDictionary<Task, Task> _runningReceiveTasks;
-        private const int _pumpMessageCheckDelay = 100;
+        private const int PumpMessageCheckDelay = 100;
 
         public Task Init(Func<MessageContext, Task> onMessage, Func<ErrorContext, Task<ErrorHandleResult>> onError, CriticalError criticalError, PushSettings settings)
         {
@@ -106,7 +106,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 
                 if (!filesFound)
                 {
-                    await Task.Delay(_pumpMessageCheckDelay, _cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(PumpMessageCheckDelay, _cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -115,7 +115,8 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         {
             var nativeMessageId = Path.GetFileNameWithoutExtension(filePath);
             await _concurrencyLimiter.WaitAsync(_cancellationToken).ConfigureAwait(false);
-            Func<Task> processFileTaskFactory = async () =>
+
+            async Task ProcessFileTaskFactory()
             {
                 try
                 {
@@ -125,15 +126,17 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                 {
                     _concurrencyLimiter.Release();
                 }
-            };
-            var task = Task.Run(processFileTaskFactory, _cancellationToken);
+            }
 
-            Action<Task> removeRunningTask = runningTask =>
+            var task = Task.Run(ProcessFileTaskFactory, _cancellationToken);
+
+            void RemoveRunningTask(Task runningTask)
             {
                 Task toBeRemoved;
                 _runningReceiveTasks.TryRemove(runningTask, out toBeRemoved);
-            };
-            task.ContinueWith(removeRunningTask, TaskContinuationOptions.ExecuteSynchronously).Ignore();
+            }
+
+            task.ContinueWith(RemoveRunningTask, TaskContinuationOptions.ExecuteSynchronously).Ignore();
             _runningReceiveTasks.AddOrUpdate(task, task, (k, v) => task).Ignore();
         }
 
@@ -177,7 +180,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             }
             catch (Exception ex)
             {
-                log.Error("File Message pump failed", ex);
+                Log.Error("File Message pump failed", ex);
             }
 
             if (!_cancellationToken.IsCancellationRequested)
@@ -255,7 +258,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 
             if (finishedTask.Equals(timeoutTask))
             {
-                log.Error("The message pump failed to stop with in the time allowed(30s)");
+                Log.Error("The message pump failed to stop with in the time allowed(30s)");
             }
         }
     }

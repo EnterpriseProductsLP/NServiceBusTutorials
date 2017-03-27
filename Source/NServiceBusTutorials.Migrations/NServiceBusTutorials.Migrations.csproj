@@ -43,24 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OrderedMigrations\Migration_1_Create_Locking_Table.cs" />
-    <Compile Include="OrderedMigrations\Migration_4_Add_Version_Column_To_DistributedLock_Table - Copy.cs" />
-    <Compile Include="OrderedMigrations\Migration_4_Add_Version_Column_To_DistributedLock_Table.cs" />
-    <Compile Include="OrderedMigrations\Migration_3_Create_uspDeleteDistributedLock.cs" />
-    <Compile Include="OrderedMigrations\Migration_2_Create_uspHeartbeatDistributedLock.cs" />
+    <Compile Include="OrderedMigrations\Migration1CreateLockingTable.cs" />
+    <Compile Include="OrderedMigrations\Migration5UpdateUsepHeartbeatDistributedLockToUseVersion.cs" />
+    <Compile Include="OrderedMigrations\Migration4AddVersionColumnToDistributedLockTable.cs" />
+    <Compile Include="OrderedMigrations\Migration3CreateUspDeleteDistributedLock.cs" />
+    <Compile Include="OrderedMigrations\Migration2CreateUspHeartbeatDistributedLock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration_2_Create_uspHeartbeatDistributedLock.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration2CreateUspHeartbeatDistributedLock.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration_3_Create_uspDeleteDistributedLock.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration3CreateUspDeleteDistributedLock.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration_4_Add_Version_Column_To_DistributedLock_Table.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration4AddVersionColumnToDistributedLockTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration_5_Update_usepHeartbeatDistributedLock_To_Use_Version.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration5UpdateUsepHeartbeatDistributedLockToUseVersion.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -5,27 +5,27 @@ namespace NServiceBusTutorials.StepByStepExample.Domain
 {
     public static class ProductBuilder
     {
-        private static readonly object _nextProductLock;
-        private static readonly IList<Product> _products;
-        private static readonly Random _random;
+        private static readonly object NextProductLock;
+        private static readonly IList<Product> Products;
+        private static readonly Random Random;
 
         static ProductBuilder()
         {
-            _nextProductLock = new object();
-            _products = new List<Product>();
-            _random = new Random(DateTime.Now.Millisecond);
+            NextProductLock = new object();
+            Products = new List<Product>();
+            Random = new Random(DateTime.Now.Millisecond);
             foreach (var productName in GetProductNames())
             {
-                _products.Add(new Product(Guid.NewGuid(), productName));
+                Products.Add(new Product(Guid.NewGuid(), productName));
             }
         }
 
         public static Product NextProduct()
         {
-            lock (_nextProductLock)
+            lock (NextProductLock)
             {
-                var productIndex = _random.Next(0, _products.Count - 1);
-                return _products[productIndex];
+                var productIndex = Random.Next(0, Products.Count - 1);
+                return Products[productIndex];
             }
         }
 

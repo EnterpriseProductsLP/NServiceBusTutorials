@@ -3,7 +3,7 @@
 namespace NServiceBusTutorials.Migrations.OrderedMigrations
 {
     [Migration(1)]
-    public class Migration_1_Create_Locking_Table : ForwardOnlyMigration
+    public class Migration1CreateLockingTable : ForwardOnlyMigration
     {
         public override void Up()
         {

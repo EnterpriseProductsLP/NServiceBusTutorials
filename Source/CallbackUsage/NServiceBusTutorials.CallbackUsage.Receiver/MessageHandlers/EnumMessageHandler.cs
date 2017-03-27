@@ -7,12 +7,12 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver.MessageHandlers
 {
     internal class EnumMessageHandler : IHandleMessages<EnumMessage>
     {
-        private static ILog log = LogManager.GetLogger<EnumMessageHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<EnumMessageHandler>();
 
         public Task Handle(EnumMessage message, IMessageHandlerContext context)
         {
-            log.Info("Enum message received.  Returning.");
-            var responseMessage = new EnumMessageResponse {Status = Status.OK};
+            Log.Info("Enum message received.  Returning.");
+            var responseMessage = new EnumMessageResponse {Status = Status.Ok};
             return context.Reply(responseMessage);
         }
     }
