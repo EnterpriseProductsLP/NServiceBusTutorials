@@ -58,6 +58,8 @@
     <Compile Include="ConsoleUtilities.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="EndpointConfigurationBuilder.cs" />
+    <Compile Include="IEndpointConfigurationBuilder.cs" />
+    <Compile Include="IEndpointInstanceBuilder.cs" />
     <Compile Include="MigrationRunnerBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

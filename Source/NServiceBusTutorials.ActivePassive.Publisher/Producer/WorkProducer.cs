@@ -14,7 +14,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
     {
         private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
-        private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
+        private readonly IEndpointConfigurationBuilder _endpointConfigurationBuilder;
 
         private readonly object _endpointLock = new object();
 
@@ -26,7 +26,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkProducer(EndpointConfigurationBuilder endpointConfigurationBuilder)
+        public WorkProducer(IEndpointConfigurationBuilder endpointConfigurationBuilder)
         {
             CurrentState = State.Initializing;
 

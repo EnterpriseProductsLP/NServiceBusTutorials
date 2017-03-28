@@ -18,7 +18,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private readonly IManageDistributedLocks _distributedLockManager;
 
-        private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
+        private readonly IEndpointConfigurationBuilder _endpointConfigurationBuilder;
 
         private readonly object _endpointLock = new object();
 
@@ -32,7 +32,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkConsumer(EndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks distributedLockManager)
+        public WorkConsumer(IEndpointConfigurationBuilder endpointConfigurationBuilder, IManageDistributedLocks distributedLockManager)
         {
             CurrentState = State.Initializing;
 
