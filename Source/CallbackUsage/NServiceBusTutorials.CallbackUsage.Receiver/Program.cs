@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.CallbackUsage.Contracts;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.CallbackUsage.Receiver
 {
@@ -10,7 +11,7 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()
@@ -18,9 +19,9 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver
             Console.Title = "Callback Usage:  Receiver";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Receiver, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
-            endpointConfiguration.MakeInstanceUniquelyAddressable(discriminator: "1");
-            var endpointInstance = await Endpoint.Start(configuration: endpointConfiguration);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Receiver, errorQueue: Endpoints.ErrorQueue);
+            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+            var endpointInstance = await Endpoint.Start(endpointConfiguration);
 
             try
             {

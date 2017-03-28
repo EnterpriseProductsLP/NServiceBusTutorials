@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.PublishSubscribe.Contracts;
+using NServiceBusTutorials.PublishSubscribe.Contracts.Events;
 
 namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
 {
@@ -10,7 +12,7 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()
@@ -18,8 +20,9 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
             Console.Title = "Pub/Sub:  SubscriberThree";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.SubscriberThree, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberThree, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+            await endpointInstance.Subscribe<EventMessage>().ConfigureAwait(false);
 
             try
             {

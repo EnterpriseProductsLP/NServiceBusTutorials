@@ -19,7 +19,7 @@ namespace NServiceBusTutorials.StepByStepExample.Contracts.Commands
         }
 
         public PlaceOrder(Guid productId, string productName)
-            : this(new Product(id: productId, name: productName))
+            : this(new Product(productId, productName))
         {
         }
 

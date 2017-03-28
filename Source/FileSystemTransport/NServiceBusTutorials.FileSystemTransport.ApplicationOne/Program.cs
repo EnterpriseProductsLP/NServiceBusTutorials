@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.FileSystemTransport.Contracts;
 using NServiceBusTutorials.FileSystemTransport.Transport;
 
@@ -12,7 +13,7 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()
@@ -20,7 +21,7 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne
             Console.Title = "FileSystem Transport:  Application One";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration<FileTransport>(endpointName: Endpoints.EndpointOne, auditQueue: null, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration<FileTransport>(Endpoints.EndpointOne, Endpoints.ErrorQueue);
             endpointConfiguration.DisableFeature<TimeoutManager>();
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);

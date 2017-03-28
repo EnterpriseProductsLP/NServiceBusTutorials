@@ -1,8 +1,3 @@
-# Create the admin user
-rabbitmqctl delete_user admin
-rabbitmqctl add_user admin 1breakthings!
-rabbitmqctl set_user_tags admin administrator
-
 # Create the NServiceBusTutorials user
 rabbitmqctl delete_user NServiceBusTutorials
 rabbitmqctl add_user NServiceBusTutorials 1breakthings!

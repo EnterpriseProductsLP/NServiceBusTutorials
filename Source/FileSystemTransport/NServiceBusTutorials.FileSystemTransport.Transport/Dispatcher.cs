@@ -18,9 +18,12 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                 var bodyPath = Path.Combine(destinationBasePath, ".bodies", $"{nativeMessageId}.xml");
 
                 var bodyDirectory = Path.GetDirectoryName(bodyPath);
-                if (!Directory.Exists(bodyDirectory))
+                if (bodyDirectory != null)
                 {
-                    Directory.CreateDirectory(bodyDirectory);
+                    if (!Directory.Exists(bodyDirectory))
+                    {
+                        Directory.CreateDirectory(bodyDirectory);
+                    }
                 }
 
                 File.WriteAllBytes(bodyPath, operation.Message.Body);

@@ -15,7 +15,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 {
     internal class FileTransportMessagePump : IPushMessages
     {
-        private static readonly ILog log = LogManager.GetLogger<FileTransportMessagePump>();
+        private static readonly ILog Log = LogManager.GetLogger<FileTransportMessagePump>();
 
         private CancellationToken _cancellationToken;
         private CancellationTokenSource _cancellationTokenSource;
@@ -26,7 +26,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         private Func<MessageContext, Task> _pipeline;
         private bool _purgeOnStartup;
         private ConcurrentDictionary<Task, Task> _runningReceiveTasks;
-        private const int _pumpMessageCheckDelay = 100;
+        private const int PumpMessageCheckDelay = 100;
 
         public Task Init(Func<MessageContext, Task> onMessage, Func<ErrorContext, Task<ErrorHandleResult>> onError, CriticalError criticalError, PushSettings settings)
         {
@@ -55,12 +55,12 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         {
             var receiveCancellationTokenSource = new CancellationTokenSource();
             var pushContext = new MessageContext(
-                messageId: messageId,
-                headers: new Dictionary<string, string>(headers),
-                body: body,
-                transportTransaction: transportTransaction,
-                receiveCancellationTokenSource: receiveCancellationTokenSource,
-                context: new ContextBag());
+                messageId,
+                new Dictionary<string, string>(headers),
+                body,
+                transportTransaction,
+                receiveCancellationTokenSource,
+                new ContextBag());
 
             await _pipeline(pushContext).ConfigureAwait(false);
 
@@ -106,7 +106,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 
                 if (!filesFound)
                 {
-                    await Task.Delay(_pumpMessageCheckDelay, _cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(PumpMessageCheckDelay, _cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
             }
             catch (Exception ex)
             {
-                log.Error("File Message pump failed", ex);
+                Log.Error("File Message pump failed", ex);
             }
 
             if (!_cancellationToken.IsCancellationRequested)
@@ -236,10 +236,10 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         {
             _messagePumpTask = Task.Factory
                 .StartNew(
-                    function: ProcessMessages,
-                    cancellationToken: CancellationToken.None,
-                    creationOptions: TaskCreationOptions.LongRunning,
-                    scheduler: TaskScheduler.Default)
+                    ProcessMessages,
+                    CancellationToken.None,
+                    TaskCreationOptions.LongRunning,
+                    TaskScheduler.Default)
                 .Unwrap();
         }
 
@@ -255,7 +255,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
 
             if (finishedTask.Equals(timeoutTask))
             {
-                log.Error("The message pump failed to stop with in the time allowed(30s)");
+                Log.Error("The message pump failed to stop with in the time allowed(30s)");
             }
         }
     }

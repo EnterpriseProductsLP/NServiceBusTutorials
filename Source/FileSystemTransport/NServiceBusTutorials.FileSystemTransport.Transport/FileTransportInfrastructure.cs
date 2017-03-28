@@ -14,17 +14,17 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         public override TransportReceiveInfrastructure ConfigureReceiveInfrastructure()
         {
             return new TransportReceiveInfrastructure(
-                messagePumpFactory: () => new FileTransportMessagePump(),
-                queueCreatorFactory: () => new FileTransportQueueCreator(),
-                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success)
+                () => new FileTransportMessagePump(),
+                () => new FileTransportQueueCreator(),
+                () => Task.FromResult(StartupCheckResult.Success)
             );
         }
 
         public override TransportSendInfrastructure ConfigureSendInfrastructure()
         {
             return new TransportSendInfrastructure(
-                dispatcherFactory: () => new Dispatcher(),
-                preStartupCheck: () => Task.FromResult(StartupCheckResult.Success)
+                () => new Dispatcher(),
+                () => Task.FromResult(StartupCheckResult.Success)
             );
         }
 
@@ -57,9 +57,9 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         public override TransportTransactionMode TransactionMode => TransportTransactionMode.ReceiveOnly;
 
         public override OutboundRoutingPolicy OutboundRoutingPolicy => new OutboundRoutingPolicy(
-            sends: OutboundRoutingType.Unicast,
-            publishes: OutboundRoutingType.Unicast,
-            replies: OutboundRoutingType.Unicast
+            OutboundRoutingType.Unicast,
+            OutboundRoutingType.Unicast,
+            OutboundRoutingType.Unicast
         );
     }
 }

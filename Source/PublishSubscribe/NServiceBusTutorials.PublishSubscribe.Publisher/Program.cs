@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.PublishSubscribe.Contracts;
 using NServiceBusTutorials.PublishSubscribe.Contracts.Events;
 
@@ -12,7 +13,7 @@ namespace NServiceBusTutorials.PublishSubscribe.Publisher
     {
         public static void Main()
         {
-            AsyncMain().GetAwaiter().GetResult();
+            AsyncMain().Inline();
         }
 
         private static async Task AsyncMain()
@@ -21,7 +22,7 @@ namespace NServiceBusTutorials.PublishSubscribe.Publisher
             Thread.Sleep(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(endpointName: Endpoints.Publisher, auditQueue: Endpoints.AuditQueue, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             try
@@ -51,7 +52,7 @@ namespace NServiceBusTutorials.PublishSubscribe.Publisher
 
                 var eventMessage = new EventMessage(Guid.NewGuid());
 
-                await endpointInstance.Publish(message: eventMessage);
+                await endpointInstance.Publish(eventMessage);
                 Console.WriteLine($"Published an EventMessage with ID: {eventMessage.EventMessageId}");
             }
         }

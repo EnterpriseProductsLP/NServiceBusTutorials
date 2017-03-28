@@ -8,13 +8,13 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree.MessageHandlers
 {
     internal class EventMessageHandler : IHandleMessages<EventMessage>
     {
-        private static ILog log = LogManager.GetLogger<EventMessageHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<EventMessageHandler>();
 
         public Task Handle(EventMessage message, IMessageHandlerContext context)
         {
             Console.WriteLine();
 
-            log.Info($"SubscriberThree: Handled event: {message.EventMessageId}");
+            Log.Info($"SubscriberThree: Handled event: {message.EventMessageId}");
             return Task.CompletedTask;
         }
     }

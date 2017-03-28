@@ -9,7 +9,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server.MessageHandlers
 {
     internal class PlaceOrderHandler : IHandleMessages<PlaceOrder>
     {
-        private static ILog log = LogManager.GetLogger<PlaceOrderHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<PlaceOrderHandler>();
 
         public Task Handle(PlaceOrder message, IMessageHandlerContext context)
         {
@@ -19,11 +19,11 @@ namespace NServiceBusTutorials.StepByStepExample.Server.MessageHandlers
 
             Console.WriteLine();
 
-            log.Info($"Order: {orderId} placed for Product:[Id: {productId}, Name: {productName}]");
-            log.Info($"Publishing: OrderPlaced for Order Id: {orderId}");
+            Log.Info($"Order: {orderId} placed for Product:[Id: {productId}, Name: {productName}]");
+            Log.Info($"Publishing: OrderPlaced for Order Id: {orderId}");
 
-            var orderPlaced = new OrderPlaced(orderId: orderId);
-            return context.Publish(message: orderPlaced);
+            var orderPlaced = new OrderPlaced(orderId);
+            return context.Publish(orderPlaced);
         }
     }
 }

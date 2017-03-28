@@ -7,11 +7,11 @@ namespace NServiceBusTutorials.FileSystemTransport.ApplicationOne.MessageHandler
 {
     public class MessageBHandler : IHandleMessages<MessageB>
     {
-        private static ILog log = LogManager.GetLogger<MessageBHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<MessageBHandler>();
 
         public Task Handle(MessageB message, IMessageHandlerContext context)
         {
-            log.Info("MessageB handled");
+            Log.Info("MessageB handled");
             return Task.CompletedTask;
         }
     }
