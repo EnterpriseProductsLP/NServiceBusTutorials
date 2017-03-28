@@ -1,32 +1,15 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
 
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
-using NServiceBusTutorials.Common;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class DistributedLockManager : IManageDistributedLocks
     {
-        private readonly bool _randomlyFail;
-
-        private readonly Random _random;
-
-        public DistributedLockManager(bool randomlyFail = true)
-        {
-            _randomlyFail = randomlyFail;
-            _random = new Random(DateTime.Now.Millisecond);
-        }
-
         public bool GetOrMaintainLock()
         {
-            if (RandomlyFail())
-            {
-                return false;
-            }
-
             bool result;
             using (var connection = new SqlConnection(ConfigurationProvider.ConnectionString))
             {
@@ -76,23 +59,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
 
             return result;
-        }
-
-        private bool RandomlyFail()
-        {
-            if (!_randomlyFail)
-            {
-                return false;
-            }
-
-            var nextRandom = _random.Next(101, 501);
-            if (nextRandom % 100 != 0)
-            {
-                return false;
-            }
-
-            ConsoleUtilities.WriteLineWithColor($"Randomly failing:  {nextRandom}", ConsoleColor.Blue);
-            return true;
         }
 
         public void ReleaseLock()
