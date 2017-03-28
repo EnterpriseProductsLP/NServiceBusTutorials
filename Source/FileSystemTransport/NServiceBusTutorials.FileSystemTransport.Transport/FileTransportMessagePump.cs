@@ -115,8 +115,7 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
         {
             var nativeMessageId = Path.GetFileNameWithoutExtension(filePath);
             await _concurrencyLimiter.WaitAsync(_cancellationToken).ConfigureAwait(false);
-
-            async Task ProcessFileTaskFactory()
+            Func<Task> processFileTaskFactory = async () =>
             {
                 try
                 {
@@ -126,17 +125,15 @@ namespace NServiceBusTutorials.FileSystemTransport.Transport
                 {
                     _concurrencyLimiter.Release();
                 }
-            }
+            };
+            var task = Task.Run(processFileTaskFactory, _cancellationToken);
 
-            var task = Task.Run(ProcessFileTaskFactory, _cancellationToken);
-
-            void RemoveRunningTask(Task runningTask)
+            Action<Task> removeRunningTask = runningTask =>
             {
                 Task toBeRemoved;
                 _runningReceiveTasks.TryRemove(runningTask, out toBeRemoved);
-            }
-
-            task.ContinueWith(RemoveRunningTask, TaskContinuationOptions.ExecuteSynchronously).Ignore();
+            };
+            task.ContinueWith(removeRunningTask, TaskContinuationOptions.ExecuteSynchronously).Ignore();
             _runningReceiveTasks.AddOrUpdate(task, task, (k, v) => task).Ignore();
         }
 

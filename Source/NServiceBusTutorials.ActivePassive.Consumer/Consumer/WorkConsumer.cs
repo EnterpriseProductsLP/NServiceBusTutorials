@@ -206,8 +206,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
         {
             lock (_stateLock)
             {
+                State nextState;
                 var stateTransition = new StateTransition(CurrentState, command);
-                if (_allowedTransitions.TryGetValue(stateTransition, out State nextState))
+                if (_allowedTransitions.TryGetValue(stateTransition, out nextState))
                 {
                     return nextState;
                 }
