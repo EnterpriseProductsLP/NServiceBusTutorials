@@ -25,16 +25,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
 
         public async Task<IEndpointInstance> Start()
         {
-            var startableEndpoint = await _endpointInstanceBuilder.Create();
-            _endpointInstance = await startableEndpoint.Start();
-
-            var subscriptionTasks = _subscriptions
-                .Select(subscription => _endpointInstance.Subscribe(subscription.EventType, subscription.Options))
-                .ToArray();
-
-            Task.WaitAll(subscriptionTasks);
-
-            return _endpointInstance;
+            return await StartEndpoint();
         }
 
         public Task Send(object message, SendOptions options)
@@ -92,6 +83,22 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
         public async Task Stop()
         {
             await StopEndpoint();
+        }
+
+        private async Task<IEndpointInstance> StartEndpoint()
+        {
+            await StopEndpoint();
+
+            var startableEndpoint = await _endpointInstanceBuilder.Create();
+            _endpointInstance = await startableEndpoint.Start();
+
+            var subscriptionTasks = _subscriptions
+                .Select(subscription => _endpointInstance.Subscribe(subscription.EventType, subscription.Options))
+                .ToArray();
+
+            Task.WaitAll(subscriptionTasks);
+
+            return _endpointInstance;
         }
 
         private async Task StopEndpoint()
