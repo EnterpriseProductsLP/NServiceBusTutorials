@@ -3,7 +3,7 @@ using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
 {
-    public class DistributedLockRegistrar : IRegisterModules
+    public class DistributedLockRegistrar
     {
         public void Register(ContainerBuilder containerBuilder)
         {

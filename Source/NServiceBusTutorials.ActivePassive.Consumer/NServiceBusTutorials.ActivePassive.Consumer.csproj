@@ -61,7 +61,6 @@
     <Compile Include="DistributedLockManager.cs" />
     <Compile Include="DependencyInjection\DistributedLockRegistrar.cs" />
     <Compile Include="Interfaces\IManageDistributedLocks.cs" />
-    <Compile Include="Interfaces\IRegisterModules.cs" />
     <Compile Include="MessageHandlers\LockableMessageHandler.cs" />
     <Compile Include="MessageHandlers\WorkCommandHandler.cs" />
     <Compile Include="Program.cs" />

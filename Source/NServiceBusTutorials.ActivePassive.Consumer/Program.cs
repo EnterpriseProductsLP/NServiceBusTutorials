@@ -59,20 +59,20 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             while (!_consumer.Terminated);
         }
 
-        private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        private static async void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
             Console.WriteLine(value: "CTRL+C detected");
             Console.WriteLine(value: "Stopping consumer");
-            _consumer.Stop();
+            await _consumer.Stop();
         }
 
-        private static void StartConsumer()
+        private static async void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
             _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new DistributedLockManager());
-            _consumer.Start();
+            await _consumer.Start();
         }
 
         private static void RunMigrations()
