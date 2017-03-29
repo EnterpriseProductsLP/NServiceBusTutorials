@@ -7,64 +7,58 @@ namespace NServiceBusTutorials.Common.Extensions
 {
     public static class AsyncHelpers
     {
-        /// <summary>
-        /// Execute's an async Task<T> method which has a void return value synchronously
-        /// </summary>
-        /// <param name="task">Task<T> method to execute</param>
-        public static void RunSync(Func<Task> task)
+        public static void RunSync(this Func<Task> task)
         {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
-            synch.Post(async _ =>
-                {
-                    try
+            synch.Post(
+                async λ =>
                     {
-                        await task();
-                    }
-                    catch (Exception e)
-                    {
-                        synch.InnerException = e;
-                        throw;
-                    }
-                    finally
-                    {
-                        synch.EndMessageLoop();
-                    }
-                }, null);
+                        try
+                        {
+                            await task();
+                        }
+                        catch (Exception e)
+                        {
+                            synch.InnerException = e;
+                            throw;
+                        }
+                        finally
+                        {
+                            synch.EndMessageLoop();
+                        }
+                    },
+                null);
             synch.BeginMessageLoop();
 
             SynchronizationContext.SetSynchronizationContext(oldContext);
         }
 
-        /// <summary>
-        /// Execute's an async Task<T> method which has a T return type synchronously
-        /// </summary>
-        /// <typeparam name="T">Return Type</typeparam>
-        /// <param name="task">Task<T> method to execute</param>
-        /// <returns></returns>
-        public static T RunSync<T>(Func<Task<T>> task)
+        public static T RunSync<T>(this Func<Task<T>> task)
         {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
-            T ret = default(T);
-            synch.Post(async _ =>
-                {
-                    try
+            var ret = default(T);
+            synch.Post(
+                async λ =>
                     {
-                        ret = await task();
-                    }
-                    catch (Exception e)
-                    {
-                        synch.InnerException = e;
-                        throw;
-                    }
-                    finally
-                    {
-                        synch.EndMessageLoop();
-                    }
-                }, null);
+                        try
+                        {
+                            ret = await task();
+                        }
+                        catch (Exception e)
+                        {
+                            synch.InnerException = e;
+                            throw;
+                        }
+                        finally
+                        {
+                            synch.EndMessageLoop();
+                        }
+                    },
+                null);
             synch.BeginMessageLoop();
             SynchronizationContext.SetSynchronizationContext(oldContext);
             return ret;
@@ -72,11 +66,14 @@ namespace NServiceBusTutorials.Common.Extensions
 
         private class ExclusiveSynchronizationContext : SynchronizationContext
         {
-            private bool done;
-            public Exception InnerException { get; set; }
-            readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
             readonly Queue<Tuple<SendOrPostCallback, object>> items =
                 new Queue<Tuple<SendOrPostCallback, object>>();
+
+            private readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
+
+            private bool done;
+
+            public Exception InnerException { private get; set; }
 
             public override void Send(SendOrPostCallback d, object state)
             {
@@ -94,7 +91,7 @@ namespace NServiceBusTutorials.Common.Extensions
 
             public void EndMessageLoop()
             {
-                Post(_ => done = true, null);
+                Post(λ => done = true, null);
             }
 
             public void BeginMessageLoop()
