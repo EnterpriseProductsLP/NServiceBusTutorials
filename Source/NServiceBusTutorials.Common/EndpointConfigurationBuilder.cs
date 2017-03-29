@@ -1,12 +1,11 @@
 ﻿using System;
-
 using NServiceBus;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.Common
 {
-    public class EndpointConfigurationBuilder
+    public class EndpointConfigurationBuilder : IBuildEndpointConfigurations
     {
         public EndpointConfiguration GetEndpointConfiguration(string endpointName, string errorQueue = null, string auditQueue = null, int requestedConcurrency = 0)
         {

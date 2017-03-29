@@ -35,12 +35,15 @@
   <ItemGroup>
     <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
+      <HintPath>..\packages\FluentMigrator.1.6.2.1\lib\40\FluentMigrator.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator.Runner, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentMigrator.Runner.1.6.2\lib\40\FluentMigrator.Runner.dll</HintPath>
+      <HintPath>..\packages\FluentMigrator.Runner.1.6.2.1\lib\40\FluentMigrator.Runner.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
       <HintPath>..\packages\NServiceBus.6.1.3\lib\net452\NServiceBus.Core.dll</HintPath>
@@ -56,19 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivePassiveEndpointInstance.cs" />
     <Compile Include="DependencyInjection\ContainerProvider.cs" />
-    <Compile Include="DistributedLockManager.cs" />
-    <Compile Include="Interfaces\DistributedLockRegistrar.cs" />
+    <Compile Include="DependencyInjection\DistributedLockRegistrar.cs" />
     <Compile Include="Interfaces\IManageDistributedLocks.cs" />
-    <Compile Include="Interfaces\IRegisterModules.cs" />
     <Compile Include="MessageHandlers\LockableMessageHandler.cs" />
     <Compile Include="MessageHandlers\WorkCommandHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Consumer\WorkConsumer.cs" />
-    <Compile Include="Consumer\Command.cs" />
-    <Compile Include="Consumer\State.cs" />
-    <Compile Include="Consumer\StateTransition.cs" />
+    <Compile Include="SqlServerDistributedLockManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

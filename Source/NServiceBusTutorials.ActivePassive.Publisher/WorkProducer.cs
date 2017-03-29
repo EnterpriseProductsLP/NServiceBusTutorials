@@ -1,20 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Timers;
-
 using NServiceBus;
-
 using NServiceBusTutorials.ActivePassive.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
 
-namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
+namespace NServiceBusTutorials.ActivePassive.Publisher
 {
     internal class WorkProducer
     {
+        private enum Command
+        {
+            Pause,
+
+            Run,
+
+            Stop
+        }
+
+        private enum State
+        {
+            Initializing,
+
+            Paused,
+
+            Running,
+
+            Stopped
+        }
+
+        private class StateTransition
+        {
+            private readonly Command _command;
+
+            private readonly State _currentState;
+
+            public StateTransition(State currentState, Command command)
+            {
+                _currentState = currentState;
+                _command = command;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+
+                return obj.GetType() == GetType() && Equals((StateTransition)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (_command.GetHashCode() * 397) ^ (int)_currentState;
+                }
+            }
+
+            private bool Equals(StateTransition other)
+            {
+                return Equals(_command, other._command) && _currentState == other._currentState;
+            }
+        }
+
         private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
-        private readonly EndpointConfigurationBuilder _endpointConfigurationBuilder;
+        private readonly IBuildEndpointConfigurations _endpointConfigurationBuilder;
 
         private readonly object _endpointLock = new object();
 
@@ -26,7 +85,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
 
         private IEndpointInstance _endpointInstance;
 
-        public WorkProducer(EndpointConfigurationBuilder endpointConfigurationBuilder)
+        public WorkProducer(IBuildEndpointConfigurations endpointConfigurationBuilder)
         {
             CurrentState = State.Initializing;
 
@@ -61,17 +120,6 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                                       };
         }
 
-        public bool Stopped
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _currentState == State.Stopped;
-                }
-            }
-        }
-
         private State CurrentState
         {
             get
@@ -86,6 +134,17 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
                 lock (_stateLock)
                 {
                     _currentState = value;
+                }
+            }
+        }
+
+        public bool Terminated
+        {
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _currentState == State.Stopped;
                 }
             }
         }
@@ -111,7 +170,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             DoStateTransition(Command.Run);
         }
 
-        public State DoStateTransition(Command command)
+        private State DoStateTransition(Command command)
         {
             Console.WriteLine($"Attempting to {command}");
             lock (_stateLock)
@@ -207,7 +266,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher.Producer
             {
                 lock (_endpointLock)
                 {
-                    var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, errorQueue: Endpoints.ErrorQueue);
+                    var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, Endpoints.ErrorQueue);
                     var startableEndpoint = Endpoint.Create(endpointConfiguration).Inline();
                     _endpointInstance = startableEndpoint.Start().Inline();
                 }

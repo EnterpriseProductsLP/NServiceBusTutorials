@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading;
-
-using NServiceBusTutorials.ActivePassive.Publisher.Producer;
 using NServiceBusTutorials.Common;
 
 namespace NServiceBusTutorials.ActivePassive.Publisher
@@ -54,7 +52,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                         break;
                 }
             }
-            while (!_producer.Stopped);
+            while (!_producer.Terminated);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)

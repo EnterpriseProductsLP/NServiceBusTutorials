@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
-using System.Threading;
-
 using NServiceBusTutorials.ActivePassive.Common;
-using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
@@ -12,7 +9,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     public class Program
     {
-        private static WorkConsumer _consumer;
+        private static IActivePassiveEndpointInstance _consumer;
+
+        private static bool _ending;
 
         public static void Main()
         {
@@ -59,22 +58,24 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (!_consumer.Stopped);
+            while (!_ending);
         }
 
-        private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        private static async void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
             Console.WriteLine("CTRL+C detected");
             Console.WriteLine("Stopping consumer");
-            _consumer.Stop();
+            await _consumer.Stop();
+            _ending = true;
         }
 
-        private static void StartConsumer()
+        private static async void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            _consumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
-            new Thread(_consumer.Run).Start();
+            var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
+            _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new SqlServerDistributedLockManager());
+            await _consumer.Start();
         }
 
         private static void RunMigrations()

@@ -1,9 +1,20 @@
-﻿namespace NServiceBusTutorials.ActivePassive.Consumer.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace NServiceBusTutorials.ActivePassive.Consumer.Interfaces
 {
     internal interface IManageDistributedLocks
     {
-        bool GetOrMaintainLock();
+        /// <summary>
+        /// Gets or updates the distributed lock.
+        /// </summary>
+        /// <returns>True on success.  False on failure.</returns>
+        /// <remarks>Implementation should deal with any exceptions internally, and swallow them.</remarks>
+        Task<bool> GetOrMaintainLock();
 
-        void ReleaseLock();
+        /// <summary>
+        /// Releases the distributed lock.
+        /// </summary>
+        /// <remarks>Implementation should deal with any exceptions internally, and swallow them.</remarks>
+        Task ReleaseLock();
     }
 }

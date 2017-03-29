@@ -48,10 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Producer\Command.cs" />
-    <Compile Include="Producer\State.cs" />
-    <Compile Include="Producer\StateTransition.cs" />
-    <Compile Include="Producer\WorkProducer.cs" />
+    <Compile Include="WorkProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

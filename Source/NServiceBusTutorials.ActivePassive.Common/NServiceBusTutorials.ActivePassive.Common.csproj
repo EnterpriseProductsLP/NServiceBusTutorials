@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationProvider.cs" />
-    <Compile Include="IActivePassiveEndpoint.cs" />
+    <Compile Include="IActivePassiveEndpointInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
