@@ -232,19 +232,19 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             return CurrentState;
         }
 
-        public async Task Pause()
+        public Task Pause()
         {
-            await Task.Run(() => DoStateTransition(Command.Pause));
+            return Task.Run(() => DoStateTransition(Command.Pause));
         }
 
-        public async Task Resume()
+        public Task Resume()
         {
-            await Task.Run(() => DoStateTransition(Command.Run));
+            return Task.Run(() => DoStateTransition(Command.Run));
         }
 
-        public async Task Start()
+        public Task Start()
         {
-            await Task.Run(() => DoStateTransition(Command.Run));
+            return Task.Run(() => DoStateTransition(Command.Run));
         }
 
         public Task Send(object message, SendOptions options)
@@ -299,9 +299,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             throw new NotImplementedException("Unsubscrive not supported.");
         }
 
-        public async Task Stop()
+        public Task Stop()
         {
-            await Task.Run(() => DoStateTransition(Command.Stop));
+            return Task.Run(() => DoStateTransition(Command.Stop));
         }
 
         private bool CanGetOrUpdateDistributedLock()
@@ -410,7 +410,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     .Select(subscription => _endpointInstance.Subscribe(subscription.EventType, subscription.Options))
                     .ToArray();
 
-                Task.WaitAll(subscriptionTasks);
+                await Task.WhenAll(subscriptionTasks);
             }
             catch (Exception ex)
             {
@@ -430,9 +430,9 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _endpointInstance = null;
         }
 
-        private async Task Wait()
+        private Task Wait()
         {
-            await Task.Run(() => DoStateTransition(Command.Wait));
+            return Task.Run(() => DoStateTransition(Command.Wait));
         }
     }
 }

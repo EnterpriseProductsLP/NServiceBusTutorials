@@ -71,12 +71,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _ending = true;
         }
 
-        private static async void StartConsumer()
+        private static void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
             _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new SqlServerDistributedLockManager());
-            await _consumer.Start();
+            _consumer.Start();
         }
 
         private static void RunMigrations()

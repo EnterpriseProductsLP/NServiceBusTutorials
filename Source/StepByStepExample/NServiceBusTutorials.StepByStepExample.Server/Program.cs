@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
@@ -18,7 +17,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server
         private static async Task AsyncMain()
         {
             Console.Title = "End to End Example:  Server";
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Server, Endpoints.ErrorQueue);

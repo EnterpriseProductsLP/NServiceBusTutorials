@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="ConsoleUtilities.cs" />
     <Compile Include="EndpointBuilder.cs" />
-    <Compile Include="Extensions\AsyncHelper.cs" />
     <Compile Include="EndpointConfigurationBuilder.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="IBuildEndpointConfigurations.cs" />

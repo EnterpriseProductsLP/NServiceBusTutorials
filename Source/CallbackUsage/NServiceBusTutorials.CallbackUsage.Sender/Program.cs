@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
+
 using NServiceBus;
+
 using NServiceBusTutorials.CallbackUsage.Contracts;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
@@ -18,7 +19,7 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
         private static async Task AsyncMain()
         {
             Console.Title = "Callback Usage:  Sender";
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Sender, Endpoints.ErrorQueue);

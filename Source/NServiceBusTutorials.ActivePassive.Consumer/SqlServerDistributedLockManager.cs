@@ -11,14 +11,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class SqlServerDistributedLockManager : IManageDistributedLocks
     {
-        public async Task<bool> GetOrMaintainLock()
+        public Task<bool> GetOrMaintainLock()
         {
-            return await Task.Run(() => GetOrMaintainLockInternal());
+            return Task.Run(() => GetOrMaintainLockInternal());
         }
 
-        public async Task ReleaseLock()
+        public Task ReleaseLock()
         {
-            await Task.Run(() => ReleaseLockInternal());
+            return Task.Run(() => ReleaseLockInternal());
         }
 
         private bool GetOrMaintainLockInternal()

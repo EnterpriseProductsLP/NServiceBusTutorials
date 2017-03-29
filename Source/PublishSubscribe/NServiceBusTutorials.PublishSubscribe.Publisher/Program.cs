@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBusTutorials.Common;
@@ -19,7 +18,7 @@ namespace NServiceBusTutorials.PublishSubscribe.Publisher
         private static async Task AsyncMain()
         {
             Console.Title = "Pub/Sub:  Publisher";
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Publisher, Endpoints.ErrorQueue);
