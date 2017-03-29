@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
-using System.Threading;
-
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;
@@ -12,7 +10,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     public class Program
     {
-        private static WorkConsumer _consumer;
+        private static IActivePassiveEndpointInstance _consumer;
 
         public static void Main()
         {
@@ -26,8 +24,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private static void RunUntilCancelKeyPress()
         {
             Console.WriteLine();
-            Console.WriteLine("Press 'P' to pause.");
-            Console.WriteLine("Press 'R' to resume.");
+            Console.WriteLine(value: "Press 'P' to pause.");
+            Console.WriteLine(value: "Press 'R' to resume.");
 
             Console.CancelKeyPress += OnCancelKeyPress;
             do
@@ -65,23 +63,24 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
-            Console.WriteLine("CTRL+C detected");
-            Console.WriteLine("Stopping consumer");
+            Console.WriteLine(value: "CTRL+C detected");
+            Console.WriteLine(value: "Stopping consumer");
             _consumer.Stop();
         }
 
         private static void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            _consumer = new WorkConsumer(endpointConfigurationBuilder, new DistributedLockManager());
-            new Thread(_consumer.Run).Start();
+            var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
+            _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new DistributedLockManager());
+            _consumer.Start();
         }
 
         private static void RunMigrations()
         {
             try
             {
-                var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+                var connectionString = ConfigurationManager.ConnectionStrings[name: "DbConnection"].ConnectionString;
                 var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
                 var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
                 migrationRunner.MigrateUp();

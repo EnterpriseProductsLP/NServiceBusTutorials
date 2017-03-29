@@ -18,25 +18,25 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     connection.Open();
                     using (var command = connection.CreateCommand())
                     {
-                        var key = new SqlParameter("@pKey", SqlDbType.VarChar, 100)
+                        var key = new SqlParameter(parameterName: "@pKey", dbType: SqlDbType.VarChar, size: 100)
                                       {
                                           Value = ConfigurationProvider.DistributedLockKey,
                                           Direction = ParameterDirection.Input
                                       };
 
-                        var discriminator = new SqlParameter("@pDiscriminator", SqlDbType.VarChar, 100)
+                        var discriminator = new SqlParameter(parameterName: "@pDiscriminator", dbType: SqlDbType.VarChar, size: 100)
                                                 {
                                                     Value = ConfigurationProvider.DistributedLockDiscriminator,
                                                     Direction = ParameterDirection.Input
                                                 };
 
-                        var heartbeatDuration = new SqlParameter("@pHeartbeatDuration", SqlDbType.Int)
+                        var heartbeatDuration = new SqlParameter(parameterName: "@pHeartbeatDuration", dbType: SqlDbType.Int)
                                                     {
                                                         Value = ConfigurationProvider.DistributedLockDuration,
                                                         Direction = ParameterDirection.Input
                                                     };
 
-                        var success = new SqlParameter("@success", SqlDbType.Bit)
+                        var success = new SqlParameter(parameterName: "@success", dbType: SqlDbType.Bit)
                                           {
                                               Direction = ParameterDirection.Output
                                           };
@@ -70,13 +70,13 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     connection.Open();
                     using (var command = connection.CreateCommand())
                     {
-                        var key = new SqlParameter("@pKey", SqlDbType.VarChar, 100)
+                        var key = new SqlParameter(parameterName: "@pKey", dbType: SqlDbType.VarChar, size: 100)
                                       {
                                           Value = ConfigurationProvider.DistributedLockKey,
                                           Direction = ParameterDirection.Input
                                       };
 
-                        var discriminator = new SqlParameter("@pDiscriminator", SqlDbType.VarChar, 100)
+                        var discriminator = new SqlParameter(parameterName: "@pDiscriminator", dbType: SqlDbType.VarChar, size: 100)
                                                 {
                                                     Value = ConfigurationProvider.DistributedLockDiscriminator,
                                                     Direction = ParameterDirection.Input

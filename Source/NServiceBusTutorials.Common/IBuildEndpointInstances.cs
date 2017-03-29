@@ -4,7 +4,7 @@ using NServiceBus;
 
 namespace NServiceBusTutorials.Common
 {
-    public interface IEndpointInstanceBuilder
+    public interface IBuildEndpointInstances
     {
         Task<IStartableEndpoint> Create();
     }

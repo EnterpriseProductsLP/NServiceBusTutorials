@@ -34,7 +34,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
                 }
 
                 HandleFailedMessage(messageIdentifier);
-                throw new Exception("This application does not have the distributed lock");
+                throw new Exception(message: "This application does not have the distributed lock");
             }
         }
 

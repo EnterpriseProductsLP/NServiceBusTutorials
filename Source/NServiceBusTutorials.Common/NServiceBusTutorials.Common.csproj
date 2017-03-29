@@ -56,15 +56,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleUtilities.cs" />
+    <Compile Include="EndpointBuilder.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="EndpointConfigurationBuilder.cs" />
-    <Compile Include="IEndpointConfigurationBuilder.cs" />
-    <Compile Include="IEndpointInstanceBuilder.cs" />
+    <Compile Include="IBuildEndpointConfigurations.cs" />
+    <Compile Include="IBuildEndpointInstances.cs" />
     <Compile Include="MigrationRunnerBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBusTutorials.ActivePassive.Contracts\NServiceBusTutorials.ActivePassive.Contracts.csproj">
+      <Project>{ECE203B4-A22B-4E0C-8B10-BA79CFB8E867}</Project>
+      <Name>NServiceBusTutorials.ActivePassive.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

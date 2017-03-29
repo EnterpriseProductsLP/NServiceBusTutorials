@@ -3,7 +3,7 @@ using NServiceBus.Transport;
 
 namespace NServiceBusTutorials.Common
 {
-    public interface IEndpointConfigurationBuilder
+    public interface IBuildEndpointConfigurations
     {
         EndpointConfiguration GetEndpointConfiguration(string endpointName, string errorQueue = null, string auditQueue = null, int requestedConcurrency = 0);
 
