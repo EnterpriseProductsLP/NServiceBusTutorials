@@ -60,7 +60,7 @@
     <Compile Include="Consumer\Subscription.cs" />
     <Compile Include="DependencyInjection\ContainerProvider.cs" />
     <Compile Include="DistributedLockManager.cs" />
-    <Compile Include="Interfaces\DistributedLockRegistrar.cs" />
+    <Compile Include="DependencyInjection\DistributedLockRegistrar.cs" />
     <Compile Include="Interfaces\IManageDistributedLocks.cs" />
     <Compile Include="Interfaces\IRegisterModules.cs" />
     <Compile Include="MessageHandlers\LockableMessageHandler.cs" />
