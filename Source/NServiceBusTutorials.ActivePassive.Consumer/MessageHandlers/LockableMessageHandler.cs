@@ -18,7 +18,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
         // ReSharper disable once StaticMemberInGenericType
         private static IList<string> _failedMessages = new List<string>();
 
-        public ILog Logger { get; } = LogManager.GetLogger<WorkCommandHandler>();
+        private ILog Logger { get; } = LogManager.GetLogger<WorkCommandHandler>();
 
         public Task Handle(T message, IMessageHandlerContext context)
         {
