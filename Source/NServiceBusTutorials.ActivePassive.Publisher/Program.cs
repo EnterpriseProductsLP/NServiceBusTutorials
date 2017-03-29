@@ -19,8 +19,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
         private static void RunUntilCancelKeyPress()
         {
             Console.WriteLine();
-            Console.WriteLine(value: "Press 'P' to pause.");
-            Console.WriteLine(value: "Press 'R' to resume.");
+            Console.WriteLine("Press 'P' to pause.");
+            Console.WriteLine("Press 'R' to resume.");
 
             Console.CancelKeyPress += OnCancelKeyPress;
             do
@@ -58,8 +58,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
-            Console.WriteLine(value: "CTRL+C detected");
-            Console.WriteLine(value: "Stopping publisher");
+            Console.WriteLine("CTRL+C detected");
+            Console.WriteLine("Stopping publisher");
             _producer.Stop();
         }
 

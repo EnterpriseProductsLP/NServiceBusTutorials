@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle(title: "NServiceBusTutorials.ActivePassive.Contracts")]
-[assembly: AssemblyDescription(description: "")]
-[assembly: AssemblyConfiguration(configuration: "")]
-[assembly: AssemblyCompany(company: "Enterprise Products")]
-[assembly: AssemblyProduct(product: "NServiceBusTutorials.ActivePassive.Contracts")]
-[assembly: AssemblyCopyright(copyright: "Copyright © Enterprise Products 2017")]
-[assembly: AssemblyTrademark(trademark: "")]
-[assembly: AssemblyCulture(culture: "")]
+[assembly: AssemblyTitle("NServiceBusTutorials.ActivePassive.Contracts")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Enterprise Products")]
+[assembly: AssemblyProduct("NServiceBusTutorials.ActivePassive.Contracts")]
+[assembly: AssemblyCopyright("Copyright © Enterprise Products 2017")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid(guid: "ece203b4-a22b-4e0c-8b10-ba79cfb8e867")]
+[assembly: Guid("ece203b4-a22b-4e0c-8b10-ba79cfb8e867")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(version: "1.0.0.0")]
-[assembly: AssemblyFileVersion(version: "1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

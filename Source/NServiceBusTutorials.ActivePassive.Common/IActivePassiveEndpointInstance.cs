@@ -3,12 +3,12 @@ using NServiceBus;
 
 namespace NServiceBusTutorials.ActivePassive.Common
 {
-    public interface IActivePassiveEndpointInstance : IStartableEndpoint, IEndpointInstance
+    public interface IActivePassiveEndpointInstance : IEndpointInstance
     {
         Task Pause();
 
         Task Resume();
 
-        bool Terminated { get; }
+        Task Start();
     }
 }

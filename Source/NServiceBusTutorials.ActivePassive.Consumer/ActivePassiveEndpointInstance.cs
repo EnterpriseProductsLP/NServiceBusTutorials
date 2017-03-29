@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -8,6 +7,7 @@ using NServiceBus;
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer
 {
@@ -119,51 +119,51 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _startupTimer.Elapsed += OnStartupTimerElapsed;
 
             _allowedTransitions = new Dictionary<StateTransition, State>
-            {
-                // Transitions from Initializing
-                {
-                    new StateTransition(State.Initializing, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Initializing, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Initializing, Command.Wait), State.Waiting
-                },
+                                      {
+                                          // Transitions from Initializing
+                                          {
+                                              new StateTransition(State.Initializing, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Initializing, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Initializing, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Paused
-                {
-                    new StateTransition(State.Paused, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Paused, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Paused, Command.Wait), State.Waiting
-                },
+                                          // Transitions from Paused
+                                          {
+                                              new StateTransition(State.Paused, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Paused, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Paused, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Running
-                {
-                    new StateTransition(State.Running, Command.Pause), State.Paused
-                },
-                {
-                    new StateTransition(State.Running, Command.Stop), State.Stopped
-                },
-                {
-                    new StateTransition(State.Running, Command.Wait), State.Waiting
-                },
+                                          // Transitions from Running
+                                          {
+                                              new StateTransition(State.Running, Command.Pause), State.Paused
+                                          },
+                                          {
+                                              new StateTransition(State.Running, Command.Stop), State.Stopped
+                                          },
+                                          {
+                                              new StateTransition(State.Running, Command.Wait), State.Waiting
+                                          },
 
-                // Transitions from Waiting
-                {
-                    new StateTransition(State.Waiting, Command.Pause), State.Paused
-                },
-                {
-                    new StateTransition(State.Waiting, Command.Run), State.Running
-                },
-                {
-                    new StateTransition(State.Waiting, Command.Stop), State.Stopped
-                }
-            };
+                                          // Transitions from Waiting
+                                          {
+                                              new StateTransition(State.Waiting, Command.Pause), State.Paused
+                                          },
+                                          {
+                                              new StateTransition(State.Waiting, Command.Run), State.Running
+                                          },
+                                          {
+                                              new StateTransition(State.Waiting, Command.Stop), State.Stopped
+                                          }
+                                      };
         }
 
         private State CurrentState
@@ -180,17 +180,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 lock (_stateLock)
                 {
                     _currentState = value;
-                }
-            }
-        }
-
-        public bool Terminated
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _currentState == State.Stopped;
                 }
             }
         }
@@ -223,6 +212,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         catch
                         {
                             nextState = DoStateTransition(Command.Wait);
+
+                            // TODO log
                         }
                         break;
 
@@ -251,34 +242,16 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             await Task.Run(() => DoStateTransition(Command.Run));
         }
 
-        public async Task<IEndpointInstance> Start()
+        public async Task Start()
         {
-            try
-            {
-                await Task.Run(() => DoStateTransition(Command.Run));
-                return _endpointInstance;
-            }
-            catch (SqlException ex)
-            {
-                ConsoleUtilities.WriteLineWithColor($"Exception when trying to run: {ex.Message}", ConsoleColor.Red);
-                WaitOnSqlException();
-                // TODO:  What is the correct thing to do if the endpoints fails to start?
-                throw;
-            }
-            catch (Exception ex)
-            {
-                ConsoleUtilities.WriteLineWithColor($"Exception when trying to run: {ex.Message}", ConsoleColor.Red);
-                Wait();
-                // TODO:  What is the correct thing to do if the endpoints fails to start?
-                throw;
-            }
+            await Task.Run(() => DoStateTransition(Command.Run));
         }
 
         public Task Send(object message, SendOptions options)
         {
             if (_endpointInstance == null)
             {
-                throw new Exception(message: "Endpoint not started.  Cannot Send.");
+                throw new Exception("Endpoint not started.  Cannot Send.");
             }
 
             return _endpointInstance.Send(message, options);
@@ -288,7 +261,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             if (_endpointInstance == null)
             {
-                throw new Exception(message: "Endpoint not started.  Cannot Send.");
+                throw new Exception("Endpoint not started.  Cannot Send.");
             }
 
             return _endpointInstance.Send(messageConstructor, options);
@@ -298,7 +271,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             if (_endpointInstance == null)
             {
-                throw new Exception(message: "Endpoint not started.  Cannot Publish.");
+                throw new Exception("Endpoint not started.  Cannot Publish.");
             }
 
             return _endpointInstance.Publish(message, options);
@@ -308,7 +281,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             if (_endpointInstance == null)
             {
-                throw new Exception(message: "Endpoint not started.  Cannot Publish.");
+                throw new Exception("Endpoint not started.  Cannot Publish.");
             }
 
             return _endpointInstance.Publish(messageConstructor, publishOptions);
@@ -323,7 +296,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         public Task Unsubscribe(Type eventType, UnsubscribeOptions options)
         {
-            throw new NotImplementedException(message: "Unsubscrive not supported.");
+            throw new NotImplementedException("Unsubscrive not supported.");
         }
 
         public async Task Stop()
@@ -333,7 +306,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private bool CanGetOrUpdateDistributedLock()
         {
-            return _distributedLockManager.GetOrMaintainLock();
+            return _distributedLockManager.GetOrMaintainLock().Inline();
         }
 
         private State GetNext(Command command)
@@ -355,27 +328,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void OnHeartbeatTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            try
+            Console.Write("Trying to heartbeat distributed lock:  ");
+            if (CanGetOrUpdateDistributedLock())
             {
-                Console.Write(value: "Trying to heartbeat distributed lock:  ");
-                if (CanGetOrUpdateDistributedLock())
-                {
-                    ConsoleUtilities.WriteLineWithColor(message: "Success!", color: ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleUtilities.WriteLineWithColor(message: "Failed!  Waiting.", color: ConsoleColor.Red);
-                    Wait();
-                }
+                ConsoleUtilities.WriteLineWithColor("Success!", ConsoleColor.Green);
             }
-            catch (SqlException ex)
+            else
             {
-                ConsoleUtilities.WriteLineWithColor($"Heartbeat failed: {ex.Message}", ConsoleColor.Red);
-                WaitOnSqlException();
-            }
-            catch (Exception ex)
-            {
-                ConsoleUtilities.WriteLineWithColor($"Heartbeat failed: {ex.Message}", ConsoleColor.Red);
+                ConsoleUtilities.WriteLineWithColor("Failed!  Waiting.", ConsoleColor.Red);
                 Wait();
             }
         }
@@ -385,7 +345,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _heartbeatTimer.Stop();
             _startupTimer.Stop();
             await StopEndpoint();
-            _distributedLockManager.ReleaseLock();
+            await _distributedLockManager.ReleaseLock();
         }
 
         private async void OnStart()
@@ -399,16 +359,16 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             try
             {
-                Console.Write(value: "Trying to get distributed lock:  ");
+                Console.Write("Trying to get distributed lock:  ");
                 _startupTimer.Stop();
                 if (CanGetOrUpdateDistributedLock())
                 {
-                    Console.WriteLine(value: "Got the lock!  Running.");
+                    Console.WriteLine("Got the lock!  Running.");
                     await Start();
                 }
                 else
                 {
-                    Console.WriteLine(value: "Failed!  Waiting.");
+                    Console.WriteLine("Failed!  Waiting.");
                     _startupTimer.Start();
                 }
             }
@@ -424,18 +384,18 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _startupTimer.Stop();
             _heartbeatTimer.Stop();
             await StopEndpoint();
-            _distributedLockManager.ReleaseLock();
+            await _distributedLockManager.ReleaseLock();
         }
 
         private async void OnWait()
         {
             _heartbeatTimer.Stop();
             await StopEndpoint();
-            _distributedLockManager.ReleaseLock();
+            await _distributedLockManager.ReleaseLock();
             _startupTimer.Start();
         }
 
-        private async Task<IEndpointInstance> StartEndpoint()
+        private async Task StartEndpoint()
         {
             await StopEndpoint();
 
@@ -449,15 +409,11 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     .ToArray();
 
                 Task.WaitAll(subscriptionTasks);
-
-                return _endpointInstance;
             }
             catch (Exception ex)
             {
                 ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
                 Wait();
-                // TODO:  What is the correct thing to do if the endpoints fails to start?
-                throw;
             }
         }
 
@@ -475,14 +431,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private async void Wait()
         {
             await Task.Run(() => DoStateTransition(Command.Wait));
-        }
-
-        private async void WaitOnSqlException()
-        {
-            _heartbeatTimer.Stop();
-            await StopEndpoint();
-            _startupTimer.Start();
-            _currentState = State.Waiting;
         }
     }
 }

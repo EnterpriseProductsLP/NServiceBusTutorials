@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
     {
         public void Register(ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterType<DistributedLockManager>().As<IManageDistributedLocks>();
+            containerBuilder.RegisterType<SqlServerDistributedLockManager>().As<IManageDistributedLocks>();
         }
     }
 }

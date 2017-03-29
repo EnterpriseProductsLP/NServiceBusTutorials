@@ -11,6 +11,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
     {
         private static IActivePassiveEndpointInstance _consumer;
 
+        private static bool _ending;
+
         public static void Main()
         {
             Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
@@ -23,8 +25,8 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private static void RunUntilCancelKeyPress()
         {
             Console.WriteLine();
-            Console.WriteLine(value: "Press 'P' to pause.");
-            Console.WriteLine(value: "Press 'R' to resume.");
+            Console.WriteLine("Press 'P' to pause.");
+            Console.WriteLine("Press 'R' to resume.");
 
             Console.CancelKeyPress += OnCancelKeyPress;
             do
@@ -56,22 +58,23 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (!_consumer.Terminated);
+            while (!_ending);
         }
 
         private static async void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
-            Console.WriteLine(value: "CTRL+C detected");
-            Console.WriteLine(value: "Stopping consumer");
+            Console.WriteLine("CTRL+C detected");
+            Console.WriteLine("Stopping consumer");
             await _consumer.Stop();
+            _ending = true;
         }
 
         private static async void StartConsumer()
         {
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
-            _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new DistributedLockManager());
+            _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new SqlServerDistributedLockManager());
             await _consumer.Start();
         }
 
@@ -79,7 +82,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         {
             try
             {
-                var connectionString = ConfigurationManager.ConnectionStrings[name: "DbConnection"].ConnectionString;
+                var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
                 var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
                 migrationRunner.MigrateUp();

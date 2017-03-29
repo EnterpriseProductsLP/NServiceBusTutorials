@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberTwo
             Console.Title = "Pub/Sub:  SubscriberTwo";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberTwo, errorQueue: Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberTwo, Endpoints.ErrorQueue);
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
             await endpointInstance.Subscribe<EventMessage>().ConfigureAwait(false);
 

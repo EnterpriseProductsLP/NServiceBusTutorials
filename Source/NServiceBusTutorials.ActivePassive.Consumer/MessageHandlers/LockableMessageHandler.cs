@@ -10,6 +10,7 @@ using NServiceBus.Logging;
 using NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
@@ -24,23 +25,28 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
         {
             var messageIdentifier = GetMessageIdentifier(message);
 
-            using (var lifetimeScope = ContainerProvider.Container.BeginLifetimeScope())
-            {
-                var distributedLockManager = lifetimeScope.Resolve<IManageDistributedLocks>();
-                if (distributedLockManager.GetOrMaintainLock())
+                if (CanGetOrUpdateDistributedLock())
                 {
                     HandleFailedMessageRetry(messageIdentifier);
                     return HandleInternal(message, context);
                 }
 
                 HandleFailedMessage(messageIdentifier);
-                throw new Exception(message: "This application does not have the distributed lock");
-            }
+                throw new Exception("This application does not have the distributed lock");
         }
 
         protected abstract string GetMessageIdentifier(T message);
 
         protected abstract Task HandleInternal(T message, IMessageHandlerContext context);
+
+        private bool CanGetOrUpdateDistributedLock()
+        {
+            using (var lifetimeScope = ContainerProvider.Container.BeginLifetimeScope())
+            {
+                var distributedLockManager = lifetimeScope.Resolve<IManageDistributedLocks>();
+                return distributedLockManager.GetOrMaintainLock().Inline();
+            }
+        }
 
         private static void HandleFailedMessageRetry(string messageIdentifier)
         {

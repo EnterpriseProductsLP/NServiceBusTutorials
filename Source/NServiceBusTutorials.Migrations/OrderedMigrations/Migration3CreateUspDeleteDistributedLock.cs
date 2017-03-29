@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.Migrations.OrderedMigrations
     {
         public override void Up()
         {
-            Execute.EmbeddedScript(EmbeddedSqlScriptName: "Migration3CreateUspDeleteDistributedLock.sql");
+            Execute.EmbeddedScript("Migration3CreateUspDeleteDistributedLock.sql");
         }
     }
 }

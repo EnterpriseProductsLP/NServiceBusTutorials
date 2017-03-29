@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.Migrations.OrderedMigrations
     {
         public override void Up()
         {
-            Execute.EmbeddedScript(EmbeddedSqlScriptName: "Migration2CreateUspHeartbeatDistributedLock.sql");
+            Execute.EmbeddedScript("Migration2CreateUspHeartbeatDistributedLock.sql");
         }
     }
 }

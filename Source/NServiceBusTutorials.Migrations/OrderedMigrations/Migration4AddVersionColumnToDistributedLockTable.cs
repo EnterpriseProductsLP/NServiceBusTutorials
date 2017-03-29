@@ -7,7 +7,7 @@ namespace NServiceBusTutorials.Migrations.OrderedMigrations
     {
         public override void Up()
         {
-            Execute.EmbeddedScript(EmbeddedSqlScriptName: "Migration4AddVersionColumnToDistributedLockTable.sql");
+            Execute.EmbeddedScript("Migration4AddVersionColumnToDistributedLockTable.sql");
         }
     }
 }

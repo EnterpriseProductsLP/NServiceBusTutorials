@@ -7,17 +7,17 @@ namespace NServiceBusTutorials.Migrations.OrderedMigrations
     {
         public override void Up()
         {
-            Create.Schema(schemaName: "Framework");
+            Create.Schema("Framework");
 
-            Create.Table(tableName: "DistributedLock")
-                .InSchema(schemaName: "Framework")
-                .WithColumn(name: "DistributedLockId").AsInt64().PrimaryKey(primaryKeyName: "PK_DistributedLock").Identity()
-                .WithColumn(name: "Discriminator").AsAnsiString(100)
-                .WithColumn(name: "Heartbeat").AsDateTime().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn(name: "Key").AsAnsiString(100);
+            Create.Table("DistributedLock")
+                .InSchema("Framework")
+                .WithColumn("DistributedLockId").AsInt64().PrimaryKey("PK_DistributedLock").Identity()
+                .WithColumn("Discriminator").AsAnsiString(100)
+                .WithColumn("Heartbeat").AsDateTime().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("Key").AsAnsiString(100);
 
-            Create.Index(indexName: "AK_DistributedLock").OnTable(tableName: "DistributedLock").InSchema(schemaName: "Framework").OnColumn(columnName: "Key").Unique();
-            Create.Index(indexName: "AK_DistributedLock2").OnTable(tableName: "DistributedLock").InSchema(schemaName: "Framework").OnColumn(columnName: "Key").Ascending().OnColumn(columnName: "Discriminator").Unique();
+            Create.Index("AK_DistributedLock").OnTable("DistributedLock").InSchema("Framework").OnColumn("Key").Unique();
+            Create.Index("AK_DistributedLock2").OnTable("DistributedLock").InSchema("Framework").OnColumn("Key").Ascending().OnColumn("Discriminator").Unique();
         }
     }
 }
