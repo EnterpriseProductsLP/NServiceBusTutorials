@@ -67,7 +67,6 @@
     <Compile Include="MessageHandlers\WorkCommandHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Consumer\WorkConsumer.cs" />
     <Compile Include="Consumer\Command.cs" />
     <Compile Include="Consumer\State.cs" />
     <Compile Include="Consumer\StateTransition.cs" />
