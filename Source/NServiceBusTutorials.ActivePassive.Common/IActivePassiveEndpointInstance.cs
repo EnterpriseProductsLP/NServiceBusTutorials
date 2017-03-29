@@ -9,6 +9,6 @@ namespace NServiceBusTutorials.ActivePassive.Common
 
         Task Resume();
 
-        bool Stopped { get; }
+        bool Terminated { get; }
     }
 }

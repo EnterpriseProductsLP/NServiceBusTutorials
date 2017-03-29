@@ -5,15 +5,92 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using NServiceBus;
-
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.Common;
 
-namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
+namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class ActivePassiveEndpointInstance : IActivePassiveEndpointInstance
     {
+        private enum Command
+        {
+            Pause,
+
+            Run,
+
+            Stop,
+
+            Wait
+        }
+
+        private enum State
+        {
+            Initializing,
+
+            Paused,
+
+            Running,
+
+            Stopped,
+
+            Waiting
+        }
+
+        private class StateTransition
+        {
+            private readonly Command _command;
+
+            private readonly State _currentState;
+
+            public StateTransition(State currentState, Command command)
+            {
+                _currentState = currentState;
+                _command = command;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+
+                return obj.GetType() == GetType() && Equals((StateTransition)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (_command.GetHashCode() * 397) ^ (int)_currentState;
+                }
+            }
+
+            private bool Equals(StateTransition other)
+            {
+                return Equals(_command, other._command) && _currentState == other._currentState;
+            }
+        }
+
+        internal class Subscription
+        {
+            public Subscription(Type eventType, SubscribeOptions options)
+            {
+                EventType = eventType;
+                Options = options;
+            }
+
+            public Type EventType { get; }
+
+            public SubscribeOptions Options { get; }
+        }
+
         private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
         private readonly IManageDistributedLocks _distributedLockManager;
@@ -107,7 +184,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
         }
 
-        public bool Stopped
+        public bool Terminated
         {
             get
             {
@@ -118,7 +195,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.Consumer
             }
         }
 
-        public State DoStateTransition(Command command)
+        private State DoStateTransition(Command command)
         {
             Console.WriteLine($"Attempting to {command}");
             lock (_stateLock)

@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Reflection;
 using NServiceBusTutorials.ActivePassive.Common;
-using NServiceBusTutorials.ActivePassive.Consumer.Consumer;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
@@ -57,7 +56,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
                 }
             }
-            while (!_consumer.Stopped);
+            while (!_consumer.Terminated);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
