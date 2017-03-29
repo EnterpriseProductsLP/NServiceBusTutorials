@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Reflection;
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.Common;
+using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer
@@ -37,7 +38,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     case ConsoleKey.P:
                         try
                         {
-                            _consumer.Pause();
+                            _consumer.Pause().Inline();
                         }
                         catch (Exception ex)
                         {
@@ -48,7 +49,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     case ConsoleKey.R:
                         try
                         {
-                            _consumer.Resume();
+                            _consumer.Resume().Inline();
                         }
                         catch (Exception ex)
                         {

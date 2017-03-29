@@ -342,7 +342,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
         }
 
-        private async void OnPause()
+        private async Task OnPause()
         {
             _heartbeatTimer.Stop();
             _startupTimer.Stop();
@@ -350,7 +350,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             await _distributedLockManager.ReleaseLock();
         }
 
-        private async void OnStart()
+        private async Task OnStart()
         {
             _startupTimer.Stop();
             await StartEndpoint();
@@ -381,7 +381,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
         }
 
-        private async void OnStop()
+        private async Task OnStop()
         {
             _startupTimer.Stop();
             _heartbeatTimer.Stop();
@@ -389,7 +389,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             await _distributedLockManager.ReleaseLock();
         }
 
-        private async void OnWait()
+        private async Task OnWait()
         {
             _heartbeatTimer.Stop();
             await StopEndpoint();
@@ -430,7 +430,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _endpointInstance = null;
         }
 
-        private async void Wait()
+        private async Task Wait()
         {
             await Task.Run(() => DoStateTransition(Command.Wait));
         }
