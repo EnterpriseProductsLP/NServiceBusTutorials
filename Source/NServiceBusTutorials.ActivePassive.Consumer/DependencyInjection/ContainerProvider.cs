@@ -4,7 +4,6 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
 using Autofac.Core.Resolving;
-using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer.DependencyInjection
 {
