@@ -328,10 +328,12 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private void OnHeartbeatTimerElapsed(object sender, ElapsedEventArgs e)
         {
+            _heartbeatTimer.Stop();
             Console.Write("Trying to heartbeat distributed lock:  ");
             if (CanGetOrUpdateDistributedLock())
             {
                 ConsoleUtilities.WriteLineWithColor("Success!", ConsoleColor.Green);
+                _heartbeatTimer.Start();
             }
             else
             {
