@@ -8,6 +8,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
     {
         private static WorkProducer _producer;
 
+        private static bool _ending;
+
         public static void Main()
         {
             Console.Title = "Active/Passive Example:  Publisher";
@@ -52,7 +54,7 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
                         break;
                 }
             }
-            while (!_producer.Terminated);
+            while (!_ending);
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -61,6 +63,8 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             Console.WriteLine("CTRL+C detected");
             Console.WriteLine("Stopping publisher");
             _producer.Stop();
+            _ending = true;
+            Environment.Exit(0);
         }
 
         private static void StartProducer()

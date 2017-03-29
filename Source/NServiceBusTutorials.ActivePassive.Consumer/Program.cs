@@ -69,6 +69,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             Console.WriteLine("Stopping consumer");
             await _consumer.Stop();
             _ending = true;
+            Environment.Exit(0);
         }
 
         private static void StartConsumer()

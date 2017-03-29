@@ -138,17 +138,6 @@ namespace NServiceBusTutorials.ActivePassive.Publisher
             }
         }
 
-        public bool Terminated
-        {
-            get
-            {
-                lock (_stateLock)
-                {
-                    return _currentState == State.Stopped;
-                }
-            }
-        }
-
         private void OnPublicationTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             var identifier = Guid.NewGuid();
