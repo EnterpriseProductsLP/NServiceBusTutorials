@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using System.Threading.Tasks;
+
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
@@ -16,11 +18,17 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         public static void Main()
         {
+            AsyncMain().Inline();
+        }
+
+        private static Task AsyncMain()
+        {
             Console.Title = $"Active/Passive Example:  Consumer - {ConfigurationProvider.DistributedLockDiscriminator}";
             RunMigrations();
 
             StartConsumer();
             RunUntilCancelKeyPress();
+            return Task.CompletedTask;
         }
 
         private static void RunUntilCancelKeyPress()
@@ -77,7 +85,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
             var endpointBuilder = new EndpointBuilder(endpointConfigurationBuilder);
             _consumer = new ActivePassiveEndpointInstance(endpointBuilder, new SqlServerDistributedLockManager());
-            _consumer.Start();
+            _consumer.Start().Inline();
         }
 
         private static void RunMigrations()

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+
 using NServiceBus;
+
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.Common;
@@ -13,97 +15,19 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 {
     internal class ActivePassiveEndpointInstance : IActivePassiveEndpointInstance
     {
-        private enum Command
-        {
-            Pause,
-
-            Run,
-
-            Stop,
-
-            Wait
-        }
-
-        private enum State
-        {
-            Initializing,
-
-            Paused,
-
-            Running,
-
-            Stopped,
-
-            Waiting
-        }
-
-        private class StateTransition
-        {
-            private readonly Command _command;
-
-            private readonly State _currentState;
-
-            public StateTransition(State currentState, Command command)
-            {
-                _currentState = currentState;
-                _command = command;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj))
-                {
-                    return false;
-                }
-
-                if (ReferenceEquals(this, obj))
-                {
-                    return true;
-                }
-
-                return obj.GetType() == GetType() && Equals((StateTransition)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return (_command.GetHashCode() * 397) ^ (int)_currentState;
-                }
-            }
-
-            private bool Equals(StateTransition other)
-            {
-                return Equals(_command, other._command) && _currentState == other._currentState;
-            }
-        }
-
-        internal class Subscription
-        {
-            public Subscription(Type eventType, SubscribeOptions options)
-            {
-                EventType = eventType;
-                Options = options;
-            }
-
-            public Type EventType { get; }
-
-            public SubscribeOptions Options { get; }
-        }
-
         private readonly Dictionary<StateTransition, State> _allowedTransitions;
 
         private readonly IManageDistributedLocks _distributedLockManager;
 
         private readonly IBuildEndpointInstances _endpointInstanceBuilder;
 
-        private readonly IList<Subscription> _subscriptions = new List<Subscription>();
-
         private readonly Timer _heartbeatTimer = new Timer(2000);
 
         private readonly Timer _startupTimer = new Timer(10000);
 
         private readonly object _stateLock = new object();
+
+        private readonly IList<Subscription> _subscriptions = new List<Subscription>();
 
         private State _currentState;
 
@@ -184,54 +108,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             }
         }
 
-        private State DoStateTransition(Command command)
-        {
-            Console.WriteLine($"Attempting to {command}");
-            lock (_stateLock)
-            {
-                var nextState = GetNext(command);
-
-                switch (command)
-                {
-                    case Command.Pause:
-                        OnPause().Inline();
-                        break;
-
-                    case Command.Run:
-                        try
-                        {
-                            if (CanGetOrUpdateDistributedLock())
-                            {
-                                OnStart().Inline();
-                            }
-                            else
-                            {
-                                nextState = DoStateTransition(Command.Wait);
-                            }
-                        }
-                        catch
-                        {
-                            nextState = DoStateTransition(Command.Wait);
-
-                            // TODO log
-                        }
-                        break;
-
-                    case Command.Stop:
-                        OnStop().Inline();
-                        break;
-
-                    case Command.Wait:
-                        OnWait().Inline();
-                        break;
-                }
-
-                CurrentState = nextState;
-            }
-
-            return CurrentState;
-        }
-
         public Task Pause()
         {
             return Task.Run(() => DoStateTransition(Command.Pause));
@@ -289,19 +165,68 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         public Task Subscribe(Type eventType, SubscribeOptions options)
         {
-            _subscriptions.Add(new Subscription(eventType, options));
+            var subscription = new Subscription(eventType, options);
+            _subscriptions.Add(subscription);
 
             return _endpointInstance?.Subscribe(eventType, options) ?? Task.CompletedTask;
         }
 
         public Task Unsubscribe(Type eventType, UnsubscribeOptions options)
         {
-            throw new NotImplementedException("Unsubscrive not supported.");
+            return _endpointInstance?.Unsubscribe(eventType, options) ?? Task.CompletedTask;
         }
 
         public Task Stop()
         {
             return Task.Run(() => DoStateTransition(Command.Stop));
+        }
+
+        private State DoStateTransition(Command command)
+        {
+            Console.WriteLine($"Attempting to {command}");
+            lock (_stateLock)
+            {
+                var nextState = GetNext(command);
+
+                switch (command)
+                {
+                    case Command.Pause:
+                        OnPause().Inline();
+                        break;
+
+                    case Command.Run:
+                        try
+                        {
+                            if (CanGetOrUpdateDistributedLock())
+                            {
+                                OnStart().Inline();
+                            }
+                            else
+                            {
+                                nextState = DoStateTransition(Command.Wait);
+                            }
+                        }
+                        catch
+                        {
+                            nextState = DoStateTransition(Command.Wait);
+
+                            // TODO log
+                        }
+                        break;
+
+                    case Command.Stop:
+                        OnStop().Inline();
+                        break;
+
+                    case Command.Wait:
+                        OnWait().Inline();
+                        break;
+                }
+
+                CurrentState = nextState;
+            }
+
+            return CurrentState;
         }
 
         private bool CanGetOrUpdateDistributedLock()
@@ -433,6 +358,114 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
         private Task Wait()
         {
             return Task.Run(() => DoStateTransition(Command.Wait));
+        }
+
+        private enum Command
+        {
+            Pause,
+
+            Run,
+
+            Stop,
+
+            Wait
+        }
+
+        private enum State
+        {
+            Initializing,
+
+            Paused,
+
+            Running,
+
+            Stopped,
+
+            Waiting
+        }
+
+        private class StateTransition
+        {
+            private readonly Command _command;
+
+            private readonly State _currentState;
+
+            public StateTransition(State currentState, Command command)
+            {
+                _currentState = currentState;
+                _command = command;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+
+                return obj.GetType() == GetType() && Equals((StateTransition)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (_command.GetHashCode() * 397) ^ (int)_currentState;
+                }
+            }
+
+            private bool Equals(StateTransition other)
+            {
+                return Equals(_command, other._command) && _currentState == other._currentState;
+            }
+        }
+
+        internal class Subscription
+        {
+            public Subscription(Type eventType, SubscribeOptions options)
+            {
+                EventType = eventType;
+                Options = options;
+            }
+
+            public Type EventType { get; }
+
+            public SubscribeOptions Options { get; }
+
+            protected bool Equals(Subscription other)
+            {
+                return EventType == other.EventType && Equals(Options, other.Options);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+                if (obj.GetType() != GetType())
+                {
+                    return false;
+                }
+                return Equals((Subscription)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ((EventType != null ? EventType.GetHashCode() : 0) * 397) ^ (Options != null ? Options.GetHashCode() : 0);
+                }
+            }
         }
     }
 }
