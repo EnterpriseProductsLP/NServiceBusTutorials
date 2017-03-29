@@ -194,7 +194,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 switch (command)
                 {
                     case Command.Pause:
-                        AsyncHelpers.RunSync(OnPause);
+                        OnPause().Inline();
                         break;
 
                     case Command.Run:
@@ -202,7 +202,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         {
                             if (CanGetOrUpdateDistributedLock())
                             {
-                                AsyncHelpers.RunSync(OnStart);
+                                OnStart().Inline();
                             }
                             else
                             {
@@ -218,11 +218,11 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         break;
 
                     case Command.Stop:
-                        AsyncHelpers.RunSync(OnStop);
+                        OnStop().Inline();
                         break;
 
                     case Command.Wait:
-                        AsyncHelpers.RunSync(OnWait);
+                        OnWait().Inline();
                         break;
                 }
 
@@ -306,7 +306,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
 
         private bool CanGetOrUpdateDistributedLock()
         {
-            return AsyncHelpers.RunSync(() => _distributedLockManager.GetOrMaintainLock());
+            return _distributedLockManager.GetOrMaintainLock().Inline();
         }
 
         private State GetNext(Command command)
@@ -338,7 +338,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             else
             {
                 ConsoleUtilities.WriteLineWithColor("Failed!  Waiting.", ConsoleColor.Red);
-                AsyncHelpers.RunSync(Wait);
+                Wait().Inline();
             }
         }
 
@@ -415,7 +415,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             catch (Exception ex)
             {
                 ConsoleUtilities.WriteLineWithColor($"Exception:  {ex.Message}", ConsoleColor.Red);
-                AsyncHelpers.RunSync(Wait);
+                Wait().Inline();
             }
         }
 
