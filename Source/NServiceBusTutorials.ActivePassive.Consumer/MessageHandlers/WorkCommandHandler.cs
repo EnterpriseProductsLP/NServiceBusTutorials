@@ -9,11 +9,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer.MessageHandlers
 {
     internal class WorkCommandHandler : LockableMessageHandler<WorkCommand>
     {
-        protected override string GetMessageIdentifier(WorkCommand message)
-        {
-            return message.Identifier.ToString();
-        }
-
         protected override Task HandleInternal(WorkCommand message, IMessageHandlerContext context)
         {
             Console.WriteLine();
