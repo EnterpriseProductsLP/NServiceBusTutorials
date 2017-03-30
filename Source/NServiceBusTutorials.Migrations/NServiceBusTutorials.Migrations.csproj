@@ -61,7 +61,7 @@
     <EmbeddedResource Include="EmbeddedScripts\Migration4AddVersionColumnToDistributedLockTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Migration5UpdateUsepHeartbeatDistributedLockToUseVersion.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Migration5UpdateUspHeartbeatDistributedLockToUseVersion.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
