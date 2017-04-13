@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-
 using NServiceBus;
-
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.ActivePassive.Consumer.Interfaces;
 using NServiceBusTutorials.Common;
@@ -43,51 +41,51 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             _startupTimer.Elapsed += OnStartupTimerElapsed;
 
             _allowedTransitions = new Dictionary<StateTransition, State>
-                                      {
-                                          // Transitions from Initializing
-                                          {
-                                              new StateTransition(State.Initializing, Command.Run), State.Running
-                                          },
-                                          {
-                                              new StateTransition(State.Initializing, Command.Stop), State.Stopped
-                                          },
-                                          {
-                                              new StateTransition(State.Initializing, Command.Wait), State.Waiting
-                                          },
+            {
+                // Transitions from Initializing
+                {
+                    new StateTransition(State.Initializing, Command.Run), State.Running
+                },
+                {
+                    new StateTransition(State.Initializing, Command.Stop), State.Stopped
+                },
+                {
+                    new StateTransition(State.Initializing, Command.Wait), State.Waiting
+                },
 
-                                          // Transitions from Paused
-                                          {
-                                              new StateTransition(State.Paused, Command.Run), State.Running
-                                          },
-                                          {
-                                              new StateTransition(State.Paused, Command.Stop), State.Stopped
-                                          },
-                                          {
-                                              new StateTransition(State.Paused, Command.Wait), State.Waiting
-                                          },
+                // Transitions from Paused
+                {
+                    new StateTransition(State.Paused, Command.Run), State.Running
+                },
+                {
+                    new StateTransition(State.Paused, Command.Stop), State.Stopped
+                },
+                {
+                    new StateTransition(State.Paused, Command.Wait), State.Waiting
+                },
 
-                                          // Transitions from Running
-                                          {
-                                              new StateTransition(State.Running, Command.Pause), State.Paused
-                                          },
-                                          {
-                                              new StateTransition(State.Running, Command.Stop), State.Stopped
-                                          },
-                                          {
-                                              new StateTransition(State.Running, Command.Wait), State.Waiting
-                                          },
+                // Transitions from Running
+                {
+                    new StateTransition(State.Running, Command.Pause), State.Paused
+                },
+                {
+                    new StateTransition(State.Running, Command.Stop), State.Stopped
+                },
+                {
+                    new StateTransition(State.Running, Command.Wait), State.Waiting
+                },
 
-                                          // Transitions from Waiting
-                                          {
-                                              new StateTransition(State.Waiting, Command.Pause), State.Paused
-                                          },
-                                          {
-                                              new StateTransition(State.Waiting, Command.Run), State.Running
-                                          },
-                                          {
-                                              new StateTransition(State.Waiting, Command.Stop), State.Stopped
-                                          }
-                                      };
+                // Transitions from Waiting
+                {
+                    new StateTransition(State.Waiting, Command.Pause), State.Paused
+                },
+                {
+                    new StateTransition(State.Waiting, Command.Run), State.Running
+                },
+                {
+                    new StateTransition(State.Waiting, Command.Stop), State.Stopped
+                }
+            };
         }
 
         private State CurrentState
@@ -209,8 +207,6 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                         catch
                         {
                             nextState = DoStateTransition(Command.Wait);
-
-                            // TODO log
                         }
                         break;
 
@@ -408,14 +404,14 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                     return true;
                 }
 
-                return obj.GetType() == GetType() && Equals((StateTransition)obj);
+                return obj.GetType() == GetType() && Equals((StateTransition) obj);
             }
 
             public override int GetHashCode()
             {
                 unchecked
                 {
-                    return (_command.GetHashCode() * 397) ^ (int)_currentState;
+                    return (_command.GetHashCode() * 397) ^ (int) _currentState;
                 }
             }
 
@@ -456,7 +452,7 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
                 {
                     return false;
                 }
-                return Equals((Subscription)obj);
+                return Equals((Subscription) obj);
             }
 
             public override int GetHashCode()
