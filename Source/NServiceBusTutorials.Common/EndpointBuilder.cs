@@ -18,7 +18,7 @@ namespace NServiceBusTutorials.Common
 
         public Task<IStartableEndpoint> Create()
         {
-            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.ErrorQueue);
+            var endpointConfiguration = _endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Consumer, Endpoints.ErrorQueue, "audit");
             endpointConfiguration.DisableFeature<AutoSubscribe>();
             var recoverability = endpointConfiguration.Recoverability();
             recoverability.Immediate(

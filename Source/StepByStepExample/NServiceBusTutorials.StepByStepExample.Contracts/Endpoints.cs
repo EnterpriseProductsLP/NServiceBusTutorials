@@ -2,7 +2,7 @@
 {
     public static class Endpoints
     {
-        public const string ErrorQueue = "Errors";
+        public const string ErrorQueue = "errors";
 
         public const string Client = "NServiceBusTutorials.StepByStepExample.Client";
 

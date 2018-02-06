@@ -19,7 +19,7 @@ namespace NServiceBusTutorials.CallbackUsage.Receiver
             Console.Title = "Callback Usage:  Receiver";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Receiver, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Receiver, Endpoints.ErrorQueue, "audit");
             endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             var endpointInstance = await Endpoint.Start(endpointConfiguration);
 

@@ -22,7 +22,7 @@ namespace NServiceBusTutorials.CallbackUsage.Sender
             await Task.Delay(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Sender, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Sender, Endpoints.ErrorQueue, "audit");
             endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             var endpointInstance = await Endpoint.Start(endpointConfiguration);
 

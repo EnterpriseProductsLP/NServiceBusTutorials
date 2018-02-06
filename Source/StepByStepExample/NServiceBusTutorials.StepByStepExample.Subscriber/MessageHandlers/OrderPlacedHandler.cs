@@ -12,6 +12,8 @@ namespace NServiceBusTutorials.StepByStepExample.Subscriber.MessageHandlers
 
         public Task Handle(OrderPlaced message, IMessageHandlerContext context)
         {
+            throw new Exception("Subscriber could not handle message.");
+
             Console.WriteLine();
 
             Log.Info($"Handling: OrderPlaced for Order Id: {message.OrderId}");

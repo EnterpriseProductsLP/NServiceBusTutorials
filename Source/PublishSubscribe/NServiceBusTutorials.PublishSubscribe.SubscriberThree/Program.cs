@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.PublishSubscribe.SubscriberThree
             Console.Title = "Pub/Sub:  SubscriberThree";
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberThree, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.SubscriberThree, Endpoints.ErrorQueue, "audit");
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
             await endpointInstance.Subscribe<EventMessage>().ConfigureAwait(false);
 

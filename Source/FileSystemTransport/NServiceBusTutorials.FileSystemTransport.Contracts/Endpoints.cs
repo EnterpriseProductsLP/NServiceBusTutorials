@@ -2,7 +2,7 @@
 {
     public static class Endpoints
     {
-        public const string ErrorQueue = "NServiceBusTutorials.FileSystemTransport.ErrorQueue";
+        public const string ErrorQueue = "errors";
 
         public const string EndpointOne = "NServiceBusTutorials.FileSystemTransport.EndpointOne";
 

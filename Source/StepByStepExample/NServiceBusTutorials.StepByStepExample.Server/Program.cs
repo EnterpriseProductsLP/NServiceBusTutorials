@@ -20,7 +20,7 @@ namespace NServiceBusTutorials.StepByStepExample.Server
             await Task.Delay(1000);
 
             var endpointConfigurationBuilder = new EndpointConfigurationBuilder();
-            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Server, Endpoints.ErrorQueue);
+            var endpointConfiguration = endpointConfigurationBuilder.GetEndpointConfiguration(Endpoints.Server, Endpoints.ErrorQueue, "audit");
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
 
