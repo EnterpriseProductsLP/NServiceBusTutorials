@@ -35,7 +35,7 @@ namespace NServiceBusTutorials.Common
             recoverability.Delayed(
                 delayed =>
                 {
-                    delayed.NumberOfRetries(1);
+                    delayed.NumberOfRetries(2);
                 }
             );
 
