@@ -31,6 +31,21 @@ namespace NServiceBusTutorials.Common
 
             endpointConfiguration.UseTransport<TTransport>();
 
+            var recoverability = endpointConfiguration.Recoverability();
+            recoverability.Delayed(
+                delayed =>
+                {
+                    delayed.NumberOfRetries(1);
+                }
+            );
+
+            recoverability.Immediate(
+                immediate =>
+                {
+                    immediate.NumberOfRetries(2);
+                }
+            );
+
             return endpointConfiguration;
         }
 
