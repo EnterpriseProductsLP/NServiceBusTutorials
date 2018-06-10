@@ -2,11 +2,13 @@
 using System.Configuration;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using FluentMigrator.Runner;
+using Microsoft.Extensions.DependencyInjection;
 using NServiceBusTutorials.ActivePassive.Common;
 using NServiceBusTutorials.Common;
 using NServiceBusTutorials.Common.Extensions;
 using NServiceBusTutorials.Migrations.OrderedMigrations;
+using ConsoleUtilities = NServiceBusTutorials.Common.ConsoleUtilities;
 
 namespace NServiceBusTutorials.ActivePassive.Consumer
 {
@@ -93,9 +95,20 @@ namespace NServiceBusTutorials.ActivePassive.Consumer
             try
             {
                 var connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                var migrationRunnerBuilder = new MigrationRunnerBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
-                var migrationRunner = migrationRunnerBuilder.BuildMigrationRunner();
-                migrationRunner.MigrateUp();
+                var migrationRunnerBuilder = new ServiceProviderBuilder(connectionString, Assembly.GetAssembly(typeof(Migration1CreateLockingTable)));
+                var serviceProvider = migrationRunnerBuilder.BuildMigrationRunner();
+
+
+                // Put the database update into a scope to ensure
+                // that all resources will be disposed.
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    // Instantiate the runner
+                    var migrationRunner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+
+                    // Execute the migrations
+                    migrationRunner.MigrateUp();
+                }
             }
             catch (Exception ex)
             {
