@@ -24,6 +24,8 @@ namespace NServiceBusTutorials.Common
             var maxConcurrency = GetMaxConcurrency(requestedConcurrency);
             endpointConfiguration.LimitMessageProcessingConcurrencyTo(maxConcurrency);
 
+            endpointConfiguration.ExcludeAssemblies("netstandard.dll");
+
             if (errorQueue != null)
             {
                 endpointConfiguration.SendFailedMessagesTo(errorQueue);
