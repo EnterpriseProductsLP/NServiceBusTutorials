@@ -16,24 +16,35 @@ namespace NServiceBusTutorials.Common
             where TTransport : TransportDefinition, new()
         {
             var endpointConfiguration = GetBaseEndpointConfiguration(endpointName);
-            if (auditQueue != null)
-            {
-                endpointConfiguration.AuditProcessedMessagesTo(auditQueue);
-            }
-
-            var maxConcurrency = GetMaxConcurrency(requestedConcurrency);
-            endpointConfiguration.LimitMessageProcessingConcurrencyTo(maxConcurrency);
-
-            endpointConfiguration.ExcludeAssemblies("netstandard.dll");
-
-            if (errorQueue != null)
-            {
-                endpointConfiguration.SendFailedMessagesTo(errorQueue);
-            }
+            ConfigureAuditing(auditQueue, endpointConfiguration);
+            ConfigureMaxConcurrency(requestedConcurrency, endpointConfiguration);
+            ConfigureErrorQueue(errorQueue, endpointConfiguration);
 
             endpointConfiguration.UseTransport<TTransport>();
 
             return endpointConfiguration;
+        }
+
+        private static void ConfigureErrorQueue(string errorQueue, EndpointConfiguration endpointConfiguration)
+        {
+            if (errorQueue != null)
+            {
+                endpointConfiguration.SendFailedMessagesTo(errorQueue);
+            }
+        }
+
+        private static void ConfigureMaxConcurrency(int requestedConcurrency, EndpointConfiguration endpointConfiguration)
+        {
+            var maxConcurrency = GetMaxConcurrency(requestedConcurrency);
+            endpointConfiguration.LimitMessageProcessingConcurrencyTo(maxConcurrency);
+        }
+
+        private static void ConfigureAuditing(string auditQueue, EndpointConfiguration endpointConfiguration)
+        {
+            if (auditQueue != null)
+            {
+                endpointConfiguration.AuditProcessedMessagesTo(auditQueue);
+            }
         }
 
         private static int GetMaxConcurrency(int requestedConcurrency)
@@ -47,6 +58,7 @@ namespace NServiceBusTutorials.Common
         {
             var endpointConfiguration = new EndpointConfiguration(endpointName);
             endpointConfiguration.EnableInstallers();
+            endpointConfiguration.ExcludeAssemblies("netstandard.dll");
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
