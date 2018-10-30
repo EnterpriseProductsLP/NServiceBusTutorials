@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell Scripts", "Power
 	ProjectSection(SolutionItems) = preProject
 		Configure Corp and Gulf Clusters for Testing.ps1 = Configure Corp and Gulf Clusters for Testing.ps1
 		Configure Local RabbitMQ for Testing.ps1 = Configure Local RabbitMQ for Testing.ps1
+		install-rabbit-container.ps1 = install-rabbit-container.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - Step by Step First Example", "01 - Step by Step First Example", "{B254FE29-B995-46C9-84BC-35BC51EBF48B}"
